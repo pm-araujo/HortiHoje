@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.Web", "HortiHoje.Web\HortiHoje.Web.csproj", "{C6340F15-1FFA-4061-B122-079AAE3726CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.Model", "HortiHoje.Model\HortiHoje.Model.csproj", "{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.DataAccess", "HortiHoje.DataAccess\HortiHoje.DataAccess.csproj", "{57E72B09-3299-4AF9-8A81-5D82C37613D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
