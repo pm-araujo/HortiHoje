@@ -27,6 +27,12 @@ namespace HortiHoje.Web.Controllers
         }
 
         [HttpGet]
+        public IQueryable<Reporter> Reporters()
+        {
+            return _repository.Reporters;
+        }
+
+        [HttpGet]
         public IQueryable<Session> Sessions()
         {
             return _repository.Sessions;

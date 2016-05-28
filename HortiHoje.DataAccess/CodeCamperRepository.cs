@@ -26,6 +26,11 @@ namespace HortiHoje.DataAccess
             return _contextProvider.SaveChanges(saveBundle);
         }
 
+        public IQueryable<Reporter> Reporters
+        {
+            get { return Context.Reporters; }
+        }
+
         public IQueryable<Session> Sessions
         {
             get { return Context.Sessions; }
