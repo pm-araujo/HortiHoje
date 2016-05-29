@@ -19,6 +19,7 @@
     // Handle routing errors and success events
     app.run(['$route', '$rootScope', '$q', 'breeze',
         function ($route, $rootScope, $q, breeze) {
-        // Include $route to kick start the router.
+            // Include $route to kick start the router.
+            
         }]);        
 })();
