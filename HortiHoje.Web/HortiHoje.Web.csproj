@@ -180,7 +180,10 @@
     <Content Include="app\services\datacontext.js" />
     <Content Include="app\services\directives.js" />
     <Content Include="app\services\entityManagerFactory.js" />
-    <Content Include="app\session\sessions.html" />
+    <Content Include="app\reporter\reporters.html" />
+    <Content Include="app\reporter\reporters.js" />
+    <Content Include="app\services\model.js" />
+    <Content Include="App_Data\CodeCamper.sdf" />
     <Content Include="content\bootstrap-theme.css" />
     <Content Include="content\bootstrap-theme.min.css" />
     <Content Include="content\bootstrap.css" />
@@ -338,7 +341,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Breeze\" />
   </ItemGroup>

@@ -1,0 +1,27 @@
+﻿<section class="mainbar" data-ng-controller="reporters as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget worange">
+                    <div data-cc-widget-header title="{{vm.title}}"
+                         subtitle="{{vm.reporters.length}}"></div>
+                    <div class="widget-content user">
+                        <div class="padd" data-ng-repeat="r in vm.reporters">
+                            <div class="user">
+                                <div class="user-details" >
+                                    <small>{{r.userName}}</small>
+                                    <small>{{r.Reporter.dateofbirth}}</small>
+                                    <h3>{{r.name}}</h3>
+                                    <h6>{{r.address}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

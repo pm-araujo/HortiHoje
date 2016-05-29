@@ -8,7 +8,7 @@ namespace HortiHoje.DataAccess
     public class CodeCamperDbContext : DbContext 
     {
         public CodeCamperDbContext()
-            : base(nameOrConnectionString: "CodeCamper") { }
+            : base(nameOrConnectionString: "DefaultConnection") { }
 
         static CodeCamperDbContext()
         {
@@ -25,11 +25,15 @@ namespace HortiHoje.DataAccess
 
             modelBuilder.Configurations.Add(new SessionConfiguration());
             modelBuilder.Configurations.Add(new AttendanceConfiguration());
+
+            modelBuilder.Configurations.Add(new ReporterConfiguration());
         }
 
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Attendance> Attendance { get; set; }
+
+        public DbSet<Reporter> Reporters { get; set; }
 
         // Lookup Lists
         public DbSet<Room> Rooms { get; set; }

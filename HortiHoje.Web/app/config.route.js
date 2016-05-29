@@ -40,13 +40,13 @@
                     }
                 }
             }, {
-                url: '/sessions',
+                url: '/reporters',
                 config: {
-                    title: 'sessions',
-                    templateUrl: 'app/session/sessions.html',
+                    title: 'reporters',
+                    templateUrl: 'app/reporter/reporters.html',
                     settings: {
                         nav: 3,
-                        content: '<i class="fa fa-calendar"></i> Sessions'
+                        content: '<i class="fa fa-calendar"></i> Reporters'
                     }
                 }
             }
