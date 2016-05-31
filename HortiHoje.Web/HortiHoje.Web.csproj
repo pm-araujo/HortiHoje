@@ -176,7 +176,10 @@
     <Content Include="app\layout\sidebar.html" />
     <Content Include="app\layout\sidebar.js" />
     <Content Include="app\layout\topnav.html" />
+    <Content Include="app\layout\topnav.js" />
     <Content Include="app\layout\widgetheader.html" />
+    <Content Include="app\login\login.html" />
+    <Content Include="app\login\login.js" />
     <Content Include="app\services\datacontext.js" />
     <Content Include="app\services\directives.js" />
     <Content Include="app\services\entityManagerFactory.js" />

@@ -12,7 +12,13 @@
 
         activate();
 
-        function activate() { getNavRoutes(); }
+        function activate() {
+
+            if (!sessionStorage.isAuthenticated)
+                return;
+
+            getNavRoutes();
+        }
         
         function getNavRoutes() {
             vm.navRoutes = routes.filter(function(r) {

@@ -12,7 +12,7 @@ namespace HortiHoje.Web.Controllers
     public class BreezeController : ApiController
     {
         // Todo: inject via an interface rather than "new" the concrete class
-        readonly CodeCamperRepository _repository = new CodeCamperRepository();
+        readonly HortiHojeRepository _repository = new HortiHojeRepository();
 
         [HttpGet]
         public string Metadata()
@@ -63,10 +63,15 @@ namespace HortiHoje.Web.Controllers
         [HttpGet]
         public object Lookups()
         {
+            /*
             var rooms = _repository.Rooms;
             var tracks = _repository.Tracks;
             var timeslots = _repository.TimeSlots;
             return new { rooms, tracks, timeslots };
+            **/
+            var reporters = _repository.Reporters;
+
+            return new { reporters };
         }
 
         // Diagnostic

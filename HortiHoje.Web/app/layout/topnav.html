@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-fixed-top navbar-inverse">
+﻿<nav class="navbar navbar-fixed-top navbar-inverse" data-ng-controller="topnav as vm">
     <div class="navbar-header">
         <a href="/" class="navbar-brand"><span class="brand-title">HortiHoje</span></a>
         <a class="btn navbar-btn navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -9,20 +9,15 @@
     </div>
     <div class="navbar-collapse collapse">
         <div class="pull-right navbar-logo">
-            <ul class="nav navbar-nav pull-right">
+            <ul id="curUserinfo" ng-show="haveUser()" class="nav navbar-nav pull-right">
                 <li>
-                    <a href="http://www.johnpapa.net/hottowel-angular" target="_blank">
-                        Created by John Papa
+                    <a>
+                        <i class="fa fa-user"></i> {{vm.user}}
                     </a>
                 </li>
-                <li>
-                    <a href="http://www.breezejs.com" target="_blank">
-                        <img src="../../Content/images/breezelogo.png" />
-                    </a>
-                </li>
-                <li class="dropdown dropdown-big">
-                    <a href="http://www.angularjs.org" target="_blank">
-                        <img src="../../Content/images/AngularJS-small.png" />
+                <li ng-click="doLogout()">
+                    <a>
+                        <i class="fa fa-power-off"></i> Logout
                     </a>
                 </li>
             </ul>

@@ -1,0 +1,21 @@
+﻿<section class="mainbar" data-ng-controller="login as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wviolet">
+                    <div data-cc-widget-header title="{{vm.title}}"></div>
+                    <div class="widget-content user">
+                        <form ng-submit="doLogin()">
+                            <label>Username</label>
+                            <input type="text" ng-model="username">
+                            <button>Login</button>
+                        </form>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

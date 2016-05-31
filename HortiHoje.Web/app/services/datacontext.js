@@ -16,10 +16,29 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
+        var primePromise;
+
+        var entityNames = {
+            activity: 'Activity',
+            fieldNote: 'FieldNote',
+            fieldNoteReporter: 'FieldNoteReporter',
+            location: 'Location',
+            manager: 'Manager',
+            mediaFile: 'MediaFile',
+            mediaFileTag: 'MediaFileTag',
+            reporter: 'Reporter',
+            tag: 'Tag',
+            task: 'Task',
+            taskAllocatedReporter: 'TaskAllocatedReporter',
+            taskAllowedReporter: 'TaskAllowedReporter'
+        };
+
         var service = {
             getPeople: getPeople,
             getMessageCount: getMessageCount,
-            getReporterPartials: getReporterPartials
+            getReporterPartials: getReporterPartials,
+
+            primeData: primeData
         };
 
         return service;
@@ -42,14 +61,6 @@
         function getReporterPartials() {
             var reporters;
 
-            /*
-            return EntityQuery.from('Sessions')
-                .select('id, title, code, speakerId, trackId, timeSlotId, roomId, level, tags')
-                .orderBy(orderBy)
-                .toType('Session')
-                .using(manager).execute()
-                .to$q(querySucceeded, _queryFailed);
-            */
             return EntityQuery.from('Reporters')
                 .select('userName, name, passwordHash, doB, nIF, address')
                 .orderBy('name, nIF')
@@ -61,6 +72,60 @@
                 reporters = data.results;
                 log('Retrieved [Reporters Partials] from remote data source', reporters.length, true);
                 return reporters;
+            }
+        }
+
+        function primeData() {
+
+            if (primePromise) return primePromise;
+
+            primePromise = $q.all([getLookups()])
+                .then(extendMetadata)
+                .then(success);
+
+            return primePromise;
+
+            function success() {
+                setLookups();
+                log('Data Primed');
+            }
+
+            function extendMetadata() {
+                var metadataStore = manager.metadataStore;
+                var types = metadataStore.getEntityTypes();
+
+                types.forEach(function (type) {
+                    if( type instanceof breeze.EntityType)
+                        set(type.shortName, type)
+                });
+
+                function set(resourceName, entityName) {
+                    metadataStore.setEntityTypeForResourceName(resourceName, entityName);
+                }
+            }
+        }
+
+        function setLookups(data) {
+            service.lookupCacheData = {
+                reporters: _getAllLocal(entityNames.reporter, 'name, nIF')
+            }
+        }
+
+        function _getAllLocal(resource, ordering) {
+            return EntityQuery.from(resource)
+                .orderBy(ordering)
+                .using(manager)
+                .executeLocally();
+        }
+
+        function getLookups() {
+            return EntityQuery.from('Lookups')
+                .using(manager)
+                .execute(querySucceeded, _queryFailed);
+
+            function querySucceeded(data) {
+                log('Retrieved [Lookups] from remote data source', data, true);
+                return true;
             }
         }
 

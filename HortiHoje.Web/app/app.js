@@ -19,8 +19,21 @@
     ]);
     
     // Handle routing errors and success events
-    app.run(['$route', '$rootScope', '$q', 'breeze',
-        function ($route, $rootScope, $q, breeze) {
-        // Include $route to kick start the router.
+    app.run(['$route', '$rootScope', '$location','$q', 'breeze', 'datacontext',
+        function ($route, $rootScope, $location, $q, breeze, datacontext) {
+            // Include $route to kick start the router.
+            $rootScope.$on('$routeChangeStart',
+                function (e, next, current) {
+                    if ( !sessionStorage.isAuthenticated ) {
+                        if (next.templateUrl === "app/login/login.html") {
+                        } else {
+                            e.preventDefault();
+                            $location.path("/login");
+                        }
+                    }
+                }
+            );
+
+            datacontext.primeData();
         }]);        
 })();

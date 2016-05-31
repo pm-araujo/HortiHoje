@@ -28,7 +28,7 @@
                 get: function () {
                     // formatting the date
                     var dob = this.doB;
-                    var val = moment.utc(dob).format('yyyy-mm-dd');
+                    var val = moment.utc(dob).format('L');
 
                     return val;
                 }

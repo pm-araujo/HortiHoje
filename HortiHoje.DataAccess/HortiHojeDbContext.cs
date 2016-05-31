@@ -5,14 +5,14 @@ using HortiHoje.Model;
 
 namespace HortiHoje.DataAccess
 {
-    public class CodeCamperDbContext : DbContext 
+    public class HortiHojeDbContext : DbContext 
     {
-        public CodeCamperDbContext()
+        public HortiHojeDbContext()
             : base(nameOrConnectionString: "DefaultConnection") { }
 
-        static CodeCamperDbContext()
+        static HortiHojeDbContext()
         {
-            Database.SetInitializer<CodeCamperDbContext>(null);
+            Database.SetInitializer<HortiHojeDbContext>(null);
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

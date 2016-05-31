@@ -13,14 +13,23 @@
         routes.forEach(function (r) {
             $routeProvider.when(r.url, r.config);
         });
-        $routeProvider.otherwise({ redirectTo: '/' });
+        $routeProvider.otherwise({ redirectTo: '/login' });
     }
 
     // Define the routes 
     function getRoutes() {
         return [
             {
+                url: '/login',
+                authenticate: false,
+                config: {
+                    templateUrl: 'app/login/login.html',
+                    title: 'login',
+                }
+            },
+            {
                 url: '/',
+                authenticate: true,
                 config: {
                     templateUrl: 'app/dashboard/dashboard.html',
                     title: 'dashboard',
@@ -31,6 +40,7 @@
                 }
             }, {
                 url: '/admin',
+                authenticate: true,
                 config: {
                     title: 'admin',
                     templateUrl: 'app/admin/admin.html',
@@ -41,6 +51,7 @@
                 }
             }, {
                 url: '/reporters',
+                authenticate: true,
                 config: {
                     title: 'reporters',
                     templateUrl: 'app/reporter/reporters.html',

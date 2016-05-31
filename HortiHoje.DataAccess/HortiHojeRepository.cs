@@ -9,12 +9,12 @@ namespace HortiHoje.DataAccess
     /// <summary>
     /// Repository (a "Unit of Work" really) of CodeCamper models.
     /// </summary>
-    public class CodeCamperRepository
+    public class HortiHojeRepository
     {
-        private readonly EFContextProvider<CodeCamperDbContext>
-            _contextProvider = new EFContextProvider<CodeCamperDbContext>();
+        private readonly EFContextProvider<HortiHojeDbContext>
+            _contextProvider = new EFContextProvider<HortiHojeDbContext>();
 
-        private CodeCamperDbContext Context { get { return _contextProvider.Context; } }
+        private HortiHojeDbContext Context { get { return _contextProvider.Context; } }
 
         public string Metadata
         {
