@@ -21,7 +21,7 @@
     // Handle routing errors and success events
     app.run(['$route', '$rootScope', '$location','$q', 'breeze', 'datacontext',
         function ($route, $rootScope, $location, $q, breeze, datacontext) {
-            // Include $route to kick start the router.
+        // Include $route to kick start the router.
             $rootScope.$on('$routeChangeStart',
                 function (e, next, current) {
                     if ( !sessionStorage.isAuthenticated ) {
