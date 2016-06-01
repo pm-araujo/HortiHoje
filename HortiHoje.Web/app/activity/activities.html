@@ -1,0 +1,26 @@
+﻿<section class="mainbar" data-ng-controller="activities as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wviolet">
+                    <div data-cc-widget-header title="{{vm.title}}"
+                         subtitle="{{vm.activities.length}}"></div>
+                    <div class="widget-content user">
+                        <div class="padd" data-ng-repeat="a in vm.activities">
+                            <div class="user">
+                                <div class="user-details">
+                                    <h3>{{a.name}}</h3>
+                                    <h4>{{a.description}}</h4>
+                                    <small>Manager: {{a.Manager.Reporter.name}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

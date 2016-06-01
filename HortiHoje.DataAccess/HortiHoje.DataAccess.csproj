@@ -53,6 +53,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityConfiguration.cs" />
     <Compile Include="AttendanceConfiguration.cs" />
     <Compile Include="HortiHojeDbContext.cs" />
     <Compile Include="HortiHojeRepository.cs" />

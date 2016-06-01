@@ -21,7 +21,6 @@
         return [
             {
                 url: '/login',
-                authenticate: false,
                 config: {
                     templateUrl: 'app/login/login.html',
                     title: 'login',
@@ -29,7 +28,6 @@
             },
             {
                 url: '/',
-                authenticate: true,
                 config: {
                     templateUrl: 'app/dashboard/dashboard.html',
                     title: 'dashboard',
@@ -39,19 +37,17 @@
                     }
                 }
             }, {
-                url: '/admin',
-                authenticate: true,
+                url: '/activities',
                 config: {
-                    title: 'admin',
-                    templateUrl: 'app/admin/admin.html',
+                    title: 'activities',
+                    templateUrl: 'app/activity/activities.html',
                     settings: {
                         nav: 2,
-                        content: '<i class="fa fa-lock"></i> Admin'
+                        content: '<i class="fa fa-calendar"></i> Activities'
                     }
                 }
             }, {
                 url: '/reporters',
-                authenticate: true,
                 config: {
                     title: 'reporters',
                     templateUrl: 'app/reporter/reporters.html',

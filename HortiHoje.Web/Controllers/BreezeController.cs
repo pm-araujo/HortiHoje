@@ -26,10 +26,17 @@ namespace HortiHoje.Web.Controllers
             return _repository.SaveChanges(saveBundle);
         }
 
+        // HortiHoje Entities
         [HttpGet]
         public IQueryable<Reporter> Reporters()
         {
             return _repository.Reporters;
+        }
+
+        [HttpGet]
+        public IQueryable<Activity> Activities()
+        {
+            return _repository.Activities;
         }
 
         [HttpGet]
@@ -70,8 +77,9 @@ namespace HortiHoje.Web.Controllers
             return new { rooms, tracks, timeslots };
             **/
             var reporters = _repository.Reporters;
+            var activities = _repository.Activities;
 
-            return new { reporters };
+            return new { reporters, activities };
         }
 
         // Diagnostic

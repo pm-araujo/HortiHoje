@@ -15,7 +15,7 @@
             if ( !sessionStorage.isAuthenticated )
                 return;
 
-            vm.user = sessionStorage.userName;
+            vm.user = sessionStorage.name;
         }
 
         $scope.haveUser = function () {
@@ -26,6 +26,7 @@
 
             sessionStorage.removeItem('isAuthenticated');
             sessionStorage.removeItem('userName');
+            sessionStorage.removeItem('name');
 
             $location.path('/login');
             $window.location.reload();

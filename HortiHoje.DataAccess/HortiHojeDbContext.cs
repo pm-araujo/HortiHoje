@@ -27,13 +27,17 @@ namespace HortiHoje.DataAccess
             modelBuilder.Configurations.Add(new AttendanceConfiguration());
 
             modelBuilder.Configurations.Add(new ReporterConfiguration());
+            modelBuilder.Configurations.Add(new ActivityConfiguration());
         }
 
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Attendance> Attendance { get; set; }
 
+        // HortiHoje Entities
         public DbSet<Reporter> Reporters { get; set; }
+
+        public DbSet<Activity> Activities { get; set; }
 
         // Lookup Lists
         public DbSet<Room> Rooms { get; set; }

@@ -44,11 +44,10 @@
 
 
         function activate() {
+
             if (sessionStorage.isAuthenticated)
                 $location.path('/');
-                        return datacontext.getReporterPartials().then(function (data) {
-                return vm.reporters = data;
-            });
+
             common.activateController([], controllerId)
                 .then(function () { log('Activated Login View'); });
         }
