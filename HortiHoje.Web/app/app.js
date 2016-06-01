@@ -34,6 +34,7 @@
                 }
             );
 
-            datacontext.primeData();
+            if( sessionStorage.isAuthenticated )
+                datacontext.primeData();
         }]);        
 })();

@@ -38,6 +38,7 @@
             getMessageCount: getMessageCount,
             getReporterPartials: getReporterPartials,
 
+            doLogin: doLogin,
             primeData: primeData
         };
 
@@ -72,6 +73,22 @@
                 reporters = data.results;
                 log('Retrieved [Reporters Partials] from remote data source', reporters.length, true);
                 return reporters;
+            }
+        }
+
+        function doLogin(userName, pw) {
+            var unamePred = new breeze.Predicate('userName', '==', userName);
+            var pwPred = new breeze.Predicate('passwordHash', '==', pw);
+
+            return EntityQuery.from('Reporters')
+                .where(unamePred.and(pwPred) )
+                .select('id, userName, name')
+                .toType('Reporter')
+                .using(manager).execute()
+                .to$q(querySucceeded, _queryFailed);
+
+            function querySucceeded(data) {
+                return data.results[0];
             }
         }
 
