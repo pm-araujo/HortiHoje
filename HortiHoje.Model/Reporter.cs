@@ -19,7 +19,11 @@ namespace HortiHoje.Model
         public DateTime DoB { get; set; }
         
         public int NIF { get; set; }
+
+        public Boolean IsManager { get; set; }
         public string Address { get; set; }
+
+        public virtual ICollection<Activity> ManagerActivities { get; set; }
 
     }
 }

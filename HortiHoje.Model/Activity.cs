@@ -9,9 +9,9 @@ namespace HortiHoje.Model
         [Required, MaxLength(50)]
         public string Name { get; set; }
         public string Description { get; set; }
-        public int ManagerId { get; set; }
+        public int IdManager { get; set; }
 
-        public virtual Manager Manager { get; set; }
+        public virtual Reporter Reporter { get; set; }
 
         public virtual ICollection<Task>
             TaskList
