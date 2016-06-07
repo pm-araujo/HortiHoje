@@ -7,6 +7,10 @@ namespace HortiHoje.DataAccess
     {
         public ActivityConfiguration()
         {
+            // Activity has 1 Manager, Manager has many Activities
+            HasRequired(s => s.Reporter)
+               .WithMany(r => r.ManagerActivities)
+               .HasForeignKey(s => s.IdManager);
         }
     }
 }

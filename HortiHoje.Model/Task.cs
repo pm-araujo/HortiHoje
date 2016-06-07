@@ -13,12 +13,12 @@ namespace HortiHoje.Model
 
         public bool Completed { get; set; }
 
-        public int ActivityId { get; set; }
+        public int IdActivity { get; set; }
 
-        public int LocationId { get; set; }
+        public int Location { get; set; }
 
         public virtual Activity Activity { get; set; }
 
-        public virtual Location Location { get; set; }
+        public virtual Location LocationVirt { get; set; }
     }
 }

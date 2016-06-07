@@ -23,7 +23,6 @@
             fieldNote: 'FieldNote',
             fieldNoteReporter: 'FieldNoteReporter',
             location: 'Location',
-            manager: 'Manager',
             mediaFile: 'MediaFile',
             mediaFileTag: 'MediaFileTag',
             reporter: 'Reporter',
@@ -154,7 +153,7 @@
             /*
             // Fetching the data from remote source
             return EntityQuery.from('Reporters')
-                .select('userName, name, passwordHash, doB, nIF, address')
+                .select('userName, name, passwordHash, doB, nIF, address, isManager')
                 .orderBy('name, nIF')
                 .toType('Reporter')
                 .using(manager).execute()
@@ -172,9 +171,9 @@
             var activities;
 
             return EntityQuery.from('Activities')
-                .select('name, description, manager')
+                .select('name, description, idManager')
                 .orderBy('name')
-                .toType('Activities')
+                .toType('Activity')
                 .using(manager).execute()
                 .to$q(querySucceeded, _queryFailed);
 
