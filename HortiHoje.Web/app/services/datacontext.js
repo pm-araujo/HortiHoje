@@ -46,6 +46,11 @@
         return service;
 
         function doLogin(userName, pw) {
+
+            if (userName === undefined ||
+                pw === undefined)
+                return $q.when();
+
             var unamePred = new breeze.Predicate('userName', '==', userName);
             var pwPred = new breeze.Predicate('passwordHash', '==', pw);
 
@@ -59,6 +64,7 @@
             function querySucceeded(data) {
                 return data.results[0];
             }
+
         }
 
         function primeData() {
@@ -141,6 +147,12 @@
         function getReporterPartials() {
             var reporters;
 
+            // Fetching the data from cache
+            reporters = _getAllLocal(entityNames.session, 'name, nIF');
+            return $q.when(reporters);
+            
+            /*
+            // Fetching the data from remote source
             return EntityQuery.from('Reporters')
                 .select('userName, name, passwordHash, doB, nIF, address')
                 .orderBy('name, nIF')
@@ -153,6 +165,7 @@
                 log('Retrieved [Reporters Partials] from remote data source', reporters.length, true);
                 return reporters;
             }
+            */
         }
 
         function getActivityPartials() {

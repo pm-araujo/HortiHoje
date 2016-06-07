@@ -26,11 +26,26 @@
             $location.path("/");
             $window.location.reload();
             */
+
+
+            $("#submitButton").button("disable");
+            $("#submitButton")
+                .html("<i class='fa fa-circle-o-notch fa-spin'></i> Loading");
+
             datacontext.doLogin($scope.username, $scope.password).then(function (data) {
                 if (!data) {
+
                     logError('Login Failed - Invalid Credentials');
+
+                    $("#submitButton").button("enable");
+                    $("#submitButton")
+                        .html("<i class='fa fa-sign-in'></i> Sign In");
+
+
                     $scope.username = "";
                     $scope.password = "";
+
+
                     return;
                 }
                 sessionStorage.isAuthenticated = true;
