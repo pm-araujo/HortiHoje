@@ -19,20 +19,11 @@
     ]);
     
     // Handle routing errors and success events
-    app.run(['$route', '$rootScope', '$location','$q', 'breeze', 'datacontext',
-        function ($route, $rootScope, $location, $q, breeze, datacontext) {
+    app.run(['$route', '$rootScope', '$location','$q', 'breeze', 'datacontext', 'routeMediator',
+        function ($route, $rootScope, $location, $q, breeze, datacontext, routeMediator) {
         // Include $route to kick start the router.
-            $rootScope.$on('$routeChangeStart',
-                function (e, next, current) {
-                    if ( !sessionStorage.isAuthenticated ) {
-                        if (next.templateUrl === "app/login/login.html") {
-                        } else {
-                            e.preventDefault();
-                            $location.path("/login");
-                        }
-                    }
-                }
-            );
+
+            routeMediator.setupRoutingHandlers();
 
             if( sessionStorage.isAuthenticated )
                 datacontext.primeData();

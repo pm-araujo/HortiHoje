@@ -9,8 +9,22 @@
 
 
     function model() {
+        var entityNames = {
+            activity: 'Activity',
+            fieldNote: 'FieldNote',
+            fieldNoteReporter: 'FieldNoteReporter',
+            location: 'Location',
+            mediaFile: 'MediaFile',
+            mediaFileTag: 'MediaFileTag',
+            reporter: 'Reporter',
+            tag: 'Tag',
+            task: 'Task',
+            taskAllocatedReporter: 'TaskAllocatedReporter',
+            taskAllowedReporter: 'TaskAllowedReporter'
+        };
         var service = {
-            configureMetadataStore: configureMetadataStore
+            configureMetadataStore: configureMetadataStore,
+            entityNames: entityNames
         };
 
         return service;

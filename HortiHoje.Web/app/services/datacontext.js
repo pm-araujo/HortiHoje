@@ -3,11 +3,11 @@
 
     var serviceId = 'datacontext';
     angular.module('app').factory(serviceId,
-        ['common', 'entityManagerFactory', 'breeze', 'config', datacontext]);
+        ['breeze', 'common', 'entityManagerFactory', 'config', 'model', datacontext]);
 
-    function datacontext(common, emFactory, breeze, config) {
+    function datacontext(breeze, common, emFactory, config, model) {
         var EntityQuery = breeze.EntityQuery;
-
+        var entityNames = model.entityNames;
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(serviceId);
         var logError = getLogFn(serviceId, 'error');
@@ -17,20 +17,6 @@
         var $q = common.$q;
 
         var primePromise;
-
-        var entityNames = {
-            activity: 'Activity',
-            fieldNote: 'FieldNote',
-            fieldNoteReporter: 'FieldNoteReporter',
-            location: 'Location',
-            mediaFile: 'MediaFile',
-            mediaFileTag: 'MediaFileTag',
-            reporter: 'Reporter',
-            tag: 'Tag',
-            task: 'Task',
-            taskAllocatedReporter: 'TaskAllocatedReporter',
-            taskAllowedReporter: 'TaskAllowedReporter'
-        };
 
         var service = {
             getPeople: getPeople,
@@ -103,13 +89,6 @@
             }
         }
 
-        function _getAllLocal(resource, ordering) {
-            return EntityQuery.from(resource)
-                .orderBy(ordering)
-                .using(manager)
-                .executeLocally();
-        }
-
         function getLookups() {
             return EntityQuery.from('Lookups')
                 .using(manager)
@@ -121,11 +100,23 @@
             }
         }
 
+        function _getAllLocal(resource, ordering, predicate) {
+            return EntityQuery.from(resource)
+                .orderBy(ordering)
+                .where(predicate)
+                .using(manager)
+                .executeLocally();
+        }
+
         function _queryFailed(error) {
             var msg = config.appErrorPrefix + 'Error retrieving data' + error.message;
             logError(msg, error);
             throw error;
         }
+
+
+
+
 
         // Server Queries
         function getMessageCount() { return $q.when(72); }
@@ -140,22 +131,25 @@
                 { firstName: 'Landon', lastName: 'Gates', age: 11, location: 'South Carolina' },
                 { firstName: 'Haley', lastName: 'Guthrie', age: 35, location: 'Wyoming' }
             ];
+
             return $q.when(people);
         }
 
-        function getReporterPartials() {
+        function getReporterPartials(forceRemote) {
             var reporters;
 
             // Fetching the data from cache
-            reporters = _getAllLocal(entityNames.session, 'name, nIF');
-            return $q.when(reporters);
+            if( !forceRemote ) {
+                reporters = _getAllLocal(entityNames.reporter, 'name, nIF');
+                return $q.when(reporters);
+            }
             
-            /*
+
             // Fetching the data from remote source
             return EntityQuery.from('Reporters')
                 .select('userName, name, passwordHash, doB, nIF, address, isManager')
                 .orderBy('name, nIF')
-                .toType('Reporter')
+                .toType(entityNames.reporter)
                 .using(manager).execute()
                 .to$q(querySucceeded, _queryFailed);
 
@@ -164,16 +158,24 @@
                 log('Retrieved [Reporters Partials] from remote data source', reporters.length, true);
                 return reporters;
             }
-            */
+            
         }
 
-        function getActivityPartials() {
+        function getActivityPartials(forceRemote) {
             var activities;
 
+            // Fetching the data from cache
+            if (!forceRemote) {
+                activities = _getAllLocal(entityNames.activity, 'name');
+                return $q.when(activities);
+            }
+
+            
+            // Fetching the data from remote source
             return EntityQuery.from('Activities')
                 .select('name, description, idManager')
                 .orderBy('name')
-                .toType('Activity')
+                .toType( entityNames.activity )
                 .using(manager).execute()
                 .to$q(querySucceeded, _queryFailed);
 
@@ -181,7 +183,9 @@
                 activities = data.results;
                 log('Retrieved [Activities Partials] from remote data source', activities.length, true);
                 return activities;
+            
             }
+
         }
     }
 })();

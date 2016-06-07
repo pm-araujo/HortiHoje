@@ -28,7 +28,7 @@
             */
 
 
-            $("#submitButton").button("disable");
+            $("#submitButton").prop("disabled", true);
             $("#submitButton")
                 .html("<i class='fa fa-circle-o-notch fa-spin'></i> Loading");
 
@@ -37,13 +37,15 @@
 
                     logError('Login Failed - Invalid Credentials');
 
-                    $("#submitButton").button("enable");
+                    $("#submitButton").prop("disabled", false);
                     $("#submitButton")
                         .html("<i class='fa fa-sign-in'></i> Sign In");
 
 
                     $scope.username = "";
                     $scope.password = "";
+
+                    $("#inputUserName").focus();
 
 
                     return;
@@ -62,6 +64,8 @@
 
             if (sessionStorage.isAuthenticated)
                 $location.path('/');
+
+            $("#inputUserName").focus();
 
             common.activateController([], controllerId)
                 .then(function () { log('Activated Login View'); });
