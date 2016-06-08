@@ -56,6 +56,9 @@
 
             if (primePromise) return primePromise;
 
+            if (!sessionStorage.isAuthenticated)
+                return;
+
             primePromise = $q.all([getLookups()])
                 .then(extendMetadata)
                 .then(success);

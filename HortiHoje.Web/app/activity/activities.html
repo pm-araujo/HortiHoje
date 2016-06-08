@@ -2,11 +2,21 @@
     <section class="matter">
         <div class="container">
             <div class="row">
+                <div class="form-search">
+                    <input class="input-sm search-query"
+                           data-ng-model="vm.activitiesSearch"
+                           data-ng-keyup="vm.search($event)"
+                           placeholder="Title, Description, Manager" />
+                </div>
+            </div>
+            <div class="row">
                 <div class="widget wviolet">
                     <div data-cc-widget-header title="{{vm.title}}"
-                         subtitle="{{vm.activities.length}}"></div>
+                         subtitle="{{vm.filteredActivities.length}} / {{vm.activities.length}}">
+                        
+                    </div>
                     <div class="widget-content user">
-                        <div class="padd" data-ng-repeat="a in vm.activities">
+                        <div class="padd" data-ng-repeat="a in vm.filteredActivities">
                             <div class="user">
                                 <div class="user-details">
                                     <h3>{{a.name}}</h3>

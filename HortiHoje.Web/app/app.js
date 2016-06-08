@@ -24,8 +24,5 @@
         // Include $route to kick start the router.
 
             routeMediator.setupRoutingHandlers();
-
-            if( sessionStorage.isAuthenticated )
-                datacontext.primeData();
         }]);        
 })();

@@ -11,9 +11,25 @@
     function routeConfigurator($routeProvider, routes) {
 
         routes.forEach(function (r) {
-            $routeProvider.when(r.url, r.config);
+            // $routeProvider.when(r.url, r.config);
+            setRoute(r.url, r.config);
         });
         $routeProvider.otherwise({ redirectTo: '/login' });
+
+        function setRoute(url, definition) {
+            // Sets resolvers for all of the routes
+            //      by extending any existing resolvers (or creating a new one ).
+            definition.resolve = angular.extend(definition.resolve || {}, {
+                prime: prime
+            });
+            $routeProvider.when(url, definition);
+            return $routeProvider;
+        }
+    }
+
+    prime.$inject = ['datacontext'];
+    function prime(datacontext) {
+        return datacontext.primeData();
     }
 
     // Define the routes 
