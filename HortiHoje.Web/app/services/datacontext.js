@@ -3,9 +3,9 @@
 
     var serviceId = 'datacontext';
     angular.module('app').factory(serviceId,
-        ['breeze', 'common', 'entityManagerFactory', 'config', 'model', datacontext]);
+        ['breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
 
-    function datacontext(breeze, common, emFactory, config, model) {
+    function datacontext(breeze, common, emFactory, config, model, repositories) {
         var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
@@ -17,42 +17,52 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
+        var repoNames = ['activity', 'reporter', 'lookup'];
+
         var primePromise;
 
         var service = {
+            primeData: primeData,
+
             getPeople: getPeople,
-            getMessageCount: getMessageCount,
+            getMessageCount: getMessageCount
 
-            getReporterPartials: getReporterPartials,
-            getActivityPartials: getActivityPartials,
-            getActivitiesCount: getActivitiesCount,
 
-            doLogin: doLogin,
-            primeData: primeData
+            // Repositories to be added on demand:
+            //      reporter
+            //      lookups
+            //      activity
         };
+
+        init();
 
         return service;
 
-        function doLogin(userName, pw) {
+        function init() {
+            repositories.init(manager);
+            defineLazyLoadedRepos();
+        }
 
-            if (userName === undefined ||
-                pw === undefined)
-                return $q.when();
-
-            var unamePred = Predicate('userName', '==', userName);
-            var pwPred = Predicate('passwordHash', '==', pw);
-
-            return EntityQuery.from('Reporters')
-                .where(unamePred.and(pwPred) )
-                .select('id, userName, name')
-                .toType('Reporter')
-                .using(manager).execute()
-                .to$q(querySucceeded, _queryFailed);
-
-            function querySucceeded(data) {
-                return data.results[0];
-            }
-
+        // Add ES5 property to datacontext for each named repo
+        function defineLazyLoadedRepos() {
+            repoNames.forEach(function (name) {
+                Object.defineProperty(service, name, {
+                    configurable: true, // will redefine this property once
+                    get: function () {
+                        // The 1st time the repo is request via this property, 
+                        // we ask the repositories for it (which will inject it).
+                        var repo = repositories.getRepo(name);
+                        // Rewrite this property to always return this repo;
+                        // no longer redefinable
+                        Object.defineProperty(service, name, {
+                            value: repo,
+                            configurable: false,
+                            enumerable: true
+                        });
+                        return repo;
+                    }
+                });
+            });
         }
 
         function primeData() {
@@ -62,14 +72,14 @@
             if (!sessionStorage.isAuthenticated)
                 return;
 
-            primePromise = $q.all([getLookups()])
+            primePromise = $q.all([service.lookup.getAll()])
                 .then(extendMetadata)
                 .then(success);
 
             return primePromise;
 
             function success() {
-                setLookups();
+                service.lookup.setLookups();
                 log('Data Primed');
             }
 
@@ -87,40 +97,6 @@
                 }
             }
         }
-
-        function setLookups(data) {
-            service.lookupCacheData = {
-                reporters: _getAllLocal(entityNames.reporter, 'name, nIF'),
-                activities: _getAllLocal(entityNames.activity, 'name')
-            }
-        }
-
-        function _getAllLocal(resource, ordering, predicate) {
-            return EntityQuery.from(resource)
-                .orderBy(ordering)
-                .where(predicate)
-                .using(manager)
-                .executeLocally();
-        }
-
-        function _getLocalCount(resource) {
-            var entities = EntityQuery.from(resource)
-                .using(manager)
-                .executeLocally();
-
-            return entities.length;
-        }
-
-        function _getInlineCount(data) {
-            return data.inlineCount;
-        }
-
-        function _queryFailed(error) {
-            var msg = config.appErrorPrefix + 'Error retrieving data' + error.message;
-            logError(msg, error);
-            throw error;
-        }
-
 
         // Sample Queries
         function getMessageCount() {
@@ -142,74 +118,5 @@
         }
 
 
-        // Server Queries
-
-        function getLookups() {
-            return EntityQuery.from('Lookups')
-                .using(manager)
-                .execute(querySucceeded, _queryFailed);
-
-            function querySucceeded(data) {
-                log('Retrieved [Lookups] from remote data source', data, true);
-                return true;
-            }
-        }
-
-        function getReporterPartials(forceRemote) {
-            var reporters;
-
-            // Fetching the data from cache
-            if( !forceRemote ) {
-                reporters = _getAllLocal(entityNames.reporter, 'name, nIF');
-                return $q.when(reporters);
-            }
-            
-
-            // Fetching the data from remote source
-            return EntityQuery.from('Reporters')
-                .select('userName, name, passwordHash, doB, nIF, address, isManager')
-                .orderBy('name, nIF')
-                .toType(entityNames.reporter)
-                .using(manager).execute()
-                .to$q(querySucceeded, _queryFailed);
-
-            function querySucceeded(data) {
-                reporters = data.results;
-                log('Retrieved [Reporters Partials] from remote data source', reporters.length, true);
-                return reporters;
-            }
-            
-        }
-
-        function getActivityPartials(forceRemote) {
-            var activities;
-
-            // Fetching the data from cache
-            if (!forceRemote) {
-                activities = _getAllLocal(entityNames.activity, 'name');
-                return $q.when(activities);
-            }
-
-            
-            // Fetching the data from remote source
-            return EntityQuery.from('Activities')
-                .select('name, description, idManager')
-                .orderBy('name')
-                .toType( entityNames.activity )
-                .using(manager).execute()
-                .to$q(querySucceeded, _queryFailed);
-
-            function querySucceeded(data) {
-                activities = data.results;
-                log('Retrieved [Activities Partials] from remote data source', activities.length, true);
-                return activities;
-            
-            }
-
-        }
-
-        function getActivitiesCount() {
-            return $q.when(_getLocalCount(entityNames.activity));
-        }
     }
 })();

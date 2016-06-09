@@ -188,6 +188,11 @@
     <Content Include="app\reporter\reporters.html" />
     <Content Include="app\reporter\reporters.js" />
     <Content Include="app\services\model.js" />
+    <Content Include="app\services\repository.abstract.js" />
+    <Content Include="app\services\repository.activity.js" />
+    <Content Include="app\services\repositories.js" />
+    <Content Include="app\services\repository.lookup.js" />
+    <Content Include="app\services\repository.reporter.js" />
     <Content Include="app\services\routeMediator.js" />
     <Content Include="App_Data\CodeCamper.sdf" />
     <Content Include="content\bootstrap-theme.css" />

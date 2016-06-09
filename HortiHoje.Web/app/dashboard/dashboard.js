@@ -25,7 +25,7 @@
         }
 
         function getActivitiesCount() {
-            return datacontext.getActivitiesCount().then(function (data) {
+            return datacontext.activity.getCount().then(function (data) {
                 return vm.activitiesCount = data;
             });
         }

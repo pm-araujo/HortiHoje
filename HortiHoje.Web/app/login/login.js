@@ -35,7 +35,7 @@
             $("#submitButton")
                 .html("<i class='fa fa-circle-o-notch fa-spin'></i> Loading");
 
-            datacontext.doLogin(username, password).then(function (data) {
+            datacontext.reporter.doLogin(username, password).then(function (data) {
                 if (!data) {
 
                     logError('Login Failed - Invalid Credentials');

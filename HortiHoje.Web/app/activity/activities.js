@@ -37,7 +37,7 @@
         }
 
         function getActivities() {
-            return datacontext.getActivityPartials().then(function (data) {
+            return datacontext.activity.getPartials().then(function (data) {
                 return vm.activities = vm.filteredActivities = data;
             });
         }

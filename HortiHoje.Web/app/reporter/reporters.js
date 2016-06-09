@@ -27,7 +27,7 @@
         }
 
         function getReporters(forceRefresh) {
-            return datacontext.getReporterPartials(forceRefresh).then(function (data) {
+            return datacontext.reporter.getPartials(forceRefresh).then(function (data) {
                 return vm.reporters = data;
             });
         }
