@@ -11,6 +11,7 @@
         var events = config.events;
         vm.busyMessage = 'Please wait ...';
         vm.isBusy = true;
+        vm.showSplash = true;
         vm.spinnerOptions = {
             radius: 40,
             lines: 7,
@@ -26,7 +27,9 @@
 
         function activate() {
             logSuccess('HortiHoje loaded!', null, true);
-            common.activateController([], controllerId);
+            common.activateController([], controllerId).then(function () {
+                vm.showSplash = false;
+            });
         }
 
         function toggleSpinner(on) { vm.isBusy = on; }
