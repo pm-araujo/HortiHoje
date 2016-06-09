@@ -6,6 +6,7 @@
         ['breeze', 'common', 'entityManagerFactory', 'config', 'model', datacontext]);
 
     function datacontext(breeze, common, emFactory, config, model) {
+        var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
         var getLogFn = common.logger.getLogFn;
@@ -21,8 +22,10 @@
         var service = {
             getPeople: getPeople,
             getMessageCount: getMessageCount,
+
             getReporterPartials: getReporterPartials,
             getActivityPartials: getActivityPartials,
+            getActivitiesCount: getActivitiesCount,
 
             doLogin: doLogin,
             primeData: primeData
@@ -36,8 +39,8 @@
                 pw === undefined)
                 return $q.when();
 
-            var unamePred = new breeze.Predicate('userName', '==', userName);
-            var pwPred = new breeze.Predicate('passwordHash', '==', pw);
+            var unamePred = Predicate('userName', '==', userName);
+            var pwPred = Predicate('passwordHash', '==', pw);
 
             return EntityQuery.from('Reporters')
                 .where(unamePred.and(pwPred) )
@@ -92,23 +95,24 @@
             }
         }
 
-        function getLookups() {
-            return EntityQuery.from('Lookups')
-                .using(manager)
-                .execute(querySucceeded, _queryFailed);
-
-            function querySucceeded(data) {
-                log('Retrieved [Lookups] from remote data source', data, true);
-                return true;
-            }
-        }
-
         function _getAllLocal(resource, ordering, predicate) {
             return EntityQuery.from(resource)
                 .orderBy(ordering)
                 .where(predicate)
                 .using(manager)
                 .executeLocally();
+        }
+
+        function _getLocalCount(resource) {
+            var entities = EntityQuery.from(resource)
+                .using(manager)
+                .executeLocally();
+
+            return entities.length;
+        }
+
+        function _getInlineCount(data) {
+            return data.inlineCount;
         }
 
         function _queryFailed(error) {
@@ -118,11 +122,10 @@
         }
 
 
-
-
-
-        // Server Queries
-        function getMessageCount() { return $q.when(72); }
+        // Sample Queries
+        function getMessageCount() {
+            return $q.when(72);
+        }
 
         function getPeople() {
             var people = [
@@ -136,6 +139,20 @@
             ];
 
             return $q.when(people);
+        }
+
+
+        // Server Queries
+
+        function getLookups() {
+            return EntityQuery.from('Lookups')
+                .using(manager)
+                .execute(querySucceeded, _queryFailed);
+
+            function querySucceeded(data) {
+                log('Retrieved [Lookups] from remote data source', data, true);
+                return true;
+            }
         }
 
         function getReporterPartials(forceRemote) {
@@ -189,6 +206,10 @@
             
             }
 
+        }
+
+        function getActivitiesCount() {
+            return $q.when(_getLocalCount(entityNames.activity));
         }
     }
 })();

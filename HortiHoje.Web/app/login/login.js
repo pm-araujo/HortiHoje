@@ -27,12 +27,15 @@
             $window.location.reload();
             */
 
+            var username = ($scope.username || "");
+            var password = ($scope.password || "");
+
 
             $("#submitButton").prop("disabled", true);
             $("#submitButton")
                 .html("<i class='fa fa-circle-o-notch fa-spin'></i> Loading");
 
-            datacontext.doLogin($scope.username, $scope.password).then(function (data) {
+            datacontext.doLogin(username, password).then(function (data) {
                 if (!data) {
 
                     logError('Login Failed - Invalid Credentials');

@@ -12,21 +12,21 @@
             title: 'Hot Towel Angular',
             description: 'Hot Towel Angular is a SPA template for Angular developers.'
         };
-        vm.messageCount = 0;
+        vm.activitiesCount = 0;
         vm.people = [];
         vm.title = 'Dashboard';
 
         activate();
 
         function activate() {
-            var promises = [getMessageCount(), getPeople()];
+            var promises = [getActivitiesCount(), getPeople()];
             common.activateController(promises, controllerId)
                 .then(function () { log('Activated Dashboard View'); });
         }
 
-        function getMessageCount() {
-            return datacontext.getMessageCount().then(function (data) {
-                return vm.messageCount = data;
+        function getActivitiesCount() {
+            return datacontext.getActivitiesCount().then(function (data) {
+                return vm.activitiesCount = data;
             });
         }
 

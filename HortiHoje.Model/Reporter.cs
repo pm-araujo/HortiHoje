@@ -8,7 +8,6 @@ namespace HortiHoje.Model
     {
         public int Id { get; set; }
 
-        [Required]
         public string PasswordHash { get; set; }
 
         [Required]

@@ -26,19 +26,9 @@ namespace HortiHoje.Web.Controllers
             return _repository.SaveChanges(saveBundle);
         }
 
-        // HortiHoje Entities
-        [HttpGet]
-        public IQueryable<Reporter> Reporters()
-        {
-            return _repository.Reporters;
-        }
 
-        [HttpGet]
-        public IQueryable<Activity> Activities()
-        {
-            return _repository.Activities;
-        }
 
+        // Sample Entities
         [HttpGet]
         public IQueryable<Session> Sessions()
         {
@@ -57,6 +47,19 @@ namespace HortiHoje.Web.Controllers
             return _repository.Persons;
         }
 
+
+        // HortiHoje Entities
+        [HttpGet]
+        public IQueryable<Reporter> Reporters()
+        {
+            return _repository.Reporters;
+        }
+
+        [HttpGet]
+        public IQueryable<Activity> Activities()
+        {
+            return _repository.Activities;
+        }
 
         /// <summary>
         /// Query returing a 1-element array with a lookups object whose 

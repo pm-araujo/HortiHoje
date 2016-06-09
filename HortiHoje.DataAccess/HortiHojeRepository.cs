@@ -37,6 +37,7 @@ namespace HortiHoje.DataAccess
             get { return Context.Activities; }
         }
 
+        // Sample Entities
         public IQueryable<Session> Sessions
         {
             get { return Context.Sessions; }
