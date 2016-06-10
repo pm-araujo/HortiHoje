@@ -47,6 +47,11 @@ namespace HortiHoje.DataAccess
             get { return Context.Locations; }
         }
 
+        public IQueryable<FieldNote> FieldNotes
+        {
+            get { return Context.FieldNotes; }
+        }
+
         // Sample Entities
         public IQueryable<Session> Sessions
         {

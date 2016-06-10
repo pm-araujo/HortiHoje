@@ -29,6 +29,7 @@ namespace HortiHoje.DataAccess
             modelBuilder.Configurations.Add(new ReporterConfiguration());
             modelBuilder.Configurations.Add(new ActivityConfiguration());
             modelBuilder.Configurations.Add(new TaskConfiguration());
+            modelBuilder.Configurations.Add(new FieldNoteConfiguration());
         }
 
 
@@ -40,6 +41,8 @@ namespace HortiHoje.DataAccess
         public DbSet<Task> Tasks { get; set; }
 
         public DbSet<Location> Locations { get; set; }
+
+        public DbSet<FieldNote> FieldNotes { get; set; }
 
         // Sample Lists
         public DbSet<Room> Rooms { get; set; }
