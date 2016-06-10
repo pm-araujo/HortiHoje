@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HortiHoje.Model
 {
@@ -14,5 +15,7 @@ namespace HortiHoje.Model
         public int IdTask { get; set; }
                 
         public virtual Task Task { get; set; }
+
+        public virtual ICollection<MediaFile> MediaFiles { get; set; }
     }
 }

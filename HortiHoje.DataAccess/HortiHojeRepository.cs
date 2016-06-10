@@ -52,6 +52,15 @@ namespace HortiHoje.DataAccess
             get { return Context.FieldNotes; }
         }
 
+        public IQueryable<MediaFileTag> MediaFileTags
+        {
+            get { return Context.MediaFileTags; }
+        }
+
+        public IQueryable<MediaFile> MediaFiles
+        {
+            get { return Context.MediaFiles; }
+        }
         // Sample Entities
         public IQueryable<Session> Sessions
         {
