@@ -23,7 +23,6 @@ namespace HortiHoje.Model
         public string Address { get; set; }
 
         public virtual ICollection<Activity> ManagerActivities { get; set; }
-        public virtual ICollection<FieldNoteReporter> FieldNoteReporters { get; set; }
 
     }
 }
