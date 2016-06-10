@@ -13,7 +13,7 @@ namespace HortiHoje.Model
         public virtual FieldNote FieldNote { get; set; }
 
         public virtual ICollection<MediaFileTag>
-            MediaFileTagList
+            Tags
         { get; set; }
     }
 }

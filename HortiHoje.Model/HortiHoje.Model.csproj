@@ -44,6 +44,7 @@
     <Compile Include="Activity.cs" />
     <Compile Include="Attendance.cs" />
     <Compile Include="FieldNote.cs" />
+    <Compile Include="Tag.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="MediaFile.cs" />
     <Compile Include="MediaFileTag.cs" />
