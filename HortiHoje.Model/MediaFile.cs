@@ -8,7 +8,7 @@ namespace HortiHoje.Model
         public int Id { get; set; }
         [Required, MaxLength(25)]
         public string Name { get; set; }
-        public int IdFieldNote { get; set; }
+        public int? IdFieldNote { get; set; }
 
         public virtual FieldNote FieldNote { get; set; }
 
