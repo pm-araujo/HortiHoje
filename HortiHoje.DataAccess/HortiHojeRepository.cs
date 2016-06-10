@@ -37,6 +37,16 @@ namespace HortiHoje.DataAccess
             get { return Context.Activities; }
         }
 
+        public IQueryable<Task> Tasks
+        {
+            get { return Context.Tasks; }
+        }
+
+        public IQueryable<Location> Locations
+        {
+            get { return Context.Locations; }
+        }
+
         // Sample Entities
         public IQueryable<Session> Sessions
         {

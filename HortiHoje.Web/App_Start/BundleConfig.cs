@@ -15,7 +15,13 @@ namespace HortiHoje
                 "~/app/services/directives.js",
                 "~/app/services/entityManagerFactory.js",
                 "~/app/services/model.js",
-                "~/app/services/routeMediator.js"
+                "~/app/services/routeMediator.js",
+
+                "~/app/services/repositories.js",
+                "~/app/services/repository.abstract.js",
+                "~/app/services/repository.activity.js",
+                "~/app/services/repository.reporter.js",
+                "~/app/services/repository.lookup.js"
             ));
 
             // App

@@ -15,10 +15,10 @@ namespace HortiHoje.Model
 
         public int IdActivity { get; set; }
 
-        public int Location { get; set; }
+        public int IdLocation { get; set; }
 
         public virtual Activity Activity { get; set; }
 
-        public virtual Location LocationVirt { get; set; }
+        public virtual Location Location { get; set; }
     }
 }
