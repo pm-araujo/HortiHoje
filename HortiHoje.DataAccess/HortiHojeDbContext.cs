@@ -32,6 +32,7 @@ namespace HortiHoje.DataAccess
             modelBuilder.Configurations.Add(new LocationConfiguration());
             modelBuilder.Configurations.Add(new FieldNoteConfiguration());
             modelBuilder.Configurations.Add(new MediaFileTagConfiguration());
+            modelBuilder.Configurations.Add(new MediaFileConfiguration());
         }
 
 
@@ -47,6 +48,7 @@ namespace HortiHoje.DataAccess
         public DbSet<FieldNote> FieldNotes { get; set; }
 
         public DbSet<MediaFileTag> MediaFileTags{ get; set; }
+        public DbSet<MediaFile> MediaFiles { get; set; }
 
         // Sample Lists
         public DbSet<Room> Rooms { get; set; }
