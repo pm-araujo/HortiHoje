@@ -29,6 +29,7 @@ namespace HortiHoje.DataAccess
             modelBuilder.Configurations.Add(new ReporterConfiguration());
             modelBuilder.Configurations.Add(new ActivityConfiguration());
             modelBuilder.Configurations.Add(new TaskConfiguration());
+            modelBuilder.Configurations.Add(new LocationConfiguration());
         }
 
 
