@@ -53,6 +53,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldNoteReporterConfiguration.cs" />
     <Compile Include="FieldNoteConfiguration.cs" />
     <Compile Include="LocationConfiguration.cs" />
     <Compile Include="MediaFileConfiguration.cs" />

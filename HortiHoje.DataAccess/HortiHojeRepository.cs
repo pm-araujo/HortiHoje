@@ -61,6 +61,22 @@ namespace HortiHoje.DataAccess
         {
             get { return Context.MediaFiles; }
         }
+
+        public IQueryable<FieldNoteReporter> FieldNoteReporters
+        {
+            get { return Context.FieldNoteReporters; }
+        }
+
+
+
+
+
+
+
+
+
+
+
         // Sample Entities
         public IQueryable<Session> Sessions
         {
