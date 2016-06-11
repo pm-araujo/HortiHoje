@@ -12,7 +12,7 @@ namespace HortiHoje.Model
         [Required, MaxLength(20)]
         public string Name { get; set; }
 
-        public int RefCount { get; set; }
+        public int? RefCount { get; set; }
 
         public virtual ICollection<MediaFileTag> MediaFiles { get; set; }
     }

@@ -157,11 +157,12 @@ small {
     padding: 1.5% .5%;
 }
 
-.name-stack h5 {
+.name-stack h6 {
     text-align: center;
     padding: 0;
     margin: 0;
     line-height: 18px !important;
+    word-wrap: break-word
 }
 
 
@@ -184,6 +185,10 @@ small {
 .user .user-pic {
     display: block;
     margin: auto;
+}
+
+.user {
+    text-align: center;
 }
 
 .user .user-details {

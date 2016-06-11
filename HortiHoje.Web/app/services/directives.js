@@ -22,7 +22,6 @@
         }
     }]);
 
-
     app.directive('ccSidebar', function () {
         // Opens and clsoes the sidebar menu.
         // Usage:
@@ -60,7 +59,6 @@
             }
         }
     });
-
 
     app.directive('ccWidgetClose', function () {
         // Usage:
@@ -199,4 +197,40 @@
             attrs.$set('class', 'widget-head');
         }
     });
+
+    app.directive('ccFileImage', ['config', function (config) {
+        //Usage:
+        //<i data-ng-class="{{f.name}}"></i>
+        var resolveFileImage = config.resolveFileImage;
+        var directive = {
+            link: link,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+            attrs.$observe('ccFileImage', function(value) {
+                value = resolveFileImage(value);
+                attrs.$set('class', value);
+            });
+        }
+    }]);
+
+    app.directive('ccFileDownloadPath', ['config', function (config) {
+        //Usage:
+        //<i data-ng-class="{{f.name}}"></i>
+        var baseDownloadPath = config.baseDownloadPath;
+        var directive = {
+            link: link,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+            attrs.$observe('ccFileDownloadPath', function (value) {
+                value = baseDownloadPath + value;
+                attrs.$set('href', value);
+            });
+        }
+    }]);
 })();
