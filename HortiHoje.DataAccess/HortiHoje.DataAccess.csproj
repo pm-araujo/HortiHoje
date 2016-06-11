@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FieldNoteConfiguration.cs" />
+    <Compile Include="FieldNoteReporterConfiguration.cs" />
     <Compile Include="TagConfiguration.cs" />
     <Compile Include="LocationConfiguration.cs" />
     <Compile Include="MediaFileConfiguration.cs" />

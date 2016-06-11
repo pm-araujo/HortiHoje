@@ -17,5 +17,7 @@ namespace HortiHoje.Model
         public virtual Task Task { get; set; }
 
         public virtual ICollection<MediaFile> MediaFiles { get; set; }
+
+        public virtual ICollection<FieldNoteReporter> Reporters { get; set; }
     }
 }

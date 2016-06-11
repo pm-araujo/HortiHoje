@@ -71,9 +71,15 @@ namespace HortiHoje.DataAccess
         {
             get { return Context.TaskAllocatedReporters; }
         }
+
         public IQueryable<TaskAllowedReporter> TaskAllowedReporters
         {
             get { return Context.TaskAllowedReporters; }
+        }
+
+        public IQueryable<FieldNoteReporter> FieldNoteReporters
+        {
+            get { return Context.FieldNoteReporters; }
         }
 
 

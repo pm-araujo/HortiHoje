@@ -36,6 +36,7 @@ namespace HortiHoje.DataAccess
             modelBuilder.Configurations.Add(new TagConfiguration());
             modelBuilder.Configurations.Add(new TaskAllocatedReporterConfiguration());
             modelBuilder.Configurations.Add(new TaskAllowedReporterConfiguration());
+            modelBuilder.Configurations.Add(new FieldNoteReporterConfiguration());
         }
 
 
@@ -57,6 +58,8 @@ namespace HortiHoje.DataAccess
 
         public DbSet<TaskAllocatedReporter> TaskAllocatedReporters { get; set; }
         public DbSet<TaskAllowedReporter> TaskAllowedReporters { get; set; }
+
+        public DbSet<FieldNoteReporter> FieldNoteReporters { get; set; }
 
         // Sample Lists
         public DbSet<Room> Rooms { get; set; }
