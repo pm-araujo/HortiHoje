@@ -48,8 +48,9 @@
                 reporters: this._getAllLocal(entityNames.reporter, 'name, nIF'),
                 tasks: this._getAllLocal(entityNames.task, 'name'),
                 locations: this._getAllLocal(entityNames.location),
-                activities: this._getAllLocal(entityNames.activity, 'name')
-            };
+                activities: this._getAllLocal(entityNames.activity, 'name'),
+                mediaFiles: this._getAllLocal(entityNames.mediaFile, 'name')
+        };
         }
     }
 })();

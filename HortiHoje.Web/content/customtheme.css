@@ -1249,6 +1249,7 @@ form {
 .user {
     font-size: 12px !important;
     line-height: 20px !important;
+    height: 100%;
 }
 
     .user img {
@@ -1263,11 +1264,22 @@ form {
 
     .user .smallMap {
         float: left;
-        width: 100px;
+        width: 90px;
+    }
+    
+    .user .smallMap ng-map {
+        height: 110px;
     }
 
     .user .user-details {
-        margin-left: 85px;
+        margin-left: 95px;
+        height: 100%;
+        position: relative;
+    }
+
+    .user .user-details .bottomAlign {
+        bottom: 0;
+        position: absolute;
     }
 
     .user .btn {

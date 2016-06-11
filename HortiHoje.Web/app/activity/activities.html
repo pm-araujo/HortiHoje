@@ -19,16 +19,13 @@
                         <div class="padd fader-animation" data-ng-repeat="a in vm.filteredActivities">
                             <div class="user">
                                 <div class="smallMap">
-                                    <ng-map zoom="11" center="{{a.lastTaskLocation}}"
-                                            scrollwheel="false">
+                                    <ng-map zoom="8" center="{{a.lastTaskLocation}}">
                                         <marker position="{{a.lastTaskLocation}}" title="pos: {{a.lastTaskLocation}}"></marker>
                                     </ng-map>
                                 </div>
                                 <div class="user-details">
                                     <h3>{{a.name}}</h3>
-                                    <h4>{{a.description}}</h4>
-                                    <small>Manager: {{a.reporter.name}}</small>
-                                    <small>Nº Tasks: {{a.taskList.length}}</small>
+                                    <small class="bottomAlign">Manager: {{a.reporter.name}}</small>
                                 </div>
                             </div>
                         </div>

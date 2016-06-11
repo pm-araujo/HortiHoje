@@ -41,8 +41,9 @@
                 .executeLocally();
         }
 
-        function _getLocalCount(resource) {
+        function _getLocalCount(resource, predicate) {
             var entities = EntityQuery.from(resource)
+                .where(predicate)
                 .using(this.manager)
                 .executeLocally();
             return entities.length;

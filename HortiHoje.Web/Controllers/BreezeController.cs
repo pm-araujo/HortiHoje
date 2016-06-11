@@ -72,6 +72,32 @@ namespace HortiHoje.Web.Controllers
         {
             return _repository.Locations;
         }
+
+        [HttpGet]
+        public IQueryable<FieldNote> FieldNotes()
+        {
+            return _repository.FieldNotes;
+        }
+
+        [HttpGet]
+        public IQueryable<MediaFileTag> MediaFileTags()
+        {
+            return _repository.MediaFileTags;
+        }
+
+        [HttpGet]
+        public IQueryable<MediaFile> MediaFiles()
+        {
+            return _repository.MediaFiles;
+        }
+
+        [HttpGet]
+        public IQueryable<Tag> Tags()
+        {
+            return _repository.Tags;
+        }
+
+
         /// <summary>
         /// Query returing a 1-element array with a lookups object whose 
         /// properties are all Rooms, Tracks, and TimeSlots.
@@ -94,8 +120,12 @@ namespace HortiHoje.Web.Controllers
             var activities = _repository.Activities;
             var tasks = _repository.Tasks;
             var locations = _repository.Locations;
+            var fieldNotes = _repository.FieldNotes;
+            var mediaFileTags = _repository.MediaFileTags;
+            var mediaFiles = _repository.MediaFiles;
+            var tags = _repository.Tags;
 
-            return new { reporters, activities, tasks, locations};
+            return new { reporters, activities, tasks, locations, fieldNotes, mediaFileTags, mediaFiles, tags };
         }
 
         // Diagnostic

@@ -17,7 +17,7 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
-        var repoNames = ['activity', 'reporter', 'lookup'];
+        var repoNames = ['activity', 'reporter', 'lookup', 'file'];
 
         var primePromise;
 
@@ -32,6 +32,7 @@
             //      reporter
             //      lookups
             //      activity
+            //      file
         };
 
         init();

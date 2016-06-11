@@ -63,13 +63,13 @@
                     }
                 }
             }, {
-                url: '/reporters',
+                url: '/files',
                 config: {
-                    title: 'reporters',
-                    templateUrl: 'app/reporter/reporters.html',
+                    title: 'files',
+                    templateUrl: 'app/file/files.html',
                     settings: {
                         nav: 3,
-                        content: '<i class="fa fa-calendar"></i> Reporters'
+                        content: '<i class="fa fa-file"></i> Files'
                     }
                 }
             }

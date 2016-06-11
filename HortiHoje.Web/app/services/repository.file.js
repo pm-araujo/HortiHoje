@@ -1,13 +1,13 @@
 ﻿(function () {
     'use strict';
 
-    var serviceId = 'repository.activity';
+    var serviceId = 'repository.file';
     angular.module('app').factory(serviceId,
-        ['model', 'repository.abstract', RepositoryActivity]);
+        ['model', 'repository.abstract', RepositoryFile]);
 
-    function RepositoryActivity(model, AbstractRepository) {
+    function RepositoryFile(model, AbstractRepository) {
         var Predicate = breeze.Predicate;
-        var entityName = model.entityNames.activity;
+        var entityName = model.entityNames.mediaFile;
         var EntityQuery = breeze.EntityQuery;
         var orderBy = 'name';
 
@@ -25,35 +25,36 @@
 
         return Ctor;
 
-
-        // getActivityCount
+        // getMediaFileCount
         function getCount() {
             var self = this;
-            return self.$q.when(self._getLocalCount(entityName));
+            var predicate = Predicate('idFieldNote', '==', null);
+            return self.$q.when(self._getLocalCount(entityName, predicate));
         }
 
 
-        // Formerly known as datacontext.getActivityPartials()
+        // getMediaFilePartials
         function getPartials(forceRefresh) {
             var self = this;
-            var activities;
+            var predicate = Predicate('idFieldNote', '==', null);
+            var files;
 
             if (!forceRefresh) {
-                activities = self._getAllLocal(entityName, orderBy);
-                return self.$q.when(activities);
+                files = self._getAllLocal(entityName, orderBy, predicate);
+                return self.$q.when(files);
             }
 
-            return EntityQuery.from('Activities')
+            return EntityQuery.from('MediaFiles')
                 .select('*')
-                .orderBy('name')
+                .orderBy(orderBy)
                 .toType(entityName)
                 .using(self.manager).execute()
                 .to$q(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
-                activities = data.results;
-                self.log('Retrieved [Activity Partials] from remote data source', activities.length, true);
-                return activities;
+                files = data.results;
+                self.log('Retrieved [File Partials] from remote data source', files.length, true);
+                return reporters;
             }
         }
     }
