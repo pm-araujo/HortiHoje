@@ -55,6 +55,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskAllocatedReporter.cs" />
+    <Compile Include="TaskAllowedReporter.cs" />
     <Compile Include="TimeSlot.cs" />
     <Compile Include="Track.cs" />
   </ItemGroup>

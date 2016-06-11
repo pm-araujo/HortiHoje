@@ -58,6 +58,7 @@
     <Compile Include="LocationConfiguration.cs" />
     <Compile Include="MediaFileConfiguration.cs" />
     <Compile Include="MediaFileTagConfiguration.cs" />
+    <Compile Include="TaskAllowedReporterConfiguration.cs" />
     <Compile Include="TaskAllocatedReporterConfiguration.cs" />
     <Compile Include="TaskConfiguration.cs" />
     <Compile Include="ActivityConfiguration.cs" />

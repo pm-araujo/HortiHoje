@@ -35,6 +35,7 @@ namespace HortiHoje.DataAccess
             modelBuilder.Configurations.Add(new MediaFileConfiguration());
             modelBuilder.Configurations.Add(new TagConfiguration());
             modelBuilder.Configurations.Add(new TaskAllocatedReporterConfiguration());
+            modelBuilder.Configurations.Add(new TaskAllowedReporterConfiguration());
         }
 
 
@@ -55,6 +56,7 @@ namespace HortiHoje.DataAccess
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<TaskAllocatedReporter> TaskAllocatedReporters { get; set; }
+        public DbSet<TaskAllowedReporter> TaskAllowedReporters { get; set; }
 
         // Sample Lists
         public DbSet<Room> Rooms { get; set; }
