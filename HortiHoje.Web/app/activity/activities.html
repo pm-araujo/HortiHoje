@@ -19,7 +19,7 @@
                         <div class="padd fader-animation" data-ng-repeat="a in vm.filteredActivities">
                             <div class="user">
                                 <div class="smallMap">
-                                    <ng-map zoom="8" center="{{a.lastTaskLocation}}">
+                                    <ng-map zoom="8" center="{{a.lastTaskLocation}}" >
                                         <marker position="{{a.lastTaskLocation}}" title="pos: {{a.lastTaskLocation}}"></marker>
                                     </ng-map>
                                 </div>
