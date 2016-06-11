@@ -202,6 +202,9 @@
     <Content Include="content\bootstrap.min.css" />
     <Content Include="content\breeze.directives.css" />
     <Content Include="content\customtheme.css" />
+    <Content Include="content\files\lions.jpg" />
+    <Content Include="content\files\mickey.png" />
+    <Content Include="content\files\viking.mp4" />
     <Content Include="content\font-awesome.css" />
     <Content Include="content\font-awesome.min.css" />
     <Content Include="content\ie10mobile.css" />
@@ -285,6 +288,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="content\bootstrap.min.css.map" />
     <Content Include="content\bootstrap-theme.min.css.map" />
+    <Content Include="content\files\images.zip" />
+    <Content Include="content\files\Resumo.pdf" />
     <None Include="scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
