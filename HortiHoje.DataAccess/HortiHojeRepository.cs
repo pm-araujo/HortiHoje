@@ -66,6 +66,15 @@ namespace HortiHoje.DataAccess
         {
             get { return Context.Tags; }
         }
+
+        public IQueryable<TaskAllocatedReporter> TaskAllocatedReporters
+        {
+            get { return Context.TaskAllocatedReporters; }
+        }
+
+
+
+
         // Sample Entities
         public IQueryable<Session> Sessions
         {
