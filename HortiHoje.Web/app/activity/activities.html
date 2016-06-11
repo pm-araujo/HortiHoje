@@ -18,6 +18,12 @@
                     <div class="widget-content user">
                         <div class="padd fader-animation" data-ng-repeat="a in vm.filteredActivities">
                             <div class="user">
+                                <div class="smallMap">
+                                    <ng-map zoom="11" center="{{a.lastTaskLocation}}"
+                                            scrollwheel="false">
+                                        <marker position="{{a.lastTaskLocation}}" title="pos: {{a.lastTaskLocation}}"></marker>
+                                    </ng-map>
+                                </div>
                                 <div class="user-details">
                                     <h3>{{a.name}}</h3>
                                     <h4>{{a.description}}</h4>

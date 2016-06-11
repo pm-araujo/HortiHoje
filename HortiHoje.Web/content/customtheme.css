@@ -1261,6 +1261,11 @@ form {
         width: 80px;
     }
 
+    .user .smallMap {
+        float: left;
+        width: 100px;
+    }
+
     .user .user-details {
         margin-left: 85px;
     }

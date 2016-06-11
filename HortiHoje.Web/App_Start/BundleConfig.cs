@@ -72,7 +72,8 @@ namespace HortiHoje
                     "~/scripts/toastr.min.js",
                     "~/scripts/moment.min.js",
                     "~/scripts/ui-bootstrap-tpls-0.10.0.min.js",
-                    "~/scripts/spin.js"
+                    "~/scripts/spin.js",
+                    "~/scripts/ng-map.min.js"
                 ));
 
             // Styles

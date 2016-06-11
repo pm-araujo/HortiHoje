@@ -38,9 +38,31 @@
 
         function getActivities() {
             return datacontext.activity.getPartials().then(function (data) {
+
+                // Setting Last Task Location
+                data.forEach(function (e) {
+                    var last = 0;
+                    var location = "";
+                    e.lastTaskLocation = "";
+                    if ((last = e.taskList.length)) {
+                        location = '[' +
+                            e.taskList[last - 1].location.lat +
+                            ',' +
+                            e.taskList[last - 1].location.long +
+                            ']';
+                    } else {
+                        location = "";
+                    }
+
+                    e.lastTaskLocation = location;
+                });
+
+                vm.activities = vm.filteredActivities = data;
+
                 return vm.activities = vm.filteredActivities = data;
             });
         }
+
 
         function search($event) {
             if ($event.keyCode === keyCodes.esc) {

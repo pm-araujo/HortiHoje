@@ -303,6 +303,7 @@
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
+    <Content Include="scripts\ng-map.min.js" />
     <Content Include="scripts\q.js" />
     <Content Include="scripts\q.min.js" />
     <Content Include="scripts\toastr.js" />
