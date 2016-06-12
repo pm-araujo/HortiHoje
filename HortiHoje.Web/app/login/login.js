@@ -55,7 +55,8 @@
                 }
                 sessionStorage.isAuthenticated = true;
                 sessionStorage.userName = data.userName;
-                sessionStorage.name = data.name;
+                sessionStorage.userId = data.id;
+                sessionStorage.userFullName = data.name;
 
                 $location.path("/");
                 $window.location.reload();

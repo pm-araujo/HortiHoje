@@ -40,7 +40,7 @@
 
         function getActivities() {
             return datacontext.activity.getPartials().then(function (data) {
-
+                console.log(data);
                 // Setting Last Task Location
                 data.forEach(function (e) {
                     var last = 0;
@@ -63,6 +63,10 @@
 
                 return vm.activities = vm.filteredActivities = data;
             });
+        }
+
+        function goToActivity(activity) {
+            $location.path('/activity/'+ activity.id);
         }
 
 

@@ -29,7 +29,11 @@
         // getActivityCount
         function getCount() {
             var self = this;
-            return self.$q.when(self._getLocalCount(entityName));
+            var predicate = Predicate("taskList", "any",
+                Predicate("allowedReporters", "any", "idReporter", "==", sessionStorage.userId
+                ));
+
+            return self.$q.when(self._getLocalCount(entityName, predicate));
         }
 
 
@@ -37,15 +41,29 @@
         function getPartials(forceRefresh) {
             var self = this;
             var activities;
+            var predicate = Predicate("taskList", "any",
+                Predicate("allowedReporters", "any", "reporter.id", "==", sessionStorage.userId
+                ));
 
             if (!forceRefresh) {
-                activities = self._getAllLocal(entityName, orderBy);
+                //activities = self._getAllLocal(entityName, orderBy, predicate);
+
+                predicate = Predicate("taskList", "any", "allowedReporters", "any", "reporter.userName", "==", "Silas");
+                activities = EntityQuery.from(entityName)
+                    .select("taskList")
+                    .orderBy(orderBy)
+                    .where(predicate)
+                    .expand("taskList")
+                    .using(this.manager)
+                    .executeLocally();
+
                 return self.$q.when(activities);
             }
 
             return EntityQuery.from('Activities')
                 .select('*')
                 .orderBy('name')
+                .where(predicate)
                 .toType(entityName)
                 .using(self.manager).execute()
                 .to$q(querySucceeded, self._queryFailed);

@@ -23,7 +23,12 @@ namespace HortiHoje.Model
 
         public virtual ICollection<FieldNote> FieldNotes { get; set; }
 
-        public virtual ICollection<TaskAllocatedReporter> AllocatedReporters { get; set; }
-        public virtual ICollection<TaskAllowedReporter> AllowedReporters { get; set; }
+        // public virtual ICollection<TaskAllocatedReporter> AllocatedReporters { get; set; }
+        
+        // public virtual ICollection<TaskAllowedReporter> AllowedReporters { get; set; }
+        public virtual ICollection<Reporter> AllocatedReporters { get; set; }
+
+        public virtual ICollection<Reporter> AllowedReporters { get; set; }
+
     }
 }
