@@ -4,10 +4,10 @@
     var controllerId = "activities";
     angular
         .module('app')
-        .controller(controllerId, ['datacontext', 'config', 'common', activities]);
+        .controller(controllerId, ['$location', 'datacontext', 'config', 'common', activities]);
 
 
-    function activities(datacontext, config, common) {
+    function activities($location, datacontext, config, common) {
         var vm = this;
 
         var getLogFn = common.logger.getLogFn;
@@ -27,6 +27,7 @@
 
 
         activate();
+
 
         function activate() {
             common.activateController([getActivities()], controllerId)
@@ -63,6 +64,12 @@
 
                 return vm.activities = vm.filteredActivities = data;
             });
+        }
+
+        function goToActivity(activity) {
+            if (activity && activity.id) {
+                $location.path('/activity/' + activity.id);
+            }
         }
 
 

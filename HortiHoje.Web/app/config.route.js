@@ -63,6 +63,12 @@
                     }
                 }
             }, {
+                url: '/activity/:id',
+                config: {
+                    title: 'activity',
+                    templateUrl: 'app/activity/activitydashboard.html'
+                }
+            }, {
                 url: '/files',
                 config: {
                     title: 'files',
