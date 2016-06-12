@@ -17,6 +17,8 @@
         vm.title = 'Activities';
         vm.activities = [];
 
+        vm.goToActivity = goToActivity;
+
         // Search bindings
         vm.activitiesFilter = activitiesFilter;
         vm.filteredActivities = [];
