@@ -28,25 +28,6 @@ namespace HortiHoje.Web.Controllers
 
 
 
-        // Sample Entities
-        [HttpGet]
-        public IQueryable<Session> Sessions()
-        {
-            return _repository.Sessions;
-        }
-
-        [HttpGet]
-        public IQueryable<Person> Speakers()
-        {
-            return _repository.Speakers;
-        }
-
-        [HttpGet]
-        public IQueryable<Person> Persons()
-        {
-            return _repository.Persons;
-        }
-
 
         // HortiHoje Entities
         [HttpGet]
@@ -92,9 +73,21 @@ namespace HortiHoje.Web.Controllers
         }
 
         [HttpGet]
-        public IQueryable<Tag> Tags()
+        public IQueryable<FieldNoteReporter> FieldNoteReporters()
         {
-            return _repository.Tags;
+            return _repository.FieldNoteReporters;
+        }
+
+        [HttpGet]
+        public IQueryable<TaskAllocatedReporter> TaskAllocatedReporters()
+        {
+            return _repository.TaskAllocatedReporters;
+        }
+
+        [HttpGet]
+        public IQueryable<TaskAllowedReporter> TaskAllowedReporters()
+        {
+            return _repository.TaskAllowedReporters;
         }
 
 

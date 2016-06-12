@@ -16,6 +16,10 @@ namespace HortiHoje.DataAccess
             HasRequired(t => t.Location)
                 .WithMany(l => l.Tasks)
                 .HasForeignKey(t => t.IdLocation);
+
+            HasOptional(t => t.AllowedReporters)
+                .WithMany(r => r.AllowedTasks)
+                .HasForeignKey(t => t.Id);
         }
     }
 }

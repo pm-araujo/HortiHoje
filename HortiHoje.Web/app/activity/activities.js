@@ -41,7 +41,7 @@
 
         function getActivities() {
             return datacontext.activity.getPartials().then(function (data) {
-
+                console.log(data);
                 // Setting Last Task Location
                 data.forEach(function (e) {
                     var last = 0;

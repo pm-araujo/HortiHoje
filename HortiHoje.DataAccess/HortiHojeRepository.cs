@@ -81,37 +81,5 @@ namespace HortiHoje.DataAccess
         {
             get { return Context.FieldNoteReporters; }
         }
-
-
-
-
-        // Sample Entities
-        public IQueryable<Session> Sessions
-        {
-            get { return Context.Sessions; }
-        }
-
-        public IQueryable<Person> Speakers
-        {
-            get { return Context.Persons.Where(p => p.SpeakerSessions.Any()); }
-        }
-
-        public IQueryable<Person> Persons
-        {
-            get { return Context.Persons; }
-        }
-
-        public IQueryable<Room> Rooms
-        {
-            get { return Context.Rooms; }
-        }
-        public IQueryable<TimeSlot> TimeSlots
-        {
-            get { return Context.TimeSlots; }
-        }
-        public IQueryable<Track> Tracks
-        {
-            get { return Context.Tracks; }
-        }
     }
 }

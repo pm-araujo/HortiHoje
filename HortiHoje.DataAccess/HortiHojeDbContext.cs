@@ -22,9 +22,7 @@ namespace HortiHoje.DataAccess
             // Disable proxy creation and lazy loading; not wanted in this service context.
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
-
-            modelBuilder.Configurations.Add(new SessionConfiguration());
-            modelBuilder.Configurations.Add(new AttendanceConfiguration());
+            
 
             modelBuilder.Configurations.Add(new ReporterConfiguration());
             modelBuilder.Configurations.Add(new ActivityConfiguration());
@@ -60,13 +58,5 @@ namespace HortiHoje.DataAccess
         public DbSet<TaskAllowedReporter> TaskAllowedReporters { get; set; }
 
         public DbSet<FieldNoteReporter> FieldNoteReporters { get; set; }
-
-        // Sample Lists
-        public DbSet<Room> Rooms { get; set; }
-        public DbSet<TimeSlot> TimeSlots { get; set; }
-        public DbSet<Track> Tracks { get; set; }
-        public DbSet<Session> Sessions { get; set; }
-        public DbSet<Person> Persons { get; set; }
-        public DbSet<Attendance> Attendance { get; set; }
     }
 }
