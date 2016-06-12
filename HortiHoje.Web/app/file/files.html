@@ -16,10 +16,12 @@
                     <div class="widget-content user">
                         <div class="padd list-flow fader-animation" data-ng-repeat="f in vm.filteredFiles">
                             <div class="user">
-                                <i class="fa fa-file fa-5x"></i>
-                                <div class="name-stack">
-                                    <h5>{{f.name}}</h5>
-                                </div>
+                                <a target="_self" data-cc-file-download-path="{{f.name}}" download="{{f.name}}">
+                                    <i data-cc-file-image="{{f.name}}"></i>
+                                    <div class="name-stack">
+                                        <h6>{{f.name}}</h6>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

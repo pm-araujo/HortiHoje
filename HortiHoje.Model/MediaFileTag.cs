@@ -13,7 +13,7 @@ namespace HortiHoje.Model
         public virtual Tag Tag { get; set; }
 
 
-        [Required, MaxLength(50)]
+        [MaxLength(50)]
         public string Value { get; set; }
     }
 }
