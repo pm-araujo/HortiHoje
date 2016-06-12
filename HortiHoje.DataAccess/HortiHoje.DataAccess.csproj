@@ -63,12 +63,10 @@
     <Compile Include="TaskAllocatedReporterConfiguration.cs" />
     <Compile Include="TaskConfiguration.cs" />
     <Compile Include="ActivityConfiguration.cs" />
-    <Compile Include="AttendanceConfiguration.cs" />
     <Compile Include="HortiHojeDbContext.cs" />
     <Compile Include="HortiHojeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReporterConfiguration.cs" />
-    <Compile Include="SessionConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -28,25 +28,6 @@ namespace HortiHoje.Web.Controllers
 
 
 
-        // Sample Entities
-        [HttpGet]
-        public IQueryable<Session> Sessions()
-        {
-            return _repository.Sessions;
-        }
-
-        [HttpGet]
-        public IQueryable<Person> Speakers()
-        {
-            return _repository.Speakers;
-        }
-
-        [HttpGet]
-        public IQueryable<Person> Persons()
-        {
-            return _repository.Persons;
-        }
-
 
         // HortiHoje Entities
         [HttpGet]
