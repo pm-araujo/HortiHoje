@@ -1,27 +1,17 @@
-﻿<section class="mainbar" data-ng-controller="activities as vm">
+﻿<section class="mainbar" data-ng-controller="activitydashboard as vm">
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="form-search">
-                    <input class="input-sm search-query"
-                           data-ng-model="vm.activitiesSearch"
-                           data-ng-keyup="vm.search($event)"
-                           placeholder="Title, Description, Manager" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="widget wviolet">
+                <div class="widget wred">
                     <div data-cc-widget-header title="{{vm.title}}"
                          subtitle="{{vm.filteredActivities.length}} / {{vm.activities.length}}">
-                        
+
                     </div>
                     <div class="widget-content user">
-                        <div class="padd fader-animation"
-                             data-ng-repeat="a in vm.filteredActivities" 
-                             data-ng-click="vm.goToActivity(a)">
-                            <div class="user" title="Go to Activity Dashboard">
+                        <div class="padd fader-animation" data-ng-repeat="a in vm.filteredActivities">
+                            <div class="user">
                                 <div class="smallMap">
-                                    <ng-map zoom="8" center="{{a.lastTaskLocation}}" >
+                                    <ng-map zoom="8" center="{{a.lastTaskLocation}}">
                                         <marker position="{{a.lastTaskLocation}}" title="pos: {{a.lastTaskLocation}}"></marker>
                                     </ng-map>
                                 </div>

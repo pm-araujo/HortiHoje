@@ -161,6 +161,8 @@
   <ItemGroup>
     <Content Include="app\activity\activities.html" />
     <Content Include="app\activity\activities.js" />
+    <Content Include="app\activity\activitydashboard.html" />
+    <Content Include="app\activity\activitydashboard.js" />
     <Content Include="app\admin\admin.html" />
     <Content Include="app\admin\admin.js" />
     <Content Include="app\app.js" />
