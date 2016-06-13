@@ -41,12 +41,16 @@
 
         function getActivities() {
             return datacontext.activity.getPartials().then(function (data) {
-                console.log(data);
-                // Setting Last Task Location
+                console.log(data[0].taskList[0].allowedReporters);
+
+
+                
                 data.forEach(function (e) {
+                    // Setting Last Task Location
                     var last = 0;
                     var location = "";
                     e.lastTaskLocation = "";
+
                     if ((last = e.taskList.length)) {
                         location = '[' +
                             e.taskList[last - 1].location.lat +

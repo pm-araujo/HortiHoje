@@ -16,7 +16,9 @@
                         
                     </div>
                     <div class="widget-content user">
-                        <div class="padd fader-animation" data-ng-repeat="a in vm.filteredActivities">
+                        <div class="padd fader-animation"
+                             data-ng-repeat="a in vm.filteredActivities"
+                             data-ng-click="vm.goToActivity(a)">
                             <div class="user">
                                 <div class="smallMap">
                                     <ng-map zoom="8" center="{{a.lastTaskLocation}}" >

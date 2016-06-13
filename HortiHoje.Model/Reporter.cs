@@ -6,6 +6,10 @@ namespace HortiHoje.Model
 {
     public class Reporter
     {
+        public Reporter()
+        {
+            this.AllowedTasks = new HashSet<TaskAllowedReporter>();
+        }
         public int Id { get; set; }
 
         public string PasswordHash { get; set; }
@@ -24,8 +28,8 @@ namespace HortiHoje.Model
 
         public virtual ICollection<Activity> ManagerActivities { get; set; }
 
-        public virtual ICollection<Task> AllocatedTasks { get; set; }
-        public virtual ICollection<Task> AllowedTasks { get; set; }
+        public virtual ICollection<TaskAllocatedReporter> AllocatedTasks { get; set; }
+        public virtual ICollection<TaskAllowedReporter> AllowedTasks { get; set; }
 
         public virtual  ICollection<FieldNoteReporter> FieldNotes { get; set; }
 

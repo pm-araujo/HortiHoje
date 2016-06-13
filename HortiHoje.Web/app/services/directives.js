@@ -186,7 +186,8 @@
                 'title': '@',
                 'subtitle': '@',
                 'rightText': '@',
-                'allowCollapse': '@'
+                'allowCollapse': '@',
+                'editable': '@'
             },
             templateUrl: '/app/layout/widgetheader.html',
             restrict: 'A',

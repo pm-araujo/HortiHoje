@@ -5,6 +5,13 @@ namespace HortiHoje.Model
 {
     public class Task
     {
+        public Task()
+        {
+            this.FieldNotes = new HashSet<FieldNote>();
+            this.AllowedReporters = new HashSet<TaskAllowedReporter>();
+            this.AllocatedReporters = new HashSet<TaskAllocatedReporter>();
+        }
+
         public int Id { get; set; }
         [Required, MaxLength(50)]
         public string Name { get; set; }
@@ -23,12 +30,9 @@ namespace HortiHoje.Model
 
         public virtual ICollection<FieldNote> FieldNotes { get; set; }
 
-        // public virtual ICollection<TaskAllocatedReporter> AllocatedReporters { get; set; }
-        
-        // public virtual ICollection<TaskAllowedReporter> AllowedReporters { get; set; }
-        public virtual ICollection<Reporter> AllocatedReporters { get; set; }
+        public virtual ICollection<TaskAllocatedReporter> AllocatedReporters { get; set; }
 
-        public virtual ICollection<Reporter> AllowedReporters { get; set; }
+        public virtual ICollection<TaskAllowedReporter> AllowedReporters { get; set; }
 
     }
 }

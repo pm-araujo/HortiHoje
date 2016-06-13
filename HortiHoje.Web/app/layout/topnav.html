@@ -10,7 +10,7 @@
     <div class="navbar-collapse collapse">
         <div class="pull-right navbar-logo">
             <ul id="curUserinfo" ng-show="haveUser()" class="nav navbar-nav pull-right">
-                <li>
+                <li ng-click="doProfile()">
                     <a>
                         <i class="fa fa-user"></i> {{vm.user}}
                     </a>

@@ -8,7 +8,10 @@ namespace HortiHoje.DataAccess
     public class HortiHojeDbContext : DbContext 
     {
         public HortiHojeDbContext()
-            : base(nameOrConnectionString: "DefaultConnection") { }
+            : base(nameOrConnectionString: "DefaultConnection")
+        {
+            this.Configuration.LazyLoadingEnabled = false;
+        }
 
         static HortiHojeDbContext()
         {

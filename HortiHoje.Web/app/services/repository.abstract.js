@@ -3,9 +3,9 @@
 
     var serviceId = 'repository.abstract';
 
-    angular.module('app').factory(serviceId, ['common', 'config', AbstractRepository]);
+    angular.module('app').factory(serviceId, ['$q', 'common', 'config', AbstractRepository]);
 
-    function AbstractRepository(common, config) {
+    function AbstractRepository($q, common, config) {
         var EntityQuery = breeze.EntityQuery;
         var logError = common.logger.getLogFn(this.serviceId, 'error');
 
@@ -23,6 +23,7 @@
 
         // Shared by repository classes 
         Ctor.prototype._getAllLocal = _getAllLocal;
+        Ctor.prototype._getById = _getById;
         Ctor.prototype._getInlineCount = _getInlineCount;
         Ctor.prototype._getLocalCount = _getLocalCount;
         Ctor.prototype._queryFailed = _queryFailed;
@@ -39,6 +40,40 @@
                 .where(predicate)
                 .using(this.manager)
                 .executeLocally();
+        }
+
+        function _getById(entityName, id, forceRemote) {
+            var self = this;
+            var manager = self.manager;
+
+            if (!forceRemote) {
+                // check cache first
+                var entity = manager.getEntityByKey(entityName, id);
+                
+                if (entity ) {
+                    
+                    if (entity.entityAspect.entityState.isDeleted()) {
+                        entity = null; // hide session marked-for-delete
+                    }
+
+                    return self.$q.when(entity);
+                }
+            }
+
+            // check server
+            return manager.fetchEntityByKey(entityName, id)
+                .to$q(querySucceeded, self._queryFailed);
+
+            function querySucceeded(data) {
+                entity = data.entity;
+                if (!entity) {
+                    self.logError("Error retrieving " + entityName + " from server.");
+                    return null;
+                }
+
+                return entity;
+            }
+
         }
 
         function _getLocalCount(resource, predicate) {

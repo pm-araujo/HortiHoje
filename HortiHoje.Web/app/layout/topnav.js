@@ -3,11 +3,13 @@
 
     angular
         .module('app')
-        .controller('topnav', ['$scope', '$rootScope', '$location', '$window', topnav]);
+        .controller('topnav', ['$scope', '$rootScope', '$location', '$window', 'model', 'datacontext', topnav]);
 
-    function topnav($scope, $rootScope, $location, $window) {
+    function topnav($scope, $rootScope, $location, $window, model, datacontext) {
         var vm = this;
         vm.title = 'topnav';
+        var EntityQuery = breeze.EntityQuery;
+        var entityName = model.entityNames.reporter;
 
         activate();
 
@@ -32,6 +34,10 @@
 
             $location.path('/login');
             $window.location.reload();
+        }
+
+        $scope.doProfile = function () {
+
         }
     }
 })();

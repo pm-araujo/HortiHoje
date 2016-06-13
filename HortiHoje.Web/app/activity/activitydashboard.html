@@ -2,22 +2,54 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="widget wred">
-                    <div data-cc-widget-header title="{{vm.title}}"
-                         subtitle="{{vm.filteredActivities.length}} / {{vm.activities.length}}">
-
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="{{vm.activity.name}}"
+                         subtitle="{{vm.activity.description}}">
                     </div>
                     <div class="widget-content user">
-                        <div class="padd fader-animation" data-ng-repeat="a in vm.filteredActivities">
-                            <div class="user">
-                                <div class="smallMap">
-                                    <ng-map zoom="8" center="{{a.lastTaskLocation}}">
-                                        <marker position="{{a.lastTaskLocation}}" title="pos: {{a.lastTaskLocation}}"></marker>
-                                    </ng-map>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="widget wgreen">
+                                    <div data-cc-widget-header title="Travel Journal"
+                                         allow-collapse="true"></div>
+                                    <div class="widget-content">
+                                        <ng-map>
+                                        </ng-map>
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
-                                <div class="user-details">
-                                    <h3>{{a.name}}</h3>
-                                    <small class="bottomAlign">Manager: {{a.reporter.name}}</small>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="widget wgreen">
+                                    <div data-cc-widget-header title="Task List"
+                                         allow-collapse="true"></div>
+                                    <div class="widget-content text-info">
+                                        <table class="table table-condensed table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Task</th>
+                                                <th>Descript</th>
+                                                <th>Finished</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr data-ng-mouseover="vm.animateMarker($index)"
+                                                data-ng-repeat="t in vm.tasks"
+                                                data-ng-mouseleave="vm.animateMarkerLeave($index)">
+                                                <td>{{$index + 1}}</td>
+                                                <td>{{t.name}}</td>
+                                                <td>{{t.shortenedDescript}}</td>
+                                                <td><i class="fa fa-{{t.finished}}-circle"></i></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="widget-foot">
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

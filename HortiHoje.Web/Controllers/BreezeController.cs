@@ -117,8 +117,14 @@ namespace HortiHoje.Web.Controllers
             var mediaFileTags = _repository.MediaFileTags;
             var mediaFiles = _repository.MediaFiles;
             var tags = _repository.Tags;
+            var taskAllocatedReporters = _repository.TaskAllocatedReporters;
+            var taskAllowedReporters = _repository.TaskAllowedReporters;
+            var fieldNoteReporters = _repository.FieldNoteReporters;
 
-            return new { reporters, activities, tasks, locations, fieldNotes, mediaFileTags, mediaFiles, tags };
+            return new { reporters, activities, tasks, locations,
+                fieldNotes, mediaFileTags, mediaFiles, tags,
+                taskAllocatedReporters, taskAllowedReporters, fieldNoteReporters
+            };
         }
 
         // Diagnostic
