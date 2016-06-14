@@ -1,13 +1,15 @@
 ﻿(function () {
     'use strict';
 
+    var controllerId = "topnav";
+
     angular
         .module('app')
-        .controller('topnav', ['$scope', '$rootScope', '$location', '$window', 'model', 'datacontext', topnav]);
+        .controller(controllerId, ['$scope', '$rootScope', '$location', '$window', 'config', 'model', 'datacontext', topnav]);
 
-    function topnav($scope, $rootScope, $location, $window, model, datacontext) {
+    function topnav($scope, $rootScope, $location, $window, config, model, datacontext) {
         var vm = this;
-        vm.title = 'topnav';
+        vm.title = controllerId;
         var EntityQuery = breeze.EntityQuery;
         var entityName = model.entityNames.reporter;
 
@@ -16,6 +18,8 @@
         function activate() {
             if ( !sessionStorage.isAuthenticated )
                 return;
+
+            onHasChanges();
 
             vm.user = sessionStorage.userFullName;
             sessionStorage.isAuthenticated = true;
@@ -46,6 +50,13 @@
 
         vm.saveChanges = function () {
             return datacontext.save();
+        }
+
+        function onHasChanges() {
+            $scope.$on(config.events.hasChangesChanged, function(event, data) {
+                console.log(controllerId + ": detected has changes");
+                console.log(data);
+            });
         }
     }
 })();

@@ -9,6 +9,9 @@
         var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
+
+        var events = config.events;
+
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(serviceId);
         var logError = getLogFn(serviceId, 'error');
@@ -44,6 +47,7 @@
         function init() {
             repositories.init(manager);
             defineLazyLoadedRepos();
+            setupEventForHasChangesChanged();
         }
 
         // Add ES5 property to datacontext for each named repo
@@ -77,6 +81,7 @@
 
             primePromise = $q.all([service.lookup.getAll()])
                 .then(extendMetadata)
+                .then(setupEventForEntityChanged)
                 .then(success);
 
             return primePromise;
@@ -107,8 +112,37 @@
             logSuccess("Local Changes Cancelled", null, true);
         }
 
+        function setupEventForHasChangesChanged() {
+            manager.hasChangesChanged.subscribe(function(eventArgs) {
+                var data = {
+                    hasChanges: eventArgs.hasChanges,
+                    eventArgs: eventArgs
+                };
+                // send the message (the ctrl receives it)
+                common.$broadcast(events.hasChangesChanged, data)
+                console.log('Changes Made');
+                console.log(data);
+            });
+        }
+
+        function setupEventForEntityChanged() {
+            manager.entityChanged.subscribe(function(eventArgs) {
+                var data = {
+                    eventArgs: eventArgs
+                };
+                // broadcast to subscribers
+                common.$broadcast(events.entityChanged, data);
+                console.log('Entity Changed');
+                console.log(data);
+            });
+        }
+
         // Save Changes
         function save() {
+
+            if (!manager.hasChanges()) {
+                return;
+            }
             return manager.saveChanges()
                 .to$q(saveSucceeded, saveFailed);
 
