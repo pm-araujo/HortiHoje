@@ -184,6 +184,7 @@
     <Content Include="app\layout\widgetheader.html" />
     <Content Include="app\login\login.html" />
     <Content Include="app\login\login.js" />
+    <Content Include="app\modals\editActivity.html" />
     <Content Include="app\services\datacontext.js" />
     <Content Include="app\services\directives.js" />
     <Content Include="app\services\entityManagerFactory.js" />
@@ -317,6 +318,7 @@
     <Content Include="scripts\toastr.js" />
     <Content Include="scripts\toastr.min.js" />
     <Content Include="scripts\toastr.min.js.map" />
+    <Content Include="scripts\ui-bootstrap-tpls-1.3.3.min.js" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

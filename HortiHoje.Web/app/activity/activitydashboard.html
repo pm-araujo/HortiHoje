@@ -13,7 +13,7 @@
                                     <div data-cc-widget-header title="Travel Journal"
                                          allow-collapse="true"></div>
                                     <div class="widget-content">
-                                        <ng-map>
+                                        <ng-map id="activityMap">
                                         </ng-map>
                                     </div>
                                     <div class="widget-foot">
@@ -39,7 +39,7 @@
                                             <tr data-ng-mouseover="vm.animateMarker($index)"
                                                 data-ng-repeat="t in vm.tasks"
                                                 data-ng-mouseleave="vm.animateMarkerLeave($index)">
-                                                <td>{{$index + 1}}</td>
+                                                <td>{{indexChar($index) }}</td>
                                                 <td>{{t.name}}</td>
                                                 <td>{{t.shortenedDescript}}</td>
                                                 <td><i class="fa fa-{{t.finished}}-circle"></i></td>
@@ -55,6 +55,17 @@
                         </div>
                     </div>
                     <div class="widget-foot">
+                        <div class="clearfix"></div>
+                        <div class="pull-left">
+                            <button class="btn btn-info" data-ng-click="vm.goBack()">
+                                <i class="fa fa-arrow-left"></i>Back
+                            </button>
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-info" data-ng-click="vm.editActivity()">
+                                <i class="fa fa-pencil"></i>Edit
+                            </button>
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>

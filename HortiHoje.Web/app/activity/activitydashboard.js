@@ -5,10 +5,10 @@
 
     angular
         .module('app')
-        .controller( controllerId, ['$scope', '$routeParams', '$timeout', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
+        .controller( controllerId, ['$scope', '$routeParams', '$timeout', '$dialog', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
  
 
-    function activitydashboard($scope, $routeParams, $timeout, datacontext, model, common, NgMap) {
+    function activitydashboard($scope, $routeParams, $timeout, $dialog, datacontext, model, common, NgMap) {
         var vm = this;
         var logError = common.logger.getLogFn(controllerId, 'error');
 
@@ -29,6 +29,19 @@
 
         activate();
 
+        $scope.editActivity = function() {
+
+            var modalInstance = $modal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: '../modals/editActivity.html',
+                controller: 'editActivityModalCtrl'
+            });
+        }
+
+        $scope.indexChar = function (index) {
+            return String.fromCharCode(65 + index);
+        };
+
         $scope.zoomToIncludeMarkers = function (locations) {
             var bounds = new google.maps.LatLngBounds();
             locations.forEach(function (l) {
@@ -43,8 +56,8 @@
         function activate() {
             common.activateController([getRequestedActivity()], controllerId).then(function() {
                 
-                NgMap.getMap().then(function(map) {
-                    vm.map = map;
+                NgMap.getMap({id:'activityMap'}).then(function(map) {
+                    console.log(vm.locations);
                     if (vm.locations)
                         vm.lastLocation = vm.locations[(vm.locations.length - 1)];
                     kickstartLocations(map);
@@ -79,7 +92,7 @@
                         }
 
                         t.finished = t.completed ? "check" : "times";
-
+                        
                         vm.tasks.push(t);
 
                         if (t.location) {
@@ -99,6 +112,12 @@
         function kickstartLocations(map) {
 
             var iterator = 0;
+
+            vm.map = map = new google.maps.Map(document.getElementById('activityMap'), {
+                zoom: 12,
+                center: vm.lastLocation
+            });
+
             for (var i = 0; i < vm.locations.length; i++) {
                 $timeout(function() {
                         // add a marker this way does not sync. marker with <marker> tag
@@ -106,7 +125,7 @@
                             position: vm.locations[iterator++],
                             map: map,
                             draggable: false,
-                            label: ""+(iterator),
+                            label: String.fromCharCode(64 + iterator),
                             animation: google.maps.Animation.DROP
                         });
                         $scope.zoomToIncludeMarkers(vm.locations);

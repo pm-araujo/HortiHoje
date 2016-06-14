@@ -4,10 +4,10 @@
     var controllerId = "activities";
     angular
         .module('app')
-        .controller(controllerId, ['$location', 'datacontext', 'config', 'common', activities]);
+        .controller(controllerId, ['$location', 'datacontext', 'config', 'common', 'NgMap', activities]);
 
 
-    function activities($location, datacontext, config, common) {
+    function activities($location, datacontext, config, common, NgMap) {
         var vm = this;
 
         var getLogFn = common.logger.getLogFn;
@@ -24,7 +24,6 @@
         vm.filteredActivities = [];
         vm.search = search;
         var applyFilter = function () { }
-
 
         activate();
 
@@ -61,7 +60,14 @@
                         location = "";
                     }
 
+                    NgMap.getMap({ id: e.id }).then(function (map) {
+
+                        map.setCenter(vm.lastLocation);
+
+                    });
+
                     e.lastTaskLocation = location;
+
                 });
 
                 vm.activities = vm.filteredActivities = data;
