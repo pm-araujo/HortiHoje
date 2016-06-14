@@ -5,10 +5,10 @@
 
     angular
         .module('app')
-        .controller( controllerId, ['$scope', '$routeParams', '$timeout', '$dialog', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
+        .controller( controllerId, ['$window', '$scope', '$routeParams', '$timeout', '$modal', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
  
 
-    function activitydashboard($scope, $routeParams, $timeout, $dialog, datacontext, model, common, NgMap) {
+    function activitydashboard($window, $scope, $routeParams, $timeout, $modal, datacontext, model, common, NgMap) {
         var vm = this;
         var logError = common.logger.getLogFn(controllerId, 'error');
 
@@ -29,12 +29,40 @@
 
         activate();
 
-        $scope.editActivity = function() {
+        vm.goBack = function() {
+            $window.history.back();
+        };
+
+        vm.canEdit = function() {
+            return (vm.activity.idManager == sessionStorage.userId);
+        };
+
+        vm.editActivity = function () {
+
+            if (!vm.canEdit()) {
+                return;
+            }
 
             var modalInstance = $modal.open({
-                animation: $scope.animationsEnabled,
-                templateUrl: '../modals/editActivity.html',
-                controller: 'editActivityModalCtrl'
+                animation: true,
+                templateUrl: './app/modals/editActivity.html',
+                controller: 
+                    ['$scope', '$modalInstance',
+                        function ($scope, $modalInstance) {
+
+                            $scope.tempActivity = {
+                                name: vm.activity.name,
+                                description : vm.activity.description
+                            }
+                            $scope.editActivity = function () {
+                                vm.activity.name = $scope.tempActivity.name;
+                                vm.activity.description = $scope.tempActivity.description;
+                                // TODO: apply edit operation to stack of changes
+                                $modalInstance.close('edit');
+                            };
+                            $scope.cancelActivityEdit = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ]
             });
         }
 

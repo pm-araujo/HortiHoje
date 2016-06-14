@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="widget wblue">
                     <div data-cc-widget-header title="{{vm.activity.name}}"
-                         subtitle="{{vm.activity.description}}">
+                         subtitle="{{vm.activity.description}}" data-ng-dblclick="vm.editActivity()">
                     </div>
                     <div class="widget-content user">
                         <div class="row">
@@ -62,7 +62,7 @@
                             </button>
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-info" data-ng-click="vm.editActivity()">
+                            <button class="btn btn-info" data-ng-disabled="!vm.canEdit()" data-ng-click="vm.editActivity()">
                                 <i class="fa fa-pencil"></i>Edit
                             </button>
                         </div>

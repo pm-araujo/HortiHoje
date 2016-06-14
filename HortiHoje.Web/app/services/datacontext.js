@@ -25,8 +25,10 @@
             primeData: primeData,
 
             getPeople: getPeople,
-            getMessageCount: getMessageCount
+            getMessageCount: getMessageCount,
 
+            cancel: cancel,
+            save: save
 
             // Repositories to be added on demand:
             //      reporter
@@ -96,6 +98,32 @@
                 function set(resourceName, entityName) {
                     metadataStore.setEntityTypeForResourceName(resourceName, entityName);
                 }
+            }
+        }
+
+        // Cancel Changes
+        function cancel() {
+            manager.rejectChanges();
+            logSuccess("Local Changes Cancelled", null, true);
+        }
+
+        // Save Changes
+        function save() {
+            return manager.saveChanges()
+                .to$q(saveSucceeded, saveFailed);
+
+            function saveSucceeded(result) {
+                logSuccess('Saved Data to Server', result, true);
+            }
+            function saveFailed(error) {
+                var msg = config.appErrorPrefix +
+                    'Save Failed' +
+                    breeze.saveErrorMessageService.getErrorMessage(error);
+
+                error.message = msg;
+                logError(msg, error);
+
+                throw error;
             }
         }
 

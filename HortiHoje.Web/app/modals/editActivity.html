@@ -1,16 +1,16 @@
 ﻿<div class="modal-dialog">
     <div class="modal-header">
-        <h3 class="modal-title">Edit: {{vm.activity.name()}}</h3>
+        <h3 class="modal-title">Edit: {{tempActivity.name}}</h3>
     </div>
     <div class="modal-body">
-        <div>
-            <label>ActivityName</label>
-            <input data-ng-model="vm.activity.name" placeholder="Activity Name" />
+        <div class="input-group">
+            <label>ActivityName</label><br />
+            <input class="input-group-lg" data-ng-model="tempActivity.name" placeholder="Activity Name" />
         </div>
-        <div>
-            <label>Activity Description</label>
-            <textarea data-ng-model="vm.activity.description"
-                      placeholder="Activity Description"></textarea>
+        <div class="input-group">
+            <label>Activity Description</label><br />
+            <textarea class="input-group-lg" data-ng-model="tempActivity.description"
+                      placeholder="Activity Description" style="height: 200px; width: 400px;"></textarea>
         </div>
     </div>
     <div class="modal-footer">

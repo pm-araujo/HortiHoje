@@ -1,6 +1,6 @@
 using System.Web.Http;
 
-[assembly: WebActivator.PreApplicationStartMethod(
+[assembly: WebActivatorEx.PreApplicationStartMethod(
     typeof(HortiHoje.App_Start.BreezeWebApiConfig), "RegisterBreezePreStart")]
 namespace HortiHoje.App_Start {
   ///<summary>
