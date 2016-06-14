@@ -41,7 +41,7 @@
         }
 
         $scope.doProfile = function () {
-
+            datacontext.hubHello();
         }
 
         vm.cancelChanges = function() {

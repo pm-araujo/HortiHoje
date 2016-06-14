@@ -10,6 +10,9 @@
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
 
+        // SignalR
+        var hub = {};
+
         var events = config.events;
 
         var getLogFn = common.logger.getLogFn;
@@ -31,7 +34,10 @@
             getMessageCount: getMessageCount,
 
             cancel: cancel,
-            save: save
+            save: save,
+
+            // SignalR
+            hubHello: hubHello
 
             // Repositories to be added on demand:
             //      reporter
@@ -48,6 +54,25 @@
             repositories.init(manager);
             defineLazyLoadedRepos();
             setupEventForHasChangesChanged();
+        }
+
+        function initHub() {
+            hub = $.connection.hubPoint;
+            $.connection.hub.start().done(function() {
+                log('Connected to Server on SignalR');
+            });
+
+            
+            hub.client.helloToAll = function (data) {
+                console.log('server replied');
+                log('Server Replied with ' + data);
+            }
+        }
+
+        function hubHello() {
+            console.log('calling...');
+            hub.server.send("teststring");
+
         }
 
         // Add ES5 property to datacontext for each named repo
@@ -82,6 +107,7 @@
             primePromise = $q.all([service.lookup.getAll()])
                 .then(extendMetadata)
                 .then(setupEventForEntityChanged)
+                .then(initHub)
                 .then(success);
 
             return primePromise;
