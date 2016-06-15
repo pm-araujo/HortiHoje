@@ -58,15 +58,19 @@
 
         function initHub() {
             hub = $.connection.hubPoint;
-            $.connection.hub.start().done(function() {
-                log('Connected to Server on SignalR');
-            });
-
             
             hub.client.helloToAll = function (data) {
                 console.log('server replied');
                 log('Server Replied with ' + data);
             }
+            $.connection.hub.qs = {
+                name: sessionStorage.userFullName,
+                previousConnection: ""
+            };
+            $.connection.hub.start().done(function (res) {
+                log('Connected to Server on SignalR');
+                $.connection.hub.qs.previousConnection = res.id;
+            });
         }
 
         function hubHello() {
