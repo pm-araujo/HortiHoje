@@ -39,7 +39,6 @@
 
             return EntityQuery.from('Reporters')
                 .where(unamePred.and(pwPred))
-                .select('id, userName, name')
                 .toType(entityName)
                 .using(self.manager).execute()
                 .to$q(querySucceeded, self._queryFailed);

@@ -6,7 +6,8 @@
                     <input class="input-sm search-query"
                            data-ng-model="vm.activitiesSearch"
                            data-ng-keyup="vm.search($event)"
-                           placeholder="Title, Description, Manager" />
+                           placeholder="Title, Description, Manager"/>
+                    <button type="button" class="btn btn-primary pull-right" data-ng-click="vm.newActivity()" data-ng-disabled="!vm.canAdd()">New Activity</button>
                 </div>
             </div>
             <div class="row">

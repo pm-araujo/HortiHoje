@@ -57,6 +57,8 @@
                 sessionStorage.userName = data.userName;
                 sessionStorage.userId = data.id;
                 sessionStorage.userFullName = data.name;
+                sessionStorage.isManager = data.isManager;
+
 
                 $location.path("/");
                 $window.location.reload();

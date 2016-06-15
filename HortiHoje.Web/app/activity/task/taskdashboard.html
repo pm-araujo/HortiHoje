@@ -1,4 +1,4 @@
-﻿<section class="mainbar" data-ng-controller="activitydashboard as vm">
+﻿<section class="mainbar" data-ng-controller="taskdashboard as vm">
     <section class="matter">
         <div class="container">
             <div class="row">
@@ -28,28 +28,26 @@
                                     <div class="widget-content text-info">
                                         <table class="table table-condensed table-striped">
                                             <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Task</th>
-                                                <th>Descript</th>
-                                                <th>Finished</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Task</th>
+                                                    <th>Descript</th>
+                                                    <th>Finished</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            <tr data-ng-mouseover="vm.animateMarker($index)"
-                                                data-ng-repeat="t in vm.tasks"
-                                                data-ng-mouseleave="vm.animateMarkerLeave($index)">
-                                                <td>{{indexChar($index) }}</td>
-                                                <td>{{t.name}}</td>
-                                                <td>{{t.shortenedDescript}}</td>
-                                                <td><i class="fa fa-{{t.finished}}-circle"></i></td>
-                                            </tr>
+                                                <tr data-ng-mouseover="vm.animateMarker($index)"
+                                                    data-ng-repeat="t in vm.tasks"
+                                                    data-ng-mouseleave="vm.animateMarkerLeave($index)">
+                                                    <td>{{indexChar($index) }}</td>
+                                                    <td>{{t.name}}</td>
+                                                    <td>{{t.shortenedDescript}}</td>
+                                                    <td><i class="fa fa-{{t.finished}}-circle"></i></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="widget-foot">
-                                        <div class="clearfix"></div>
-                                        <button class="btn btn-primary pull-right" data-ng-disabled="!vm.canAdd()" data-ng-click="vm.newTask()">New</button>
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
@@ -57,17 +55,6 @@
                         </div>
                     </div>
                     <div class="widget-foot">
-                        <div class="clearfix"></div>
-                        <div class="pull-left">
-                            <button class="btn btn-info" data-ng-click="vm.goBack()">
-                                <i class="fa fa-arrow-left"></i>Back
-                            </button>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-info" data-ng-disabled="!vm.canEdit()" data-ng-click="vm.editActivity()">
-                                <i class="fa fa-pencil"></i>Edit
-                            </button>
-                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>

@@ -12,13 +12,25 @@
             <ul id="curUserinfo" ng-show="haveUser()" class="nav navbar-nav pull-right">
                 <li class="dropdown dropdown-big">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="fa fa-group"></i> Connected
+                        <span class="badge badge-success">{{connectedList.length}}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li data-ng-repeat="user in connectedList">
+                            <strong>{{user}}</strong>
+                            <hr/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown dropdown-big">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                         <i class="fa fa-cloud"></i> Sync
                     </a>
                     <ul class="dropdown-menu">
                         <li>
                             <label>Save Your Changes</label>
                             <button class="btn btn-success" data-ng-click="vm.saveChanges()">Save</button>
-                            <hr/>
+                            <hr />
                         </li>
                         <li>
                             <label>Cancel Your Changes</label>

@@ -69,6 +69,12 @@
                     templateUrl: 'app/activity/activitydashboard.html'
                 }
             }, {
+                url: '/task/:id',
+                config: {
+                    title: 'task',
+                    templateUrl: 'app/activity/taskdashboard.html'
+                }
+            }, {
                 url: '/files',
                 config: {
                     title: 'files',

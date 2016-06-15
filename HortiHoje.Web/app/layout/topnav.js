@@ -13,6 +13,8 @@
         var EntityQuery = breeze.EntityQuery;
         var entityName = model.entityNames.reporter;
 
+        $scope.connectedList = [];
+
         activate();
 
         function activate() {
@@ -20,6 +22,7 @@
                 return;
 
             onHasChanges();
+            onNotifyConnected();
 
             vm.user = sessionStorage.userFullName;
             sessionStorage.isAuthenticated = true;
@@ -35,6 +38,7 @@
             sessionStorage.removeItem('userName');
             sessionStorage.removeItem('userFullName');
             sessionStorage.removeItem('userId');
+            sessionStorage.removeItem('isManager');
 
             $location.path('/login');
             $window.location.reload();
@@ -58,5 +62,15 @@
                 console.log(data);
             });
         }
+
+        function onNotifyConnected() {
+            $scope.$on(config.events.notifyConnected,
+                function(event, data) {
+                    $scope.connectedList = data;
+                    $scope.connectedCount = data.length;
+                    $scope.$apply();
+                });
+        }
+
     }
 })();

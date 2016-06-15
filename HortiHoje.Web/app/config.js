@@ -34,6 +34,7 @@
         controllerActivateSuccess: 'controller.activateSuccess',
         entityChanged: 'datacontext.entityChanged',
         hasChangesChanged: 'datacontext.hasChangesChanged',
+        notifyConnected: 'datacontext.signalr.notifyConnected',
         spinnerToggle: 'spinner.toggle'
     };
 

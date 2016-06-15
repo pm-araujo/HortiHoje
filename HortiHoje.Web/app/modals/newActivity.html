@@ -1,26 +1,26 @@
 ﻿<div class="modal-dialog">
     <div class="modal-header">
-        <h3 class="modal-title">Edit: {{tempActivity.name}}</h3>
+        <h3 class="modal-title">Add: {{tempActivity.name}}</h3>
     </div>
 
     <div class="modal-body">
         <div class="padd">
-            <form class="form-horizontal" ng-submit="editActivity()" role="form">
+            <form class="form-horizontal" ng-submit="newActivity()" role="form">
                 <div class="form-group">
                     <label class="col-md-2 control-label">Activity Name</label>
                     <input class="col-md-8 form-control" size="50" data-ng-model="tempActivity.name" placeholder="Activity Name" />
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Activity Description</label><br/>
+                    <label class="col-md-2 control-label">Activity Description</label><br />
                     <textarea class="col-md-8 form-control" data-ng-model="tempActivity.description"
                               placeholder="Activity Description" style="height: 200px; width: 400px;"></textarea>
                 </div>
             </form>
         </div>
     </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-submit="editActivity()" ng-click="editActivity()">Apply</button>
-            <button class="btn btn-warning" type="button" ng-click="cancelActivityEdit()">Cancel</button>
-        </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-submit="newActivity()" ng-click="newActivity()">Apply</button>
+        <button class="btn btn-warning" type="button" ng-click="canActivityNew()">Cancel</button>
+    </div>
 
 </div>

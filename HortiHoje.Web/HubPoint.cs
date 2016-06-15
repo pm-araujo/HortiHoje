@@ -54,7 +54,8 @@ namespace HortiHoje
             }
 
             _connections.Add(name, Context.ConnectionId);
-            
+
+            Clients.All.notifyConnected(_connections.GetKeys());
 
             return base.OnConnected();
         }
@@ -65,6 +66,8 @@ namespace HortiHoje
 
             _connections.Remove(name, Context.ConnectionId);
             changes.Remove(Context.ConnectionId);
+
+            Clients.All.notifyConnected(_connections.GetKeys());
 
             return base.OnDisconnected(stopCalled);
         }
@@ -82,6 +85,8 @@ namespace HortiHoje
             {
                 changes.Register(Context.ConnectionId);
             }
+
+            Clients.All.notifyConnected(_connections.GetKeys());
 
             return base.OnReconnected();
         }

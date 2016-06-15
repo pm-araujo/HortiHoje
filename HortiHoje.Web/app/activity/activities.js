@@ -17,6 +17,10 @@
         vm.title = 'Activities';
         vm.activities = [];
 
+        vm.canAdd = function () {
+            return (sessionStorage.isManager === "true");
+        };
+        vm.newActivity = newActivity;
         vm.goToActivity = goToActivity;
 
         // Search bindings
@@ -40,10 +44,6 @@
 
         function getActivities() {
             return datacontext.activity.getPartials().then(function (data) {
-                console.log(data[0].taskList[0].allowedReporters);
-
-
-                
                 data.forEach(function (e) {
                     // Setting Last Task Location
                     var last = 0;
@@ -82,6 +82,9 @@
             }
         }
 
+        function newActivity() {
+            console.log(vm.canAdd());
+        }
 
         function search($event) {
             if ($event.keyCode === keyCodes.esc) {

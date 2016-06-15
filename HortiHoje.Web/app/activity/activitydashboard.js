@@ -33,6 +33,55 @@
             $window.history.back();
         };
 
+        vm.canAdd = function () {
+            return (vm.activity.idManager == sessionStorage.userId);
+        };
+
+        vm.newTask = function () {
+
+            if (!vm.canAdd()) {
+                return;
+            }
+
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: './app/modals/newTask.html',
+                controller:
+                    ['$scope', '$modalInstance', 'tasks',
+                        function ($scope, $modalInstance, tasks) {
+
+                            $scope.tasks = tasks;
+
+                            $scope.tempTask = {
+                                name: "",
+                                description: "",
+                                order: 0,
+                                previousTask: (vm.tasks[vm.tasks.length - 1] || {}),
+                                completed: false,
+                                idActivity: vm.activity.id,
+                                idLocation: 0
+                            }
+                            $scope.newTask = function () {
+                                var tempTask = $scope.tempTask;
+                                var prevOrder = ( tempTask.previousTask.order || 0);
+                                tempTask.order = prevOrder;
+
+                                console.log(tempTask);
+                                //TODO: write new location code
+                                //TODO: write new task code
+                                $modalInstance.close('add');
+                            };
+                            $scope.cancelNewTask = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ],
+                resolve: {
+                    tasks: function() {
+                        return vm.tasks;
+                    }
+                }
+            });
+        }
+
         vm.canEdit = function() {
             return (vm.activity.idManager == sessionStorage.userId);
         };
@@ -57,7 +106,7 @@
                             $scope.editActivity = function () {
                                 vm.activity.name = $scope.tempActivity.name;
                                 vm.activity.description = $scope.tempActivity.description;
-                                // TODO: apply edit operation to stack of changes
+                                
                                 $modalInstance.close('edit');
                             };
                             $scope.cancelActivityEdit = function () { $modalInstance.dismiss('cancel'); };
@@ -85,7 +134,6 @@
             common.activateController([getRequestedActivity()], controllerId).then(function() {
                 
                 NgMap.getMap({id:'activityMap'}).then(function(map) {
-                    console.log(vm.locations);
                     if (vm.locations)
                         vm.lastLocation = vm.locations[(vm.locations.length - 1)];
                     kickstartLocations(map);

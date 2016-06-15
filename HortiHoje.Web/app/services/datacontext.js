@@ -23,7 +23,7 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
-        var repoNames = ['activity', 'reporter', 'lookup', 'file'];
+        var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter', ];
 
         var primePromise;
 
@@ -62,6 +62,12 @@
             hub.client.helloToAll = function (data) {
                 console.log('server replied');
                 log('Server Replied with ' + data);
+            }
+
+            hub.client.notifyConnected = function(connectedList) {
+                console.log('ConnectedNotification:');
+                console.log(connectedList);
+                common.$broadcast(events.notifyConnected, connectedList);
             }
             $.connection.hub.qs = {
                 name: sessionStorage.userFullName,
@@ -164,6 +170,7 @@
                 common.$broadcast(events.entityChanged, data);
                 console.log('Entity Changed');
                 console.log(data);
+
             });
         }
 
