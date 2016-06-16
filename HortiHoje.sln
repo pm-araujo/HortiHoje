@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.Model", "HortiHoj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.DataAccess", "HortiHoje.DataAccess\HortiHoje.DataAccess.csproj", "{57E72B09-3299-4AF9-8A81-5D82C37613D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechRecognition", "SpeechRecognition\SpeechRecognition.csproj", "{EB21BAF5-E88D-4B5B-B51A-9884D8197745}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB21BAF5-E88D-4B5B-B51A-9884D8197745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB21BAF5-E88D-4B5B-B51A-9884D8197745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB21BAF5-E88D-4B5B-B51A-9884D8197745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB21BAF5-E88D-4B5B-B51A-9884D8197745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
