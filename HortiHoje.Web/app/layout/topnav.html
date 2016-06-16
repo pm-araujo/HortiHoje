@@ -10,6 +10,22 @@
     <div class="navbar-collapse collapse">
         <div class="pull-right navbar-logo">
             <ul id="curUserinfo" ng-show="haveUser()" class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-big">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="fa fa-cloud"></i> Sync
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <label>Save Your Changes</label>
+                            <button class="btn btn-success" data-ng-click="vm.saveChanges()">Save</button>
+                            <hr/>
+                        </li>
+                        <li>
+                            <label>Cancel Your Changes</label>
+                            <button class="btn btn-danger" data-ng-click="vm.cancelChanges()">Cancel</button>
+                        </li>
+                    </ul>
+                </li>
                 <li ng-click="doProfile()">
                     <a>
                         <i class="fa fa-user"></i> {{vm.user}}

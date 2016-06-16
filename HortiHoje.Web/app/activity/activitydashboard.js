@@ -5,10 +5,10 @@
 
     angular
         .module('app')
-        .controller( controllerId, ['$scope', '$routeParams', '$timeout', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
+        .controller( controllerId, ['$window', '$scope', '$routeParams', '$timeout', '$modal', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
  
 
-    function activitydashboard($scope, $routeParams, $timeout, datacontext, model, common, NgMap) {
+    function activitydashboard($window, $scope, $routeParams, $timeout, $modal, datacontext, model, common, NgMap) {
         var vm = this;
         var logError = common.logger.getLogFn(controllerId, 'error');
 
@@ -29,6 +29,47 @@
 
         activate();
 
+        vm.goBack = function() {
+            $window.history.back();
+        };
+
+        vm.canEdit = function() {
+            return (vm.activity.idManager == sessionStorage.userId);
+        };
+
+        vm.editActivity = function () {
+
+            if (!vm.canEdit()) {
+                return;
+            }
+
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: './app/modals/editActivity.html',
+                controller: 
+                    ['$scope', '$modalInstance',
+                        function ($scope, $modalInstance) {
+
+                            $scope.tempActivity = {
+                                name: vm.activity.name,
+                                description : vm.activity.description
+                            }
+                            $scope.editActivity = function () {
+                                vm.activity.name = $scope.tempActivity.name;
+                                vm.activity.description = $scope.tempActivity.description;
+                                // TODO: apply edit operation to stack of changes
+                                $modalInstance.close('edit');
+                            };
+                            $scope.cancelActivityEdit = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ]
+            });
+        }
+
+        $scope.indexChar = function (index) {
+            return String.fromCharCode(65 + index);
+        };
+
         $scope.zoomToIncludeMarkers = function (locations) {
             var bounds = new google.maps.LatLngBounds();
             locations.forEach(function (l) {
@@ -43,8 +84,8 @@
         function activate() {
             common.activateController([getRequestedActivity()], controllerId).then(function() {
                 
-                NgMap.getMap().then(function(map) {
-                    vm.map = map;
+                NgMap.getMap({id:'activityMap'}).then(function(map) {
+                    console.log(vm.locations);
                     if (vm.locations)
                         vm.lastLocation = vm.locations[(vm.locations.length - 1)];
                     kickstartLocations(map);
@@ -79,7 +120,7 @@
                         }
 
                         t.finished = t.completed ? "check" : "times";
-
+                        
                         vm.tasks.push(t);
 
                         if (t.location) {
@@ -99,6 +140,12 @@
         function kickstartLocations(map) {
 
             var iterator = 0;
+
+            vm.map = map = new google.maps.Map(document.getElementById('activityMap'), {
+                zoom: 12,
+                center: vm.lastLocation
+            });
+
             for (var i = 0; i < vm.locations.length; i++) {
                 $timeout(function() {
                         // add a marker this way does not sync. marker with <marker> tag
@@ -106,7 +153,7 @@
                             position: vm.locations[iterator++],
                             map: map,
                             draggable: false,
-                            label: ""+(iterator),
+                            label: String.fromCharCode(64 + iterator),
                             animation: google.maps.Animation.DROP
                         });
                         $scope.zoomToIncludeMarkers(vm.locations);

@@ -39,5 +39,13 @@
         $scope.doProfile = function () {
 
         }
+
+        vm.cancelChanges = function() {
+            return datacontext.cancel();
+        }
+
+        vm.saveChanges = function () {
+            return datacontext.save();
+        }
     }
 })();
