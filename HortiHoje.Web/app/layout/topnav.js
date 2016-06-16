@@ -12,6 +12,8 @@
         vm.title = controllerId;
         var EntityQuery = breeze.EntityQuery;
         var entityName = model.entityNames.reporter;
+        vm.changesOutgoing = [];
+        vm.changesIncoming = [];
 
         $scope.connectedList = [];
 
@@ -46,6 +48,7 @@
 
         $scope.doProfile = function () {
             datacontext.hubHello();
+            console.log(vm.changesOutgoing);
         }
 
         vm.cancelChanges = function() {
@@ -60,6 +63,13 @@
             $scope.$on(config.events.hasChangesChanged, function(event, data) {
                 console.log(controllerId + ": detected has changes");
                 console.log(data);
+
+                var changes = {
+                    snapshot: datacontext.getSnapshot(),
+                    time: moment().format("hh:mm:ss")
+                }
+
+                vm.changesOutgoing.push(changes);
             });
         }
 

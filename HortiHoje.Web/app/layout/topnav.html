@@ -18,23 +18,30 @@
                     <ul class="dropdown-menu">
                         <li data-ng-repeat="user in connectedList">
                             <strong>{{user}}</strong>
-                            <hr/>
+                            <hr />
                         </li>
                     </ul>
                 </li>
                 <li class="dropdown dropdown-big">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                        <i class="fa fa-cloud"></i> Sync
+                        <i class="fa fa-cloud-upload"></i>
+                        <span class="badge badge-important">{{vm.changesIncoming.length}}</span>
+                        <span class="badge badge-info">{{vm.changesOutgoing.length}}</span>
+                        <i class="fa fa-cloud-download"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <label>Save Your Changes</label>
-                            <button class="btn btn-success" data-ng-click="vm.saveChanges()">Save</button>
-                            <hr />
+                            <h5># Changes Outgoing: {{vm.changesOutgoing.length}}</h5>
                         </li>
                         <li>
-                            <label>Cancel Your Changes</label>
-                            <button class="btn btn-danger" data-ng-click="vm.cancelChanges()">Cancel</button>
+                            <h5># Changes Incoming: {{vm.changesIncoming.length}}</h5>
+                        </li>
+                        <li>
+                            <hr />
+                            <div>
+                                <button class="btn btn-danger pull-right" data-ng-click="vm.cancelChanges()">Cancel</button>
+                                <button class="btn btn-primary pull-left" data-ng-click="vm.saveChanges()">Sync</button>
+                            </div>
                         </li>
                     </ul>
                 </li>

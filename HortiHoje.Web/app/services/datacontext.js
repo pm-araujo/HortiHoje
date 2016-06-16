@@ -24,7 +24,8 @@
         var $q = common.$q;
 
         var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter', ];
-
+        var changesOutgoing = [];
+        var changesIncoming = [];
         var primePromise;
 
         var service = {
@@ -37,7 +38,9 @@
             save: save,
 
             // SignalR
-            hubHello: hubHello
+            hubHello: hubHello,
+            importSnapshot: importSnapshot,
+            getSnapshot: getSnapshot
 
             // Repositories to be added on demand:
             //      reporter
@@ -83,6 +86,14 @@
             console.log('calling...');
             hub.server.send("teststring");
 
+        }
+
+        function getSnapshot() {
+            return manager.exportEntities(manager.getChanges(), false);
+        }
+
+        function importSnapshot(snapshot) {
+            manager.importEntities(snapshot);
         }
 
         // Add ES5 property to datacontext for each named repo
