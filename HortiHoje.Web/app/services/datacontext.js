@@ -38,6 +38,8 @@
 
             sync: sync,
 
+            getActivitiesWithIncompleteTasksByReporter : getActivitiesWithIncompleteTasksByReporter,
+
             // SignalR
             hubHello: hubHello,
             importSnapshot: importSnapshot,
@@ -330,6 +332,24 @@
         // Sample Queries
         function getMessageCount() {
             return $q.when(72);
+        }
+
+        function getActivitiesWithIncompleteTasksByReporter(reporterID) {
+            var activities = [];
+
+            activities = EntityQuery.from('Task')
+                .where('completed', '==', 'false')
+                .using(manager)
+                .executeLocally();
+
+            function querySucceeded(data) {
+                return data.results;
+            }
+            function queryFailed(data) {
+                return data.results;
+            }
+            return activities;
+
         }
 
         function getPeople() {

@@ -39,11 +39,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr data-ng-repeat="p in vm.people">
-                                    <td>{{p.firstName}}</td>
-                                    <td>{{p.lastName}}</td>
-                                    <td>{{p.age}}</td>
-                                    <td>{{p.location}}</td>
+                                <!-- Iterate through array -->
+                                <tr data-ng-repeat="t in vm.tasks">
+                                    <td>{{t.idTask}}</td>
+                                    <td>{{t.idReporter}}</td>
+                                    <td>{{t.task.activity.id}}</td>
+                                    <td>{{t.task.name}}</td>
                                 </tr>
                                 </tbody>
                             </table>

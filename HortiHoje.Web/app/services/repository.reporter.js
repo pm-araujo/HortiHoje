@@ -15,6 +15,7 @@
             this.serviceId = serviceId;
             this.entityName = entityName;
             this.manager = mgr;
+            this.getById = getById;
 
             // Exposed data access functions
             this.getCount = getCount;
@@ -53,6 +54,11 @@
         function getCount() {
             var self = this;
             return self.$q.when(self._getLocalCount(entityName));
+        }
+
+        // get Repository by id
+        function getById(id, forceRemote) {
+            return this._getById(entityName, id, forceRemote);
         }
 
 
