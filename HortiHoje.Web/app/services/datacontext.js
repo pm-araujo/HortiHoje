@@ -124,8 +124,9 @@
 
             changeList = changeList.sort(orderByTimeAsc);
 
-            manager.hasChangesChanged.unsubscribe(unSubKeyHasChange);
-
+            // manager.hasChangesChanged.unsubscribe(unSubKeyHasChange);
+            unSubKeyHasChange();
+            unSubKeyHasChange = 0;
             /*
             async.series([
                 async.filter(changeList, doIncoming, doSave),
@@ -144,38 +145,38 @@
                 console.log('haiIn');
                 if (el.type === "incoming") {
 
-                        hub.server.confirmApplyChange()
-                        .done(function () {
-                            
-                            manager.importEntities(el.change);
+                    hub.server.confirmApplyChange()
+                        .done(function() {
 
+                            manager.importEntities(el.change);
+                            manager.acceptChanges();
                             console.log("Success importing entities.");
                             return callback(null, false);
                         })
                         .fail(function(err) {
                             logError("Error communicating with server", err);
-                            return callback(null, true);
                         });
 
+                } else {
+                    callback(null, true);
                 }
-
             }
 
             function doOutgoing(el, callback) {
                 console.log('haiOut');
                 if (el.type === "outgoing") {
-                        hub.server.applyChange(JSON.stringify(el))
+                    hub.server.applyChange(JSON.stringify(el))
                         .done(function() {
                             console.log("Success applying to server")
                             return callback(null, false);
                         })
                         .fail(function(err) {
                             logError("Error Applying change to server", err);
-                            return callback(null, true);
                         });
 
+                } else {
+                    callback(null, true);
                 }
-
             }
 
             function doSave(err, results) {
@@ -189,52 +190,110 @@
                 return defer.promise;
             }
 
+            async.waterfall([
+                function (callback) {
+                    async.filter(changeList, doOutgoing, function (err, resultFilter) {
+                        // saving changes from outgoing
+                        console.log("saving from outgoing");
+                        console.log("res: ", resultFilter);
 
+                        // if no more outgoing, save here
+                        var outgoing = resultFilter.filter(function (el) { return (el.type === "outgoing"); });
+
+                        if ((outgoing.length == 0) && manager.hasChanges() ) {
+                            manager.saveChanges();
+                            log("Saved Changes");
+                        }
+
+                        callback(null, resultFilter);
+                    });
+                },
+                function (resPrev, callback) {
+                    changeList = resPrev;
+                    async.filter(changeList, doIncoming, function (err, resultFilter) {
+                        // saving changes from incoming
+                        console.log("saving from incoming");
+                        console.log("res: ", resultFilter);
+                        callback(null, resultFilter);
+                    });
+                }
+            ], function (err, result) {
+                console.log("reached end")
+                console.log("results: ", result);
+                console.log("hasChanges: " + manager.hasChanges());
+
+                changeList = result;
+                $rootScope.changeList = result;
+
+                if (changeList.length != 0) {
+                    logError("Error Syncing");
+                }
+
+                if (unSubKeyHasChange == 0) {
+                    console.log("restoring event handler");
+                    onHasChanges();
+                }
+                common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+            });
+
+            /*
             $q.when(changeList).then(
-                    function () {
+                    function () { // processing incoming
                         var defer = $q.defer();
-                        console.log('inside incoming');
                         async.filter(changeList, doIncoming, function (err, res) {
                             // saving changes from incoming
                             changeList = res;
                             $rootScope.changeList = res;
+                            console.log("saving from incoming");
+                            console.log("changeList: ", changeList);
+                            console.log("rootScope: ", $rootScope.changeList);
                             defer.resolve(changeList);
-
                         });
 
-                        common.$broadcast(events.hasChangesChanged, { hasChanges: false });
-
+                        // useless space, don't know when async is returning
                         return defer.promise;
-                    }()).then(
-                    function () {
+                    }().then(function () { // finished with incoming after save, outgoing may have started by now
                         var defer = $q.defer();
-                        console.log('inside outgoing')
-                        async.filter(changeList, doOutgoing, function (err, res) {
-                            // saving changes from outgoing
-                            changeList = res;
-                            $rootScope.changeList = res;
-                            defer.resolve(changeList);
-                        });
-
+                        console.log("then incoming after save, if save");
+                        if( unSubKeyHasChange == 0)
+                            onHasChanges();
                         common.$broadcast(events.hasChangesChanged, { hasChanges: false });
-
+                        defer.resolve();
                         return defer.promise;
-                    }
-                )
-                .then(function (res) {
-                    console.log("results:");
-                    console.log("res:", res);
-                    console.log("changeList:", changeList);
-                    if (changeList.length == 0) {
-                        manager.saveChanges();
-                        log("Saved Changes");
-                    }
-                    common.$broadcast(events.hasChangesChanged, { hasChanges: false });
-                }).finally(function () {
-                    onHasChanges();
-                    console.log("reached end");
-                });
+                    }).then(
+                        function () { // processing outgoing
+                            var defer = $q.defer();
+                            async.filter(changeList, doOutgoing, function (err, res) {
+                                // saving changes from outgoing
+                                changeList = res;
+                                $rootScope.changeList = res;
+                                console.log("saving from outgoing");
+                                console.log("changeList: ", changeList);
+                                console.log("rootScope: ", $rootScope.changeList);
+                                defer.resolve(changeList);
+                            });
 
+                            // useless space, don't know when async is returning
+                            return defer.promise;
+                        }().then(function (res) { //finished with outgoing after save
+                            var defer = $q.defer();
+                            console.log("then outgoing, after save, if save");
+                            console.log("results:");
+                            console.log("res:", res);
+                            console.log("changeList:", changeList);
+                            if (changeList.length == 0) {
+                                manager.saveChanges();
+                                log("Saved Changes");
+                            }
+                            if( unSubKeyHasChange == 0)
+                                onHasChanges();
+                            common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+                            defer.resolve();
+                            return defer.promise
+                        }))).then(function () {
+                    console.log("reached end");
+                }());
+                */
             /*
             async.series([
                 function(cb) {
@@ -273,9 +332,7 @@
         }
 
         function hubHello() {
-            console.log('calling...');
-            hub.server.send("teststring");
-
+            console.log("hasChanges:", manager.hasChanges());
         }
 
         function onHasChanges() {
