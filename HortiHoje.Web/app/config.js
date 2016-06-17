@@ -35,6 +35,7 @@
         entityChanged: 'datacontext.entityChanged',
         hasChangesChanged: 'datacontext.hasChangesChanged',
         notifyConnected: 'datacontext.signalr.notifyConnected',
+        notifyChange: 'datacontext.signalr.notifyChange',
         spinnerToggle: 'spinner.toggle'
     };
 

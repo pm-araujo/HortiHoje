@@ -4,9 +4,9 @@
     var serviceId = 'datacontext';
     angular.module('app')
         .factory(serviceId,
-        ['$rootScope', 'breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
+        ['$rootScope', '$timeout', 'breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
 
-    function datacontext($rootScope, breeze, common, emFactory, config, model, repositories) {
+    function datacontext($rootScope, $timeout, breeze, common, emFactory, config, model, repositories) {
         var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
@@ -27,6 +27,8 @@
         var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter',];
         $rootScope.changeList = [];
         var primePromise;
+
+        var unSubKeyHasChange = function(){};
 
         var service = {
             primeData: primeData,
@@ -84,6 +86,7 @@
                 changeEl.type = 'incoming';
 
                 $rootScope.changeList.push(changeEl);
+                common.$broadcast(events.notifyChange, changeEl);
             }
 
             $.connection.hub.qs = {
@@ -115,9 +118,11 @@
                 return;
             }
 
+            console.log(changeList);
 
             changeList = changeList.sort(orderByTimeAsc);
 
+            manager.hasChangesChanged.unsubscribe(unSubKeyHasChange);
 
             /*
             async.series([
@@ -137,9 +142,12 @@
                 console.log('haiIn');
                 if (el.type === "incoming") {
 
-                    hub.server.confirmApplyChange()
-                        .done(function() {
+                        hub.server.confirmApplyChange()
+                        .done(function () {
+                            
                             manager.importEntities(el.change);
+
+                            console.log("Success importing entities.");
                             return callback(null, false);
                         })
                         .fail(function(err) {
@@ -148,13 +156,13 @@
                         });
 
                 }
+
             }
 
             function doOutgoing(el, callback) {
                 console.log('haiOut');
                 if (el.type === "outgoing") {
-
-                    hub.server.applyChange(JSON.stringify(el))
+                        hub.server.applyChange(JSON.stringify(el))
                         .done(function() {
                             console.log("Success applying to server")
                             return callback(null, false);
@@ -165,13 +173,67 @@
                         });
 
                 }
+
             }
 
             function doSave(err, results) {
+                var defer = $q.defer();
+
+                
                 changeList = results;
                 $rootScope.changeList = results;
+                defer.resolve();
+
+                return defer.promise;
             }
 
+
+            $q.when(changeList).then(
+                    function () {
+                        var defer = $q.defer();
+                        console.log('inside incoming');
+                        async.filter(changeList, doIncoming, function (err, res) {
+                            // saving changes from incoming
+                            changeList = res;
+                            $rootScope.changeList = res;
+                            defer.resolve(changeList);
+
+                        });
+
+                        common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+
+                        return defer.promise;
+                    }()).then(
+                    function () {
+                        var defer = $q.defer();
+                        console.log('inside outgoing')
+                        async.filter(changeList, doOutgoing, function (err, res) {
+                            // saving changes from outgoing
+                            changeList = res;
+                            $rootScope.changeList = res;
+                            defer.resolve(changeList);
+                        });
+
+                        common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+
+                        return defer.promise;
+                    }
+                )
+                .then(function (res) {
+                    console.log("results:");
+                    console.log("res:", res);
+                    console.log("changeList:", changeList);
+                    if (changeList.length == 0) {
+                        manager.saveChanges();
+                        log("Saved Changes");
+                    }
+                    common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+                }).finally(function () {
+                    onHasChanges();
+                    console.log("reached end");
+                });
+
+            /*
             async.series([
                 function(cb) {
                     async.filter(changeList, doIncoming, cb());
@@ -194,7 +256,7 @@
                     }
                 }
             );
-
+            */
         }
 
         function orderByTimeAsc(a, b) {
@@ -215,15 +277,18 @@
         }
 
         function onHasChanges() {
-            $rootScope.$on(config.events.hasChangesChanged, function (event, data) {
+            unSubKeyHasChange = $rootScope.$on(config.events.hasChangesChanged, function (event, data) {
+                if (data.hasChanges) {
+                    console.log("event:", event);
+                    console.log("data:", data);
+                    var changeEl = {
+                        change: getSnapshot(),
+                        type: 'outgoing',
+                        time: moment()
+                    }
 
-                var changeEl = {
-                    change: getSnapshot(),
-                    type: 'outgoing',
-                    time: moment()
+                    $rootScope.changeList.push(changeEl);
                 }
-
-                $rootScope.changeList.push(changeEl);
 
             });
         }
@@ -312,7 +377,7 @@
         }
 
         function setupEventForHasChangesChanged() {
-            manager.hasChangesChanged.subscribe(function(eventArgs) {
+            manager.hasChangesChanged.subscribe(function (eventArgs) {
                 var data = {
                     hasChanges: eventArgs.hasChanges,
                     eventArgs: eventArgs

@@ -29,6 +29,7 @@
 
             onHasChanges();
             onNotifyConnected();
+            onNotifyChange();
 
             $scope.changeList = $rootScope.changeList;
 
@@ -89,6 +90,15 @@
                     $scope.$apply();
                 });
         }
+
+        function onNotifyChange() {
+            $scope.$on(config.events.notifyChange, function (event, data) {
+                $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+                $scope.$apply();
+            });
+        }
+
 
     }
 })();
