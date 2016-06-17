@@ -5,16 +5,18 @@
 
     angular
         .module('app')
-        .controller(controllerId, ['$scope', '$rootScope', '$location', '$window', 'config', 'model', 'datacontext', topnav]);
+        .controller(controllerId, ['$scope', '$rootScope', '$location', '$window', 'common', 'config', 'model', 'datacontext', topnav]);
 
-    function topnav($scope, $rootScope, $location, $window, config, model, datacontext) {
+    function topnav($scope, $rootScope, $location, $window, common, config, model, datacontext) {
         var vm = this;
         vm.title = controllerId;
         var EntityQuery = breeze.EntityQuery;
         var entityName = model.entityNames.reporter;
-        $scope.changeList = $rootScope.changeList;
-        $scope.changesOutgoing = $scope.changeList.filter(function (el) { return (el.type === "outgoing"); });
-        $scope.changesIncoming = $scope.changeList.filter(function (el) { return (el.type === "incoming"); });
+        var $q = common.$q;
+        $scope.changeList = [];
+
+        $scope.changesOutgoing = 0;
+        $scope.changesIncoming = 0;
 
 
         $scope.connectedList = [];
@@ -27,6 +29,12 @@
 
             onHasChanges();
             onNotifyConnected();
+            onNotifyChange();
+
+            $scope.changeList = $rootScope.changeList;
+
+            $scope.changesOutgoing = $scope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+            $scope.changesIncoming = $scope.changeList.filter(function (el) { return (el.type === "incoming"); });
 
             vm.user = sessionStorage.userFullName;
             sessionStorage.isAuthenticated = true;
@@ -54,11 +62,17 @@
         }
 
         vm.cancelChanges = function() {
-            return datacontext.cancel();
+            $q.when(datacontext.cancel()).then(function() {
+                $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+            });
         }
 
         vm.saveChanges = function () {
-            return datacontext.sync();
+            $q.when(datacontext.sync()).then(function() {
+                    $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                    $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+            });
         }
 
         function onHasChanges() {
@@ -76,6 +90,15 @@
                     $scope.$apply();
                 });
         }
+
+        function onNotifyChange() {
+            $scope.$on(config.events.notifyChange, function (event, data) {
+                $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+                $scope.$apply();
+            });
+        }
+
 
     }
 })();

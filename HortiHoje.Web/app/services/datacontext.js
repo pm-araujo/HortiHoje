@@ -1,11 +1,12 @@
-(function () {
+(function() {
     'use strict';
 
     var serviceId = 'datacontext';
-    angular.module('app').factory(serviceId,
-        ['$rootScope', 'breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
+    angular.module('app')
+        .factory(serviceId,
+        ['$rootScope', '$timeout', 'breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
 
-    function datacontext($rootScope, breeze, common, emFactory, config, model, repositories) {
+    function datacontext($rootScope, $timeout, breeze, common, emFactory, config, model, repositories) {
         var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
@@ -23,9 +24,11 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
-        var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter', ];
+        var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter',];
         $rootScope.changeList = [];
         var primePromise;
+
+        var unSubKeyHasChange = function(){};
 
         var service = {
             primeData: primeData,
@@ -57,7 +60,6 @@
         return service;
 
 
-
         function init() {
             repositories.init(manager);
             defineLazyLoadedRepos();
@@ -67,8 +69,8 @@
 
         function initHub() {
             hub = $.connection.hubPoint;
-            
-            hub.client.helloToAll = function (data) {
+
+            hub.client.helloToAll = function(data) {
                 console.log('server replied');
                 log('Server Replied with ' + data);
             }
@@ -80,23 +82,34 @@
             }
 
             hub.client.notifyChange = function(changeEl) {
-                //Confirm this shit isn't JSON.stringified
-                console.log("Overlord committing change")
-                console.log(changeEl);
+
+                changeEl = JSON.parse(changeEl);
 
                 changeEl.type = 'incoming';
 
                 $rootScope.changeList.push(changeEl);
+                common.$broadcast(events.notifyChange, changeEl);
             }
 
             $.connection.hub.qs = {
                 name: sessionStorage.userFullName,
                 previousConnection: ""
             };
-            $.connection.hub.start().done(function (res) {
-                log('Connected to Server on SignalR');
-                $.connection.hub.qs.previousConnection = res.id;
+
+            $.connection.hub.disconnected(function () {
+                setTimeout(function () {
+                    $.connection.hub.start()
+                    .done(function(res) {
+                        log("Connected to Server on SignalR");
+                            $.connection.hub.qs.previousConnection = res.id;
+                        });
+                }, 5000); // Re-start connection after 5 seconds
             });
+            $.connection.hub.start()
+                .done(function(res) {
+                    log('Connected to Server on SignalR');
+                    $.connection.hub.qs.previousConnection = res.id;
+                });
         }
 
         function sync() {
@@ -107,9 +120,11 @@
                 return;
             }
 
+            console.log(changeList);
 
             changeList = changeList.sort(orderByTimeAsc);
 
+            manager.hasChangesChanged.unsubscribe(unSubKeyHasChange);
 
             /*
             async.series([
@@ -129,48 +144,121 @@
                 console.log('haiIn');
                 if (el.type === "incoming") {
 
-                    hub.server.confirmApplyChange()
+                        hub.server.confirmApplyChange()
                         .done(function () {
-                            manager.importEntities(changeEl.change);
-                            return callback(false);
+                            
+                            manager.importEntities(el.change);
+
+                            console.log("Success importing entities.");
+                            return callback(null, false);
                         })
-                        .fail(function (err) {
+                        .fail(function(err) {
                             logError("Error communicating with server", err);
-                            return callback(true);
+                            return callback(null, true);
                         });
 
                 }
 
-                return callback(true);
             }
 
-            function doOutgoing (el, callback) {
+            function doOutgoing(el, callback) {
                 console.log('haiOut');
                 if (el.type === "outgoing") {
-
                         hub.server.applyChange(JSON.stringify(el))
-                            .done(function() {
-                                console.log("Success applying to server")
-                                return callback(false);
-                            })
-                            .fail(function(err) {
-                                logError("Error Applying change to server", err);
-                                return callback(true);
-                            });
+                        .done(function() {
+                            console.log("Success applying to server")
+                            return callback(null, false);
+                        })
+                        .fail(function(err) {
+                            logError("Error Applying change to server", err);
+                            return callback(null, true);
+                        });
 
-                    }
+                }
 
-                return callback(true);
             }
 
             function doSave(err, results) {
+                var defer = $q.defer();
+
+                
                 changeList = results;
                 $rootScope.changeList = results;
+                defer.resolve();
+
+                return defer.promise;
             }
 
-            async.filter(changeList, doIncoming, doSave);
-            async.filter(changeList, doOutgoing, doSave);
-            console.log(changeList);
+
+            $q.when(changeList).then(
+                    function () {
+                        var defer = $q.defer();
+                        console.log('inside incoming');
+                        async.filter(changeList, doIncoming, function (err, res) {
+                            // saving changes from incoming
+                            changeList = res;
+                            $rootScope.changeList = res;
+                            defer.resolve(changeList);
+
+                        });
+
+                        common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+
+                        return defer.promise;
+                    }()).then(
+                    function () {
+                        var defer = $q.defer();
+                        console.log('inside outgoing')
+                        async.filter(changeList, doOutgoing, function (err, res) {
+                            // saving changes from outgoing
+                            changeList = res;
+                            $rootScope.changeList = res;
+                            defer.resolve(changeList);
+                        });
+
+                        common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+
+                        return defer.promise;
+                    }
+                )
+                .then(function (res) {
+                    console.log("results:");
+                    console.log("res:", res);
+                    console.log("changeList:", changeList);
+                    if (changeList.length == 0) {
+                        manager.saveChanges();
+                        log("Saved Changes");
+                    }
+                    common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+                }).finally(function () {
+                    onHasChanges();
+                    console.log("reached end");
+                });
+
+            /*
+            async.series([
+                function(cb) {
+                    async.filter(changeList, doIncoming, cb());
+                },
+                function(cb) {
+                    async.filter(changeList, doOutgoing, function(err, results) {
+                        changeList = results;
+                        $rootScope.changeList = results;
+                        cb(null, changeList);
+                    });
+                }],
+                function (err, args) {
+                    console.log("args:");
+                    console.log(args);
+                    console.log("last callback:")
+                    console.log(changeList);
+                    if (changeList.length == 0) {
+                        manager.saveChanges();
+                        log("Saved Changes");
+                    }
+                }
+            );
+            */
         }
 
         function orderByTimeAsc(a, b) {
@@ -191,15 +279,18 @@
         }
 
         function onHasChanges() {
-            $rootScope.$on(config.events.hasChangesChanged, function (event, data) {
+            unSubKeyHasChange = $rootScope.$on(config.events.hasChangesChanged, function (event, data) {
+                if (data.hasChanges) {
+                    console.log("event:", event);
+                    console.log("data:", data);
+                    var changeEl = {
+                        change: getSnapshot(),
+                        type: 'outgoing',
+                        time: moment()
+                    }
 
-                var changeEl = {
-                    change: getSnapshot(),
-                    type: 'outgoing',
-                    time: moment()
+                    $rootScope.changeList.push(changeEl);
                 }
-
-                $rootScope.changeList.push(changeEl);
 
             });
         }
@@ -271,6 +362,9 @@
 
         // Cancel Changes
         function cancel() {
+
+            manager.rejectChanges();
+
             var changeList = $rootScope.changeList;
 
             changeList = changeList.filter(function(el) {
@@ -279,13 +373,13 @@
 
             $rootScope.changeList = changeList;
 
-            manager.rejectChanges();
+            
 
             logSuccess("Local Changes Cancelled", null, true);
         }
 
         function setupEventForHasChangesChanged() {
-            manager.hasChangesChanged.subscribe(function(eventArgs) {
+            manager.hasChangesChanged.subscribe(function (eventArgs) {
                 var data = {
                     hasChanges: eventArgs.hasChanges,
                     eventArgs: eventArgs
