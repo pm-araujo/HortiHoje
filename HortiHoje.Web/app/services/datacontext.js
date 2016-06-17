@@ -1,8 +1,9 @@
-(function () {
+(function() {
     'use strict';
 
     var serviceId = 'datacontext';
-    angular.module('app').factory(serviceId,
+    angular.module('app')
+        .factory(serviceId,
         ['$rootScope', 'breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
 
     function datacontext($rootScope, breeze, common, emFactory, config, model, repositories) {
@@ -23,7 +24,7 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
-        var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter', ];
+        var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter',];
         $rootScope.changeList = [];
         var primePromise;
 
@@ -55,7 +56,6 @@
         return service;
 
 
-
         function init() {
             repositories.init(manager);
             defineLazyLoadedRepos();
@@ -65,8 +65,8 @@
 
         function initHub() {
             hub = $.connection.hubPoint;
-            
-            hub.client.helloToAll = function (data) {
+
+            hub.client.helloToAll = function(data) {
                 console.log('server replied');
                 log('Server Replied with ' + data);
             }
@@ -78,9 +78,8 @@
             }
 
             hub.client.notifyChange = function(changeEl) {
-                //Confirm this shit isn't JSON.stringified
-                console.log("Overlord committing change")
-                console.log(changeEl);
+
+                changeEl = JSON.parse(changeEl);
 
                 changeEl.type = 'incoming';
 
@@ -91,10 +90,21 @@
                 name: sessionStorage.userFullName,
                 previousConnection: ""
             };
-            $.connection.hub.start().done(function (res) {
-                log('Connected to Server on SignalR');
-                $.connection.hub.qs.previousConnection = res.id;
+
+            $.connection.hub.disconnected(function () {
+                setTimeout(function () {
+                    $.connection.hub.start()
+                    .done(function(res) {
+                        log("Connected to Server on SignalR");
+                            $.connection.hub.qs.previousConnection = res.id;
+                        });
+                }, 5000); // Re-start connection after 5 seconds
             });
+            $.connection.hub.start()
+                .done(function(res) {
+                    log('Connected to Server on SignalR');
+                    $.connection.hub.qs.previousConnection = res.id;
+                });
         }
 
         function sync() {
@@ -128,37 +138,33 @@
                 if (el.type === "incoming") {
 
                     hub.server.confirmApplyChange()
-                        .done(function () {
-                            manager.importEntities(changeEl.change);
-                            return callback(false);
+                        .done(function() {
+                            manager.importEntities(el.change);
+                            return callback(null, false);
                         })
-                        .fail(function (err) {
+                        .fail(function(err) {
                             logError("Error communicating with server", err);
-                            return callback(true);
+                            return callback(null, true);
                         });
 
                 }
-
-                return callback(true);
             }
 
-            function doOutgoing (el, callback) {
+            function doOutgoing(el, callback) {
                 console.log('haiOut');
                 if (el.type === "outgoing") {
 
-                        hub.server.applyChange(JSON.stringify(el))
-                            .done(function() {
-                                console.log("Success applying to server")
-                                return callback(false);
-                            })
-                            .fail(function(err) {
-                                logError("Error Applying change to server", err);
-                                return callback(true);
-                            });
+                    hub.server.applyChange(JSON.stringify(el))
+                        .done(function() {
+                            console.log("Success applying to server")
+                            return callback(null, false);
+                        })
+                        .fail(function(err) {
+                            logError("Error Applying change to server", err);
+                            return callback(null, true);
+                        });
 
-                    }
-
-                return callback(true);
+                }
             }
 
             function doSave(err, results) {
@@ -166,9 +172,29 @@
                 $rootScope.changeList = results;
             }
 
-            async.filter(changeList, doIncoming, doSave);
-            async.filter(changeList, doOutgoing, doSave);
-            console.log(changeList);
+            async.series([
+                function(cb) {
+                    async.filter(changeList, doIncoming, cb());
+                },
+                function(cb) {
+                    async.filter(changeList, doOutgoing, function(err, results) {
+                        changeList = results;
+                        $rootScope.changeList = results;
+                        cb(null, changeList);
+                    });
+                }],
+                function (err, args) {
+                    console.log("args:");
+                    console.log(args);
+                    console.log("last callback:")
+                    console.log(changeList);
+                    if (changeList.length == 0) {
+                        manager.saveChanges();
+                        log("Saved Changes");
+                    }
+                }
+            );
+
         }
 
         function orderByTimeAsc(a, b) {
@@ -269,6 +295,9 @@
 
         // Cancel Changes
         function cancel() {
+
+            manager.rejectChanges();
+
             var changeList = $rootScope.changeList;
 
             changeList = changeList.filter(function(el) {
@@ -277,7 +306,7 @@
 
             $rootScope.changeList = changeList;
 
-            manager.rejectChanges();
+            
 
             logSuccess("Local Changes Cancelled", null, true);
         }
