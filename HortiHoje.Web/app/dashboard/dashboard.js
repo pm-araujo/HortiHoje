@@ -16,10 +16,11 @@
         vm.people = [];
         vm.title = 'Dashboard';
         vm.tasks = [];
+        vm.activities = [];
         activate();
 
         function activate() {
-            var promises = [getActivitiesCount(), getPeople(), getTasksByReporter()];
+            var promises = [getActivitiesCount(), getActivitiesByManager(), getTasksByReporter()];
             common.activateController(promises, controllerId)
                 .then(function () { log('Activated Dashboard View'); });
         }
@@ -46,9 +47,21 @@
                 vm.tasks = datacontext.getActivitiesWithIncompleteTasksByReporter(userID);
                 console.log(vm.tasks);
             });
-            //var acts = datacontext.getActivitiesWithIncompleteTasksByReporter(userID);
+        }
 
-            //console.log(acts);
+        function getActivitiesByManager() {
+            var userID = sessionStorage.userId;
+            if (sessionStorage.isManager) {
+                var reporter = {};
+
+                datacontext.reporter.getById(userID).then(function (data) {
+                    reporter = data;
+                    vm.activities = datacontext.getActivitiesWithIncompleteTasksByReporter(userID);
+                    console.log(vm.activities);
+                });
+            }
+
+            
         }
     }
 })();
