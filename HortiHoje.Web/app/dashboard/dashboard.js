@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'dashboard';
-    angular.module('app').controller(controllerId, ['common', 'datacontext', dashboard]);
+    angular.module('app').controller(controllerId, ['$location', 'common', 'datacontext', dashboard]);
 
-    function dashboard(common, datacontext) {
+    function dashboard($location, common, datacontext) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
@@ -17,6 +17,10 @@
         vm.title = 'Dashboard';
         vm.tasks = [];
         vm.activities = [];
+
+        vm.goToActivity = goToActivity;
+        vm.goToTask = goToTask;
+
         activate();
 
         function activate() {
@@ -61,7 +65,18 @@
                 });
             }
 
-            
+        }
+
+        function goToActivity(activity) {
+            if (activity && activity.id) {
+                $location.path('/activity/' + activity.id);
+            }
+        }
+
+        function goToTask(task) {
+            if (task && task.id) {
+                $location.path('/task/' + task.id);
+            }
         }
     }
 })();

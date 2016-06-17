@@ -40,10 +40,10 @@
                                 </thead>
                                 <tbody>
                                 <!-- Iterate through array -->
-                                <tr data-ng-repeat="t in vm.tasks">
-                                    <td><a href="#/activity/{{t.idActivity}}"> {{t.activity.name}} </a></td>
+                                <tr role="button" data-ng-repeat="t in vm.tasks" data-ng-click="vm.goToTask(t)">
+                                    <td>{{t.activity.name}}</td>
                                     <td>{{t.name}}</td>
-                                    <td>{{t.description}}</td>
+                                    <td>{{t.description}}</tddata-ng-click="vm.goToTask(t.id)">
                                     <td>{{t.order}}</td>
                                 </tr>
                                 </tbody>
@@ -72,8 +72,8 @@
                                 </thead>
                                 <tbody>
                                     <!-- Iterate through array -->
-                                    <tr data-ng-repeat="t in vm.activities">
-                                        <td><a href="#/activity/{{t.activity.id}}"> {{t.activity.name}} </a></td>
+                                    <tr role="button" data-ng-repeat="t in vm.activities" data-ng-click="vm.goToActivity(t.activity)">
+                                        <td>{{t.activity.name}}</td>
                                         <td>{{t.activity.id}}</td>
                                         <td>{{t.activity.name}}</td>
                                         <td>{{t.activity.description}}</td>
