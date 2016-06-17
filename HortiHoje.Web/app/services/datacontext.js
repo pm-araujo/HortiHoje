@@ -3,9 +3,9 @@
 
     var serviceId = 'datacontext';
     angular.module('app').factory(serviceId,
-        ['breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
+        ['$rootScope', 'breeze', 'common', 'entityManagerFactory', 'config', 'model', 'repositories', datacontext]);
 
-    function datacontext(breeze, common, emFactory, config, model, repositories) {
+    function datacontext($rootScope, breeze, common, emFactory, config, model, repositories) {
         var Predicate = breeze.Predicate;
         var EntityQuery = breeze.EntityQuery;
         var entityNames = model.entityNames;
@@ -24,8 +24,7 @@
         var $q = common.$q;
 
         var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter', ];
-        var changesOutgoing = [];
-        var changesIncoming = [];
+        $rootScope.changeList = [];
         var primePromise;
 
         var service = {
@@ -36,6 +35,8 @@
 
             cancel: cancel,
             save: save,
+
+            sync: sync,
 
             // SignalR
             hubHello: hubHello,
@@ -53,10 +54,13 @@
 
         return service;
 
+
+
         function init() {
             repositories.init(manager);
             defineLazyLoadedRepos();
             setupEventForHasChangesChanged();
+            onHasChanges();
         }
 
         function initHub() {
@@ -72,6 +76,17 @@
                 console.log(connectedList);
                 common.$broadcast(events.notifyConnected, connectedList);
             }
+
+            hub.client.notifyChange = function(changeEl) {
+                //Confirm this shit isn't JSON.stringified
+                console.log("Overlord committing change")
+                console.log(changeEl);
+
+                changeEl.type = 'incoming';
+
+                $rootScope.changeList.push(changeEl);
+            }
+
             $.connection.hub.qs = {
                 name: sessionStorage.userFullName,
                 previousConnection: ""
@@ -82,10 +97,109 @@
             });
         }
 
+        function sync() {
+
+            var changeList = $rootScope.changeList;
+
+            if (changeList.length == 0) {
+                return;
+            }
+
+
+            changeList = changeList.sort(orderByTimeAsc);
+
+
+            /*
+            async.series([
+                async.filter(changeList, doIncoming, doSave),
+                async.filter(changeList, doOutgoing, doSave)
+            ], function (bool) {
+
+                if (changeList.length == 0) {
+                    manager.saveChanges();
+                    log("Saved Changes");
+                }
+                return bool;
+            });
+            */
+
+            function doIncoming(el, callback) {
+                console.log('haiIn');
+                if (el.type === "incoming") {
+
+                    hub.server.confirmApplyChange()
+                        .done(function () {
+                            manager.importEntities(changeEl.change);
+                            return callback(false);
+                        })
+                        .fail(function (err) {
+                            logError("Error communicating with server", err);
+                            return callback(true);
+                        });
+
+                }
+
+                return callback(true);
+            }
+
+            function doOutgoing (el, callback) {
+                console.log('haiOut');
+                if (el.type === "outgoing") {
+
+                        hub.server.applyChange(JSON.stringify(el))
+                            .done(function() {
+                                console.log("Success applying to server")
+                                return callback(false);
+                            })
+                            .fail(function(err) {
+                                logError("Error Applying change to server", err);
+                                return callback(true);
+                            });
+
+                    }
+
+                return callback(true);
+            }
+
+            function doSave(err, results) {
+                changeList = results;
+                $rootScope.changeList = results;
+            }
+
+            async.filter(changeList, doIncoming, doSave);
+            async.filter(changeList, doOutgoing, doSave);
+            console.log(changeList);
+        }
+
+        function orderByTimeAsc(a, b) {
+            if (a.time < b.time) {
+                return -1;
+            } else if (a.time > b.time) {
+                return 1;
+            } else {
+                return 0;
+            }
+
+        }
+
         function hubHello() {
             console.log('calling...');
             hub.server.send("teststring");
 
+        }
+
+        function onHasChanges() {
+            $rootScope.$on(config.events.hasChangesChanged, function (event, data) {
+
+                var changeEl = {
+                    change: getSnapshot(),
+                    type: 'outgoing',
+                    time: moment()
+                }
+
+                $rootScope.changeList.push(changeEl);
+
+            });
         }
 
         function getSnapshot() {
@@ -155,7 +269,16 @@
 
         // Cancel Changes
         function cancel() {
+            var changeList = $rootScope.changeList;
+
+            changeList = changeList.filter(function(el) {
+                return (el.type === "incoming");
+            });
+
+            $rootScope.changeList = changeList;
+
             manager.rejectChanges();
+
             logSuccess("Local Changes Cancelled", null, true);
         }
 
@@ -167,8 +290,6 @@
                 };
                 // send the message (the ctrl receives it)
                 common.$broadcast(events.hasChangesChanged, data)
-                console.log('Changes Made');
-                console.log(data);
             });
         }
 
@@ -179,9 +300,6 @@
                 };
                 // broadcast to subscribers
                 common.$broadcast(events.entityChanged, data);
-                console.log('Entity Changed');
-                console.log(data);
-
             });
         }
 

@@ -326,6 +326,9 @@
     <Content Include="content\files\images.zip" />
     <Content Include="content\files\Resumo.pdf" />
     <None Include="scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="scripts\async.js" />
+    <Content Include="scripts\async.min.js" />
+    <Content Include="scripts\async.min.map.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\breeze.angular.js" />

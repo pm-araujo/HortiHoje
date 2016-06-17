@@ -157,7 +157,7 @@
                 .then(function(data) {
                     
 
-                    data.taskList.sort(compareTasks);
+                    data.taskList = data.taskList.sort(compareTasks);
 
                     data.taskList.forEach(function (t) {
                         

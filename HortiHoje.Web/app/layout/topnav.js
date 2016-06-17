@@ -12,11 +12,13 @@
         vm.title = controllerId;
         var EntityQuery = breeze.EntityQuery;
         var entityName = model.entityNames.reporter;
-        vm.changesOutgoing = [];
-        vm.changesIncoming = [];
+        $scope.changeList = $rootScope.changeList;
+        $scope.changesOutgoing = $scope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+        $scope.changesIncoming = $scope.changeList.filter(function (el) { return (el.type === "incoming"); });
+
 
         $scope.connectedList = [];
-
+        
         activate();
 
         function activate() {
@@ -48,7 +50,7 @@
 
         $scope.doProfile = function () {
             datacontext.hubHello();
-            console.log(vm.changesOutgoing);
+            console.log($rootScope.changeList);
         }
 
         vm.cancelChanges = function() {
@@ -56,20 +58,13 @@
         }
 
         vm.saveChanges = function () {
-            return datacontext.save();
+            return datacontext.sync();
         }
 
         function onHasChanges() {
-            $scope.$on(config.events.hasChangesChanged, function(event, data) {
-                console.log(controllerId + ": detected has changes");
-                console.log(data);
-
-                var changes = {
-                    snapshot: datacontext.getSnapshot(),
-                    time: moment().format("hh:mm:ss")
-                }
-
-                vm.changesOutgoing.push(changes);
+            $scope.$on(config.events.hasChangesChanged, function (event, data) {
+                $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
             });
         }
 

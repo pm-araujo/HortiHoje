@@ -17,6 +17,7 @@
             this.manager = mgr;
 
             // Exposed data access functions
+            this.create = create;
             this.getCount = getCount;
             this.getPartials = getPartials;
             this.getById = getById;
@@ -26,6 +27,10 @@
 
         return Ctor;
 
+        // Create New Activity
+        function create() {
+            return this.manager.createEntity(entityName);
+        }
 
         // getActivityCount
         function getCount() {

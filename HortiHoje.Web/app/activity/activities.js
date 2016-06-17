@@ -83,7 +83,35 @@
         }
 
         function newActivity() {
-            console.log(vm.canAdd());
+
+            if (!vm.canEdit()) {
+                return;
+            }
+
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: './app/modals/editActivity.html',
+                controller:
+                    ['$scope', '$modalInstance',
+                        function ($scope, $modalInstance) {
+
+                            $scope.tempActivity = {
+                                name: "",
+                                description: ""
+                            }
+                            $scope.editActivity = function () {
+                                var newActivity = datacontext.activity.create();
+
+                                newActivity.name = $scope.tempActivity.name;
+                                newActivity.description = $scope.tempActivity.description;
+                                newActivity.idManager = sessionStorage.userId;
+
+                                $modalInstance.close('edit');
+                            };
+                            $scope.cancelActivityEdit = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ]
+            });
         }
 
         function search($event) {
