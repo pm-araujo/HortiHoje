@@ -489,18 +489,27 @@
             var activities = [];
 
             activities = EntityQuery.from('Task')
-                .where('completed', '==', 'false')
+                .where('completed', 'eq', false)
+                .where('allocatedReporters', 'any', 'idReporter', '==', reporterID)
+                .orderBy('activity.name asc')
                 .using(manager)
                 .executeLocally();
 
-            function querySucceeded(data) {
-                return data.results;
-            }
-            function queryFailed(data) {
-                return data.results;
-            }
             return activities;
 
+        }
+
+        function getIncompleteActivities(managerID) {
+            var activities = [];
+
+            activities = EntityQuery.from('Task')
+                .where('completed', 'eq', false)
+                .where('activity', 'any', 'idManager', '==', managerID)
+                .select('activity')
+                .using(manager)
+                .executeLocally();
+
+            return activities;
         }
 
         function getPeople() {
