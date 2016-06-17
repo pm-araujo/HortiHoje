@@ -43,12 +43,12 @@
             
             datacontext.reporter.getById(userID).then(function(data) {
                 reporter = data;
-                vm.tasks = reporter.allowedTasks.slice(0,10);
-                //console.log(vm.tasks);
+                vm.tasks = datacontext.getActivitiesWithIncompleteTasksByReporter(userID);
+                console.log(vm.tasks);
             });
-            var acts = datacontext.getActivitiesWithIncompleteTasksByReporter(userID);
+            //var acts = datacontext.getActivitiesWithIncompleteTasksByReporter(userID);
 
-            console.log(acts);
+            //console.log(acts);
         }
     }
 })();

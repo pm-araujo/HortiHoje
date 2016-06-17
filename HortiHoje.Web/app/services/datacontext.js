@@ -432,7 +432,9 @@
             var activities = [];
 
             activities = EntityQuery.from('Task')
-                .where('completed', '==', 'false')
+                .where('completed', 'eq', false)
+                .where('allocatedReporters', 'any', 'idReporter', '==', reporterID)
+                .orderBy('activity.name asc')
                 .using(manager)
                 .executeLocally();
 

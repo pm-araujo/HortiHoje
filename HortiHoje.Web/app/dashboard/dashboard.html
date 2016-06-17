@@ -24,27 +24,27 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="widget wviolet">
-                        <div data-cc-widget-header title="People"
+                        <div data-cc-widget-header title="Incomplete Tasks"
                              allow-collapse="true"></div>
-                        <div class="widget-content text-center text-info">
+                        <div class="widget-content text-info">
                             <table class="table table-condensed table-striped">
                                 <thead>
                                 <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Age</th>
-                                    <th>Location</th>
+                                    <th>Activity</th>
+                                    <th>Task</th>
+                                    <th>Description</th>
+                                    <th>Order</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <!-- Iterate through array -->
                                 <tr data-ng-repeat="t in vm.tasks">
-                                    <td>{{t.idTask}}</td>
-                                    <td>{{t.idReporter}}</td>
-                                    <td>{{t.task.activity.id}}</td>
-                                    <td>{{t.task.name}}</td>
+                                    <td><a  href="#/activity/{{t.idActivity}}"> {{t.activity.name}} </a></td>
+                                    <td>{{t.name}}</td>
+                                    <td>{{t.description}}</td>
+                                    <td>{{t.order}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -54,21 +54,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="widget wgreen">
-                        <div data-cc-widget-header title="{{vm.news.title}}"
-                             allow-collapse="true"></div>
-                        <div class="widget-content text-center text-info">
-                            <small>{{vm.news.description}}</small>
-                        </div>
-                        <div class="widget-foot">
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="widget wred">
                         <div class="widget-content">
                             test
