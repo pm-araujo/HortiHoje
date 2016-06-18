@@ -6,7 +6,9 @@
                     <input class="input-sm search-query"
                            data-ng-model="vm.filesSearch"
                            data-ng-keyup="vm.search($event)"
-                           placeholder="Name, Extension, Tags"/>
+                           placeholder="Name, Extension, Tags" />
+
+                    <button type="button" class="btn btn-primary pull-right" data-ng-click="vm.newFile()" >Upload File</button>
                 </div>
             </div>
             <div class="row-fluid">

@@ -1,13 +1,13 @@
 ﻿(function () {
     'use strict';
 
-    var serviceId = 'repository.location';
+    var serviceId = 'repository.tag';
     angular.module('app').factory(serviceId,
-        ['model', 'repository.abstract', RepositoryLocation]);
+        ['model', 'repository.abstract', RepositoryTag]);
 
-    function RepositoryLocation(model, AbstractRepository) {
+    function RepositoryTag(model, AbstractRepository) {
         var Predicate = breeze.Predicate;
-        var entityName = model.entityNames.location;
+        var entityName = model.entityNames.tag;
         var EntityQuery = breeze.EntityQuery;
 
         function Ctor(mgr) {
@@ -31,39 +31,39 @@
             return this.manager.createEntity(entityName);
         }
 
-        // getLocationsCount
+        // getTagsCount
         function getCount() {
             var self = this;
 
             return self.$q.when(self._getLocalCount(entityName));
         }
 
-        // get Location by id
+        // get Tag by id
         function getById(id, forceRemote) {
             return this._getById(entityName, id, forceRemote);
         }
 
-        // datacontext.location.getPartials
+        // datacontext.tag.getPartials
         function getPartials(forceRefresh) {
             var self = this;
-            var locations;
+            var tags;
 
             if (!forceRefresh) {
-                locations = self._getAllLocal(entityName);
+                tags = self._getAllLocal(entityName);
 
-                return self.$q.when(locations);
+                return self.$q.when(tags);
             }
 
-            return EntityQuery.from('Locations')
+            return EntityQuery.from('Tags')
                 .select('*')
                 .toType(entityName)
                 .using(self.manager).execute()
                 .to$q(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
-                locations = data.results;
-                self.log('Retrieved [Location Partials] from remote data source', locations.length, true);
-                return locations;
+                tags = data.results;
+                self.log('Retrieved [Tag Partials] from remote data source', tags.length, true);
+                return tags;
             }
         }
     }

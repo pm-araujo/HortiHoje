@@ -1,0 +1,37 @@
+﻿<div class="modal-dialog">
+    <div class="modal-header">
+        <h3 class="modal-title">Upload File</h3>
+    </div>
+
+    <div class="modal-body">
+        <div class="padd">
+            <form class="form-horizontal" ng-submit="newFiles()"role="form">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Select Files</label>
+                <input class="col-md-8 form-control" type="file" ngf-select="update($files)" data-ng-model="files" multiple/>
+            </div>
+                <div class="form-group" data-ng-show="files.length > 0">
+                    <ul class="file-upload">
+                        <li data-ng-repeat="f in files">
+                            <div class="col-md-4">
+                                <strong>
+                                    <i class="fa fa-upload orange"></i>{{f.name}}
+                                </strong>
+                                <div class="file-meta">
+                                    {{getSize(f.size)}}
+                                </div>
+                            </div>
+                            <input class="col-md-4" placeholder="ex: sun, yellow, circle" type="text" data-ng-model="tags[$index]" maxlength="50"/>
+                            <div class="clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="clearfix"></div>
+        <button class="btn btn-success" ng-click="newFiles()">Save</button>
+    </div>
+
+</div>

@@ -17,10 +17,10 @@
                         <li class="borange"><a href="#/activities">
                                 <div class="pull-left"><i class="fa fa-calendar"></i>
                                 </div>
-                                <div class="datas-text pull-right">
-                                    <span class="bold">{{vm.activitiesCount}}</span> Activities
-                                </div>
-                                <div class="clearfix"></div></a>
+                            <div class="datas-text pull-right">
+                                <span class="bold">{{vm.activitiesCount}}</span> Activities
+                            </div>
+                            <div class="clearfix"></div></a>
                         </li>
 
                     </ul>
@@ -28,8 +28,8 @@
             </div>
                 -->
             <div class="row">
-                <div class="col-md-12">
-                    <div class="widget wviolet">
+                <div class="col-md-6">
+                    <div class="widget worange">
                         <div data-cc-widget-header title="Incomplete Tasks"
                              allow-collapse="true"></div>
                         <div class="widget-content text-info">
@@ -39,16 +39,14 @@
                                     <th>Activity</th>
                                     <th>Task</th>
                                     <th>Description</th>
-                                    <th>Order</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <!-- Iterate through array -->
-                                <tr data-ng-repeat="t in vm.tasks">
-                                    <td><a href="#/activity/{{t.idActivity}}"> {{t.activity.name}} </a></td>
+                                    <tr role="button" data-ng-repeat="t in vm.tasks" data-ng-click="vm.goToTask(t)">
+                                        <td>{{t.activity.name}}</td>
                                     <td>{{t.name}}</td>
                                     <td>{{t.description}}</td>
-                                    <td>{{t.order}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -58,45 +56,31 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="widget wviolet">
-                        <div data-cc-widget-header title="Active Activities"
+                <div class="col-md-6">
+                    <div class="widget wgreen">
+                        <div data-cc-widget-header title="Ongoing Activities"
                              allow-collapse="true"></div>
                         <div class="widget-content text-info">
                             <table class="table table-condensed table-striped">
                                 <thead>
-                                <tr>
-                                    <th>Activity</th>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                </tr>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Iterate through array -->
-                                <tr data-ng-repeat="t in vm.activities">
-                                    <td><a href="#/activity/{{t.activity.id}}"> {{t.activity.name}} </a></td>
-                                    <td>{{t.activity.id}}</td>
-                                    <td>{{t.activity.name}}</td>
-                                    <td>{{t.activity.description}}</td>
-                                </tr>
+                                    <!-- Iterate through array -->
+                                    <tr role="button" data-ng-repeat="t in vm.activities" data-ng-click="vm.goToActivity(t.activity)">
+                                        <td>{{t.activity.name}}</td>
+                                        <td>{{t.activity.name}}</td>
+                                        <td>{{t.activity.description}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="widget-foot">
                             <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="widget wred">
-                        <div class="widget-content">
-                            test
-                            <ng-map center="41,-87" zoom="3"></ng-map>
                         </div>
                     </div>
                 </div>
