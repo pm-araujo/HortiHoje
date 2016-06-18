@@ -334,6 +334,7 @@
     <Content Include="content\files\images.zip" />
     <Content Include="content\files\Resumo.pdf" />
     <Content Include="app\services\repository.taskallocatedreporter.js" />
+    <Content Include="content\files\mockups.ep" />
     <None Include="scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />

@@ -141,8 +141,8 @@
                     hub.server.confirmApplyChange()
                         .done(function() {
 
-                            manager.importEntities(el.change);
-                            manager.acceptChanges();
+                            //manager.importEntities(el.change);
+                            //manager.acceptChanges();
                             console.log("Success importing entities.");
                             return callback(null, false);
                         })
@@ -207,6 +207,17 @@
                         // saving changes from incoming
                         console.log("saving from incoming");
                         console.log("res: ", resultFilter);
+
+                        var incoming = resultFilter.filter(function (el) { return (el.type === "incoming"); });
+                        var incomingPrev = changeList.filter(function (el) { return (el.type === "incoming"); });
+
+                        if ((incoming.length < incomingPrev.length)) {
+                            $q.when(service.lookup.getAll())
+                                .then(function() {
+                                    log("Loaded Changes from Server");
+                                });
+                        }
+
                         callback(null, resultFilter);
                     });
                 }
