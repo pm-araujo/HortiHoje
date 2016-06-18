@@ -3,6 +3,7 @@
 
     var serviceId = 'repository.mediafile';
     angular.module('app').factory(serviceId,
+        ['model', 'repository.abstract', RepositoryMediaFile]);
 
     function RepositoryMediaFile(model, AbstractRepository) {
         var Predicate = breeze.Predicate;

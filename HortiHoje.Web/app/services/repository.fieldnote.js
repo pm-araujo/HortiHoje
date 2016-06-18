@@ -3,6 +3,7 @@
 
     var serviceId = 'repository.fieldnote';
     angular.module('app').factory(serviceId,
+        ['model', 'repository.abstract', RepositoryFieldNote]);
 
     function RepositoryFieldNote(model, AbstractRepository) {
         var Predicate = breeze.Predicate;
