@@ -16,6 +16,7 @@
             this.manager = mgr;
 
             // Exposed data access functions
+            this.attach = attach;
             this.create = create;
             this.getCount = getCount;
             this.getPartials = getPartials;
@@ -24,6 +25,11 @@
         AbstractRepository.extend(Ctor);
 
         return Ctor;
+
+        // Attach New mft
+        function attach(mft) {
+            return this.manager.attachEntity(mft);
+        }
 
         // Create
         function create(initValues) {

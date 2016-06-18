@@ -17,6 +17,7 @@
             this.manager = mgr;
 
             // Exposed data access functions
+            this.attach = attach;
             this.create = create;
             this.getCount = getCount;
             this.getPartials = getPartials;
@@ -25,6 +26,11 @@
         AbstractRepository.extend(Ctor);
 
         return Ctor;
+
+        // Attach new file
+        function attach(file) {
+            return this.manager.attachEntity(file);
+        }
 
         // Create
         function create() {

@@ -36,6 +36,9 @@
             getPeople: getPeople,
             getMessageCount: getMessageCount,
 
+            generateChange: generateChange,
+
+            apply: apply,
             cancel: cancel,
             save: save,
 
@@ -124,22 +127,10 @@
 
             changeList = changeList.sort(orderByTimeAsc);
 
-            // manager.hasChangesChanged.unsubscribe(unSubKeyHasChange);
+            
             unSubKeyHasChange();
             unSubKeyHasChange = 0;
-            /*
-            async.series([
-                async.filter(changeList, doIncoming, doSave),
-                async.filter(changeList, doOutgoing, doSave)
-            ], function (bool) {
 
-                if (changeList.length == 0) {
-                    manager.saveChanges();
-                    log("Saved Changes");
-                }
-                return bool;
-            });
-            */
 
             function doIncoming(el, callback) {
                 console.log('haiIn');
@@ -236,88 +227,6 @@
                 common.$broadcast(events.hasChangesChanged, { hasChanges: false });
             });
 
-            /*
-            $q.when(changeList).then(
-                    function () { // processing incoming
-                        var defer = $q.defer();
-                        async.filter(changeList, doIncoming, function (err, res) {
-                            // saving changes from incoming
-                            changeList = res;
-                            $rootScope.changeList = res;
-                            console.log("saving from incoming");
-                            console.log("changeList: ", changeList);
-                            console.log("rootScope: ", $rootScope.changeList);
-                            defer.resolve(changeList);
-                        });
-
-                        // useless space, don't know when async is returning
-                        return defer.promise;
-                    }().then(function () { // finished with incoming after save, outgoing may have started by now
-                        var defer = $q.defer();
-                        console.log("then incoming after save, if save");
-                        if( unSubKeyHasChange == 0)
-                            onHasChanges();
-                        common.$broadcast(events.hasChangesChanged, { hasChanges: false });
-                        defer.resolve();
-                        return defer.promise;
-                    }).then(
-                        function () { // processing outgoing
-                            var defer = $q.defer();
-                            async.filter(changeList, doOutgoing, function (err, res) {
-                                // saving changes from outgoing
-                                changeList = res;
-                                $rootScope.changeList = res;
-                                console.log("saving from outgoing");
-                                console.log("changeList: ", changeList);
-                                console.log("rootScope: ", $rootScope.changeList);
-                                defer.resolve(changeList);
-                            });
-
-                            // useless space, don't know when async is returning
-                            return defer.promise;
-                        }().then(function (res) { //finished with outgoing after save
-                            var defer = $q.defer();
-                            console.log("then outgoing, after save, if save");
-                            console.log("results:");
-                            console.log("res:", res);
-                            console.log("changeList:", changeList);
-                            if (changeList.length == 0) {
-                                manager.saveChanges();
-                                log("Saved Changes");
-                            }
-                            if( unSubKeyHasChange == 0)
-                                onHasChanges();
-                            common.$broadcast(events.hasChangesChanged, { hasChanges: false });
-                            defer.resolve();
-                            return defer.promise
-                        }))).then(function () {
-                    console.log("reached end");
-                }());
-                */
-            /*
-            async.series([
-                function(cb) {
-                    async.filter(changeList, doIncoming, cb());
-                },
-                function(cb) {
-                    async.filter(changeList, doOutgoing, function(err, results) {
-                        changeList = results;
-                        $rootScope.changeList = results;
-                        cb(null, changeList);
-                    });
-                }],
-                function (err, args) {
-                    console.log("args:");
-                    console.log(args);
-                    console.log("last callback:")
-                    console.log(changeList);
-                    if (changeList.length == 0) {
-                        manager.saveChanges();
-                        log("Saved Changes");
-                    }
-                }
-            );
-            */
         }
 
         function orderByTimeAsc(a, b) {
@@ -352,8 +261,21 @@
             });
         }
 
+        function generateChange(entities) {
+            var changeEl = {
+                change: manager.exportEntities([entities]),
+                type: 'outgoing',
+                time: moment()
+            };
+
+            $rootScope.changeList.push(changeEl);
+
+            common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+        }
+
         function getSnapshot() {
             return manager.exportEntities(manager.getChanges(), false);
+            //return manager.exportEntities();
         }
 
         function importSnapshot(snapshot) {
@@ -454,6 +376,15 @@
                 // broadcast to subscribers
                 common.$broadcast(events.entityChanged, data);
             });
+        }
+
+        // Apply changes
+        function apply() {
+            if (!manager.hasChanges()) {
+                return;
+            }
+
+            return manager.acceptChanges();
         }
 
         // Save Changes

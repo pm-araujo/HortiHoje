@@ -16,6 +16,7 @@
             this.manager = mgr;
 
             // Exposed data access functions
+            this.attach = attach;
             this.create = create;
             this.getCount = getCount;
             this.getPartials = getPartials;
@@ -25,6 +26,11 @@
         AbstractRepository.extend(Ctor);
 
         return Ctor;
+
+        // Attach New Location
+        function attach(loc) {
+            return this.manager.attachEntity(loc);
+        }
 
         // Create New Location
         function create() {

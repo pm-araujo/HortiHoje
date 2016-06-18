@@ -85,10 +85,10 @@
                                 }
 
                                 for (var i = 0; i < files.length; i++) {
-                                    var newFile = datacontext.file.create();
+                                    var newFile = datacontext.file.create({name: files[i].name});
 
                                     newFile.name = files[i].name;
-
+                                    //datacontext.generateChange(newFile);
                                     var tags = $scope.tags[i];
                                     if (tags && (tags.length != 0)) {
                                         var arrTags = tags.split(',');
@@ -96,11 +96,15 @@
                                             var tag = datacontext.tag.create();
                                             tag.name = tagStr;
                                             var mft = datacontext.mediafiletag.create({tag: tag, mediaFile: newFile});
-
+                                            //datacontext.generateChange(tag);
+                                            //datacontext.generateChange(mft);
                                         });
                                     }
+                                    
+                                    
                                     doSave(files[i]);
                                 }
+
                             }
 
                             function doSave($file) {
