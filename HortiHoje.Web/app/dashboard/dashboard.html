@@ -1,32 +1,41 @@
 ﻿<section id="dashboard-view" class="mainbar" data-ng-controller="dashboard as vm">
     <section class="matter">
         <div class="container">
-            <!--
             <div class="row">
                 <div class="col-md-12">
                     <ul class="today-datas">
-                        <li class="blightblue">
-                            <div class="pull-left"><i class="fa fa-plane"></i>
-                            </div>
-                            <div class="datas-text pull-right">
-                                <span class="bold">May 18 - 19, 2015</span> Castle Resort, Neverland
-                            </div>
-                            <div class="clearfix"></div>
-                        </li>
-
                         <li class="borange"><a href="#/activities">
                                 <div class="pull-left"><i class="fa fa-calendar"></i>
                                 </div>
-                            <div class="datas-text pull-right">
-                                <span class="bold">{{vm.activitiesCount}}</span> Activities
-                            </div>
-                            <div class="clearfix"></div></a>
+                                <div class="datas-text pull-right">
+                                    <span class="bold">{{vm.activitiesCount}}</span> Activities
+                                </div>
+                                <div class="clearfix"></div></a>
                         </li>
-
+                        <li class="bblue">
+                            <a href="#/activities">
+                                <div class="pull-left">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="datas-text pull-right">
+                                    <span class="bold">{{vm.taskCount}}</span> Tasks
+                                </div>
+                                <div class="clearfix"></div>
+                            </a>
+                        </li>
+                        <li class="bred">
+                            <a href="#/activities">
+                                <div class="pull-left">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <div class="datas-text pull-right">
+                                </div>
+                                <div class="clearfix"></div>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
-                -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="widget worange">
@@ -65,14 +74,12 @@
                                 <thead>
                                     <tr>
                                         <th>Activity</th>
-                                        <th>Name</th>
                                         <th>Description</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <!-- Iterate through array -->
                                     <tr role="button" data-ng-repeat="t in vm.activities" data-ng-click="vm.goToActivity(t.activity)">
-                                        <td>{{t.activity.name}}</td>
                                         <td>{{t.activity.name}}</td>
                                         <td>{{t.activity.description}}</td>
                                     </tr>
