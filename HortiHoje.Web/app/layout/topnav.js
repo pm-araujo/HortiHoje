@@ -59,6 +59,24 @@
         $scope.doProfile = function () {
             datacontext.hubHello();
             console.log($rootScope.changeList);
+
+            console.log("Testing FieldNote Repo");
+            console.log(datacontext.fieldnote.getCount());
+
+            console.log("Testing FieldNoteReporter Repo");
+            console.log(datacontext.fieldnotereporter.getCount());
+
+            console.log("Testing MediaFile Repo");
+            console.log(datacontext.mediafile.getCount());
+
+            console.log("Testing Task Repo");
+            console.log(datacontext.task.getCount());
+
+            console.log("Testing TaskAllocatedReporter Repo");
+            console.log(datacontext.taskallocatedreporter.getCount());
+
+            console.log("Testing TaskAllowedReporter Repo");
+            console.log(datacontext.taskallowedreporter.getCount());
         }
 
         vm.cancelChanges = function() {

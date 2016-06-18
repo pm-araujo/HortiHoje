@@ -223,8 +223,11 @@
     <Content Include="app\services\entityManagerFactory.js" />
     <Content Include="app\file\files.html" />
     <Content Include="app\file\files.js" />
+    <Content Include="app\services\repository.fieldnotereporter.js" />
     <Content Include="app\services\model.js" />
     <Content Include="app\services\repository.abstract.js" />
+    <Content Include="app\services\repository.fieldnote.js" />
+    <Content Include="app\services\repository.mediafile.js" />
     <Content Include="app\services\repository.mediafiletag.js" />
     <Content Include="app\services\repository.tag.js" />
     <Content Include="app\services\repository.location.js" />
@@ -233,6 +236,7 @@
     <Content Include="app\services\repository.lookup.js" />
     <Content Include="app\services\repository.file.js" />
     <Content Include="app\services\repository.reporter.js" />
+    <Content Include="app\services\repository.task.js" />
     <Content Include="app\services\routeMediator.js" />
     <Content Include="App_Data\CodeCamper.sdf" />
     <Content Include="content\bootstrap-theme.css" />
@@ -329,6 +333,7 @@
     <Content Include="content\bootstrap-theme.min.css.map" />
     <Content Include="content\files\images.zip" />
     <Content Include="content\files\Resumo.pdf" />
+    <Content Include="app\services\repository.taskallocatedreporter.js" />
     <None Include="scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
@@ -382,6 +387,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\services\repository.taskallowedreporter.js" />
     <Compile Include="App_Start\BreezeWebApiConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />

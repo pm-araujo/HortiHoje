@@ -1,11 +1,13 @@
 ﻿<section id="dashboard-view" class="mainbar" data-ng-controller="dashboard as vm">
     <section class="matter">
         <div class="container">
+            <!--
             <div class="row">
                 <div class="col-md-12">
                     <ul class="today-datas">
                         <li class="blightblue">
-                            <div class="pull-left"><i class="fa fa-plane"></i></div>
+                            <div class="pull-left"><i class="fa fa-plane"></i>
+                            </div>
                             <div class="datas-text pull-right">
                                 <span class="bold">May 18 - 19, 2015</span> Castle Resort, Neverland
                             </div>
@@ -13,7 +15,8 @@
                         </li>
 
                         <li class="borange"><a href="#/activities">
-                            <div class="pull-left"><i class="fa fa-calendar"></i></div>
+                                <div class="pull-left"><i class="fa fa-calendar"></i>
+                                </div>
                             <div class="datas-text pull-right">
                                 <span class="bold">{{vm.activitiesCount}}</span> Activities
                             </div>
@@ -23,6 +26,7 @@
                     </ul>
                 </div>
             </div>
+                -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="widget worange">
@@ -31,19 +35,19 @@
                         <div class="widget-content text-info">
                             <table class="table table-condensed table-striped">
                                 <thead>
-                                    <tr>
-                                        <th>Activity</th>
-                                        <th>Task</th>
-                                        <th>Description</th>
-                                    </tr>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Task</th>
+                                    <th>Description</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Iterate through array -->
+                                <!-- Iterate through array -->
                                     <tr role="button" data-ng-repeat="t in vm.tasks" data-ng-click="vm.goToTask(t)">
                                         <td>{{t.activity.name}}</td>
-                                        <td>{{t.name}}</td>
-                                        <td>{{t.description}}</td>
-                                    </tr>
+                                    <td>{{t.name}}</td>
+                                    <td>{{t.description}}</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
