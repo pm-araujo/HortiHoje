@@ -38,7 +38,7 @@
                     applyFilter = common.createSearchThrottle(vm, 'activities');
                     if (vm.activitiesSearch) { applyFilter(true); }
 
-                    log('Activated Activities View');
+                    //log('Activated Activities View');
                 });
         }
 

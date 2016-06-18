@@ -34,7 +34,7 @@
                 .then(function () {
                     applyFilter = common.createSearchThrottle(vm, 'files');
                     if (vm.filesSearch) { applyFilter(true); }
-                    log('Activated Files View');
+                    //log('Activated Files View');
                 });
         }
 

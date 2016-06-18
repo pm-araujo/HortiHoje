@@ -105,14 +105,14 @@
                 setTimeout(function () {
                     $.connection.hub.start()
                     .done(function(res) {
-                        log("Connected to Server on SignalR");
+                        //log("Connected to Server on SignalR");
                             $.connection.hub.qs.previousConnection = res.id;
                         });
                 }, 5000); // Re-start connection after 5 seconds
             });
             $.connection.hub.start()
                 .done(function(res) {
-                    log('Connected to Server on SignalR');
+                    //log('Connected to Server on SignalR');
                     $.connection.hub.qs.previousConnection = res.id;
                 });
         }
@@ -323,7 +323,7 @@
 
             function success() {
                 service.lookup.setLookups();
-                log('Data Primed');
+                //log('Data Primed');
             }
 
             function extendMetadata() {

@@ -26,7 +26,7 @@
         activate();
 
         function activate() {
-            logSuccess('HortiHoje loaded!', null, true);
+            //logSuccess('HortiHoje loaded!', null, true);
             common.activateController([], controllerId).then(function () {
                 vm.showSplash = false;
             });

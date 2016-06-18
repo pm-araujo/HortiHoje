@@ -74,7 +74,9 @@
             $("#inputUserName").focus();
 
             common.activateController([], controllerId)
-                .then(function () { log('Activated Login View'); });
+                .then(function() {
+                    // log('Activated Login View');
+                });
         }
     }
 })();

@@ -36,7 +36,7 @@
                 .to$q(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
-                self.log('Retrieved [Lookups]', data, true);
+                //self.log('Retrieved [Lookups]', data, true);
                 return true;
             }
         }

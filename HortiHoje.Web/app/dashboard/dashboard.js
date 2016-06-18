@@ -26,7 +26,9 @@
         function activate() {
             var promises = [getActivitiesCount(), getActivitiesByManager(), getTasksByReporter()];
             common.activateController(promises, controllerId)
-                .then(function () { log('Activated Dashboard View'); });
+                .then(function() {
+                    // log('Activated Dashboard View');
+                });
         }
 
         function getActivitiesCount() {

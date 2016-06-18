@@ -14,7 +14,9 @@
 
         function activate() {
             common.activateController([], controllerId)
-                .then(function () { log('Activated Admin View'); });
+                .then(function() {
+                    // log('Activated Admin View');
+                });
         }
     }
 })();
