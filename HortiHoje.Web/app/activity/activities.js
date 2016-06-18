@@ -4,10 +4,10 @@
     var controllerId = "activities";
     angular
         .module('app')
-        .controller(controllerId, ['$location', 'datacontext', 'config', 'common', 'NgMap', activities]);
+        .controller(controllerId, ['$location', '$modal', 'datacontext', 'config', 'common', 'NgMap', activities]);
 
 
-    function activities($location, datacontext, config, common, NgMap) {
+    function activities($location, $modal, datacontext, config, common, NgMap) {
         var vm = this;
 
         var getLogFn = common.logger.getLogFn;

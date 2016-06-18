@@ -215,6 +215,7 @@
     <Content Include="app\layout\widgetheader.html" />
     <Content Include="app\login\login.html" />
     <Content Include="app\login\login.js" />
+    <Content Include="app\modals\newFile.html" />
     <Content Include="app\modals\newTask.html" />
     <Content Include="app\modals\editActivity.html" />
     <Content Include="app\services\datacontext.js" />
@@ -224,6 +225,8 @@
     <Content Include="app\file\files.js" />
     <Content Include="app\services\model.js" />
     <Content Include="app\services\repository.abstract.js" />
+    <Content Include="app\services\repository.mediafiletag.js" />
+    <Content Include="app\services\repository.tag.js" />
     <Content Include="app\services\repository.location.js" />
     <Content Include="app\services\repository.activity.js" />
     <Content Include="app\services\repositories.js" />
@@ -347,6 +350,8 @@
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
+    <Content Include="scripts\ng-file-upload-shim.min.js" />
+    <Content Include="scripts\ng-file-upload.min.js" />
     <Content Include="scripts\ng-map.min.js" />
     <Content Include="scripts\q.js" />
     <Content Include="scripts\q.min.js" />
@@ -381,9 +386,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="ChangesQueue.cs" />
     <Compile Include="ConnectionMapping.cs" />
     <Compile Include="Controllers\BreezeController.cs" />
+    <Compile Include="Controllers\CustomMultipartFormDataStreamProvider.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -405,6 +413,7 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Views\Breeze\" />
+    <Folder Include="Views\File\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

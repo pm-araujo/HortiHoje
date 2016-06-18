@@ -3,11 +3,11 @@
 
     var serviceId = 'repository.location';
     angular.module('app').factory(serviceId,
-        ['model', 'repository.abstract', RepositoryActivity]);
+        ['model', 'repository.abstract', RepositoryLocation]);
 
     function RepositoryLocation(model, AbstractRepository) {
         var Predicate = breeze.Predicate;
-        var entityName = model.entityNames.activity;
+        var entityName = model.entityNames.location;
         var EntityQuery = breeze.EntityQuery;
 
         function Ctor(mgr) {

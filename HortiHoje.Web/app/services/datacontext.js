@@ -24,7 +24,7 @@
         var manager = emFactory.newManager();
         var $q = common.$q;
 
-        var repoNames = ['activity', 'location', 'lookup', 'file', 'reporter',];
+        var repoNames = ['activity', 'location', 'lookup', 'file', 'mediafiletag', 'reporter', 'tag'];
         $rootScope.changeList = [];
         var primePromise;
 

@@ -15,7 +15,7 @@
         // 3rd Party Modules
         'breeze.angular',   // breeze's angular library
         'breeze.directives', // breeze's angular directives plug in
-
+        'ngFileUpload',
         'ui.bootstrap'      // ui-bootstrap (ex: carousel, pagination, dialog)
     ]);
     

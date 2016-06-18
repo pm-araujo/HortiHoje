@@ -17,6 +17,7 @@
             this.manager = mgr;
 
             // Exposed data access functions
+            this.create = create;
             this.getCount = getCount;
             this.getPartials = getPartials;
         }
@@ -25,6 +26,10 @@
 
         return Ctor;
 
+        // Create
+        function create() {
+            return this.manager.createEntity(entityName);
+        }
         // getMediaFileCount
         function getCount() {
             var self = this;
@@ -54,7 +59,7 @@
             function querySucceeded(data) {
                 files = data.results;
                 self.log('Retrieved [File Partials] from remote data source', files.length, true);
-                return reporters;
+                return files;
             }
         }
     }
