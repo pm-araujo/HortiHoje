@@ -83,6 +83,7 @@
             hub.client.notifyConnected = function(connectedList) {
                 console.log('ConnectedNotification:');
                 console.log(connectedList);
+                sessionStorage.connectedCount = connectedList.length;
                 common.$broadcast(events.notifyConnected, connectedList);
             }
 
@@ -237,6 +238,7 @@
                     console.log("restoring event handler");
                     onHasChanges();
                 }
+
                 common.$broadcast(events.hasChangesChanged, { hasChanges: false });
             });
 

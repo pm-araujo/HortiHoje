@@ -5,13 +5,14 @@
 
     angular
         .module('app')
-        .controller(controllerId, ['$scope', '$modal', 'common', 'config', 'datacontext', files]);
+        .controller(controllerId, ['$modal', '$scope', '$timeout', 'common', 'config', 'datacontext', files]);
 
 
-    function files($scope, $modal, common, config, datacontext) {
+    function files($modal, $scope, $timeout, common, config, datacontext) {
         var keyCodes = config.keyCodes;
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
+        var events = config.events;
 
         var vm = this;
 
@@ -30,7 +31,7 @@
         activate();
 
         function activate() {
-            common.activateController([getFiles()], controllerId)
+            common.activateController([getFiles(), onHasChanges()], controllerId)
                 .then(function () {
                     applyFilter = common.createSearchThrottle(vm, 'files');
                     if (vm.filesSearch) { applyFilter(true); }
@@ -50,6 +51,15 @@
                 });
 
                 return vm.files = vm.filteredFiles = data;
+            });
+        }
+
+        function onHasChanges() {
+            $scope.$on(config.events.hasChangesChanged, function (event, data) {
+                $timeout(function () {
+                    //any code in here will automatically have an apply run afterwards
+                    getFiles();
+                });
             });
         }
 
@@ -80,12 +90,13 @@
 
                             $scope.newFiles = function () {
                                 var files = $scope.files;
+
                                 if (files.length == 0) {
                                     return;
                                 }
 
                                 for (var i = 0; i < files.length; i++) {
-                                    var newFile = datacontext.file.create({name: files[i].name});
+                                    var newFile = datacontext.file.create();
 
                                     newFile.name = files[i].name;
                                     //datacontext.generateChange(newFile);
@@ -95,7 +106,10 @@
                                         arrTags.forEach(function(tagStr) {
                                             var tag = datacontext.tag.create();
                                             tag.name = tagStr;
-                                            var mft = datacontext.mediafiletag.create({tag: tag, mediaFile: newFile});
+                                            var mft = datacontext.mediafiletag.create({
+                                                idTag: tag.id,
+                                                idMediaFile: newFile.id
+                                        });
                                             //datacontext.generateChange(tag);
                                             //datacontext.generateChange(mft);
                                         });
@@ -105,7 +119,12 @@
                                     doSave(files[i]);
                                 }
 
+                                common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+
+                                $modalInstance.close('add');
                             }
+
+                            $scope.cancelNewFiles = function () { $modalInstance.dismiss('cancel'); };
 
                             function doSave($file) {
                                 Upload.upload({

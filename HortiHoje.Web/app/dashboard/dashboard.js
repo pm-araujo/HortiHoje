@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var controllerId = 'dashboard';
-    angular.module('app').controller(controllerId, ['$scope', '$location', 'config', 'common', 'datacontext', dashboard]);
+    angular.module('app').controller(controllerId, ['$location', '$scope', '$timeout', 'config', 'common', 'datacontext', dashboard]);
 
-    function dashboard($scope, $location,config, common, datacontext) {
+    function dashboard($location, $scope, $timeout, config, common, datacontext) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
 
@@ -12,7 +12,7 @@
             title: 'Hot Towel Angular',
             description: 'Hot Towel Angular is a SPA template for Angular developers.'
         };
-        $scope.connectedCount = 0;
+
         vm.activitiesCount = 0;
         vm.taskCount = 0;
         vm.fileCount = 0;
@@ -25,13 +25,18 @@
         vm.goToActivity = goToActivity;
         vm.goToTask = goToTask;
 
+        $scope.connectedCount = 0
+
         activate();
 
         function activate() {
-            var promises = [getActivitiesCount(), getActivitiesByManager(), getFileCount(), getTaskCount(), getTasksByReporter(), onNotifyConnected()];
+            var promises = [getActivitiesCount(), getActivitiesByManager(),
+                getFileCount(), getTaskCount(), getTasksByReporter(),
+                onNotifyConnected(), onHasChanges()];
             common.activateController(promises, controllerId)
                 .then(function() {
                     // log('Activated Dashboard View');
+                    $scope.connectedCount = sessionStorage.connectedCount;
                 });
         }
 
@@ -44,8 +49,10 @@
         function onNotifyConnected() {
             $scope.$on(config.events.notifyConnected,
                 function (event, data) {
-                    $scope.connectedCount = data.length;
-                    vm.userCount = data.length;
+
+                    $scope.connectedCount = sessionStorage.connectedCount;
+                    $scope.$apply();
+
                 });
         }
 
@@ -103,6 +110,19 @@
             if (task && task.id) {
                 $location.path('/task/' + task.id);
             }
+        }
+
+        function onHasChanges() {
+            $scope.$on(config.events.hasChangesChanged, function (event, data) {
+                $timeout(function () {
+                    //any code in here will automatically have an apply run afterwards
+                    getActivitiesCount();
+                    getActivitiesByManager();
+                    getFileCount();
+                    getTaskCount();
+                    getTasksByReporter();
+                });
+            });
         }
     }
 })();

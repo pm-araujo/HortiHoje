@@ -5,7 +5,7 @@
 
     <div class="modal-body">
         <div class="padd">
-            <form class="form-horizontal" ng-submit="newFiles()"role="form">
+            <form class="form-horizontal" ng-submit="newFiles()" role="form">
             <div class="form-group">
                 <label class="col-md-2 control-label">Select Files</label>
                 <input class="col-md-8 form-control" type="file" ngf-select="update($files)" data-ng-model="files" multiple/>
@@ -31,7 +31,9 @@
     </div>
     <div class="modal-footer">
         <div class="clearfix"></div>
-        <button class="btn btn-success" ng-click="newFiles()">Save</button>
+        <button class="btn btn-warning" ng-submit="cancelNewFiles()" ng-click="cancelNewFiles()">Cancel</button>
+        <button class="btn btn-success" ng-submit="newFiles()" ng-click="newFiles()">Save</button>
+        <div class="clearfix"></div>
     </div>
 
 </div>

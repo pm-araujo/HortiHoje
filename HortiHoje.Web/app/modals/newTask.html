@@ -1,6 +1,6 @@
 ﻿<div class="modal-dialog">
     <div class="modal-header">
-        <h3 class="modal-title">Task: {{tempActivity.name}}</h3>
+        <h3 class="modal-title">Edit: {{tempActivity.name || "New Task"}}</h3>
     </div>
 
     <div class="modal-body">
@@ -27,9 +27,11 @@
             </form>
         </div>
     </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="newTask()">Apply</button>
-            <button class="btn btn-warning" type="button" ng-click="cancelNewTask()">Cancel</button>
-        </div>
+    <div class="modal-footer">
+        <div class="clearfix""></div>
+        <button class="btn btn-warning" type="button" ng-click="cancelNewTask()">Cancel</button>
+        <button class="btn btn-primary" type="button" ng-click="newTask()">Apply</button>
+        <div class="clearfix" "></div>
+    </div>
 
 </div>

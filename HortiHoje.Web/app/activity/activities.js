@@ -4,10 +4,10 @@
     var controllerId = "activities";
     angular
         .module('app')
-        .controller(controllerId, ['$location', '$modal', 'datacontext', 'config', 'common', 'NgMap', activities]);
+        .controller(controllerId, ['$location', '$modal', '$scope', '$timeout', 'datacontext', 'config', 'common', 'NgMap', activities]);
 
 
-    function activities($location, $modal, datacontext, config, common, NgMap) {
+    function activities($location, $modal, $scope, $timeout, datacontext, config, common, NgMap) {
         var vm = this;
 
         var getLogFn = common.logger.getLogFn;
@@ -33,7 +33,7 @@
 
 
         function activate() {
-            common.activateController([getActivities()], controllerId)
+            common.activateController([getActivities(), onHasChanges()], controllerId)
                 .then(function () {
                     applyFilter = common.createSearchThrottle(vm, 'activities');
                     if (vm.activitiesSearch) { applyFilter(true); }
@@ -84,7 +84,7 @@
 
         function newActivity() {
 
-            if (!vm.canEdit()) {
+            if (!vm.canAdd()) {
                 return;
             }
 
@@ -105,6 +105,8 @@
                                 newActivity.name = $scope.tempActivity.name;
                                 newActivity.description = $scope.tempActivity.description;
                                 newActivity.idManager = sessionStorage.userId;
+
+                                common.$broadcast(events.hasChangesChanged, { hasChanges: false });
 
                                 $modalInstance.close('edit');
                             };
@@ -135,6 +137,15 @@
                 : true;
 
             return isMatch;
+        }
+
+        function onHasChanges() {
+            $scope.$on(config.events.hasChangesChanged, function (event, data) {
+                $timeout(function () {
+                    //any code in here will automatically have an apply run afterwards
+                    getActivities();
+                });
+            });
         }
     }
 })();

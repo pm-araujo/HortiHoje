@@ -20,6 +20,7 @@
             this.getCount = getCount;
             this.getPartials = getPartials;
             this.getById = getById;
+            this.getAllOthers = getAllOthers;
         }
 
         AbstractRepository.extend(Ctor);
@@ -31,16 +32,32 @@
             return this.manager.createEntity(entityName);
         }
 
+        // Get Task by id
+        function getById(id, forceRemote) {
+            return this._getById(entityName, id, forceRemote);
+        }
+
+        // Get All Other Tasks in Activity
+        function getAllOthers(idTask, idActivity) {
+            var self = this;
+            var pred = Predicate("idTask", "ne", idTask)
+                .and("idActivity", "eq", idActivity);
+
+            return EntityQuery.from('Tasks')
+                .where(pred)
+                .using(self.manager).executeLocally()
+                .to$q(querySucceeded, self._queryFailed);
+
+            function querySucceeded(data) {
+                return data.results;
+            }
+        }
+
         // getTasksCount
         function getCount() {
             var self = this;
 
             return self.$q.when(self._getLocalCount(entityName));
-        }
-
-        // get Task by id
-        function getById(id, forceRemote) {
-            return this._getById(entityName, id, forceRemote);
         }
 
         // datacontext.task.getPartials

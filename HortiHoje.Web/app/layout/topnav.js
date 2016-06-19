@@ -5,9 +5,9 @@
 
     angular
         .module('app')
-        .controller(controllerId, ['$scope', '$rootScope', '$location', '$window', 'common', 'config', 'model', 'datacontext', topnav]);
+        .controller(controllerId, ['$location', '$scope', '$rootScope', '$timeout', '$window', 'common', 'config', 'model', 'datacontext', topnav]);
 
-    function topnav($scope, $rootScope, $location, $window, common, config, model, datacontext) {
+    function topnav($location, $scope, $rootScope, $timeout, $window, common, config, model, datacontext) {
         var vm = this;
         vm.title = controllerId;
         var EntityQuery = breeze.EntityQuery;
@@ -51,6 +51,7 @@
             sessionStorage.removeItem('userFullName');
             sessionStorage.removeItem('userId');
             sessionStorage.removeItem('isManager');
+            sessionStorage.removeItem('connectedList');
 
             $location.path('/login');
             $window.location.reload();
@@ -95,25 +96,31 @@
 
         function onHasChanges() {
             $scope.$on(config.events.hasChangesChanged, function (event, data) {
-                $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
-                $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+                $timeout(function () {
+                    //any code in here will automatically have an apply run afterwards
+                    $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                    $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+                });
             });
         }
 
         function onNotifyConnected() {
             $scope.$on(config.events.notifyConnected,
-                function(event, data) {
+                function (event, data) {
+                    $timeout(function() {
                     $scope.connectedList = data;
                     $scope.connectedCount = data.length;
-                    $scope.$apply();
                 });
+            });
         }
 
         function onNotifyChange() {
             $scope.$on(config.events.notifyChange, function (event, data) {
-                $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
-                $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
-                $scope.$apply();
+                $timeout(function () {
+                    //any code in here will automatically have an apply run afterwards
+                    $scope.changesOutgoing = $rootScope.changeList.filter(function (el) { return (el.type === "outgoing"); });
+                    $scope.changesIncoming = $rootScope.changeList.filter(function (el) { return (el.type === "incoming"); });
+                });
             });
         }
 

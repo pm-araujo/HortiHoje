@@ -72,7 +72,7 @@
                 url: '/task/:id',
                 config: {
                     title: 'task',
-                    templateUrl: 'app/activity/taskdashboard.html'
+                    templateUrl: 'app/activity/task/taskdashboard.html'
                 }
             }, {
                 url: '/files',

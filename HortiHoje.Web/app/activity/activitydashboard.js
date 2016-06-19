@@ -5,12 +5,13 @@
 
     angular
         .module('app')
-        .controller( controllerId, ['$window', '$scope', '$routeParams', '$timeout', '$modal', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
+        .controller( controllerId, ['$location', '$modal', '$scope', '$routeParams', '$timeout', '$window', 'config', 'datacontext', 'model', 'common', 'NgMap', activitydashboard]);
  
 
-    function activitydashboard($window, $scope, $routeParams, $timeout, $modal, datacontext, model, common, NgMap) {
+    function activitydashboard($location, $modal, $scope, $routeParams, $timeout, $window, config, datacontext, model, common, NgMap) {
         var vm = this;
         var logError = common.logger.getLogFn(controllerId, 'error');
+        var events = config.events;
 
         vm.title = 'activitydashboard';
         vm.activityId = $routeParams.id;
@@ -28,6 +29,19 @@
 
 
         activate();
+
+
+        function activate() {
+            common.activateController([getRequestedActivity(), onHasChanges()], controllerId).then(function () {
+
+                NgMap.getMap({ id: 'activityMap' }).then(function (map) {
+                    if (vm.locations)
+                        vm.lastLocation = vm.locations[(vm.locations.length - 1)];
+                    kickstartLocations(map);
+                });
+
+            });
+        }
 
         vm.goBack = function() {
             $window.history.back();
@@ -64,11 +78,31 @@
                             $scope.newTask = function () {
                                 var tempTask = $scope.tempTask;
                                 var prevOrder = ( tempTask.previousTask.order || 0);
-                                tempTask.order = prevOrder;
+                                tempTask.order = prevOrder + 1;
 
-                                console.log(tempTask);
-                                //TODO: write new location code
-                                //TODO: write new task code
+                                var task = datacontext.task.create();
+                                var loc = datacontext.location.create();
+                                var taskAlloc = datacontext.taskallocatedreporter.create({
+                                    idTask: task.id,
+                                    idReporter: sessionStorage.userId
+                                });
+                                var taskAllow = datacontext.taskallowedreporter.create({
+                                    idTask: task.id,
+                                    idReporter: sessionStorage.userId
+                                });
+
+                                loc.lat = "0";
+                                loc.long = "0";
+
+                                task.idActivity = tempTask.idActivity;
+                                task.idLocation = loc.id;
+
+                                task.name = tempTask.name;
+                                task.description = tempTask.description;
+                                task.order = tempTask.order;
+
+                                common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+                                
                                 $modalInstance.close('add');
                             };
                             $scope.cancelNewTask = function () { $modalInstance.dismiss('cancel'); };
@@ -115,6 +149,12 @@
             });
         }
 
+        vm.goToTask = function(task) {
+            if (task && task.id) {
+                $location.path('/task/' + task.id);
+            }
+        }
+
         $scope.indexChar = function (index) {
             return String.fromCharCode(65 + index);
         };
@@ -129,18 +169,6 @@
                 vm.map.setZoom(5);
             }
         };
-
-        function activate() {
-            common.activateController([getRequestedActivity()], controllerId).then(function() {
-                
-                NgMap.getMap({id:'activityMap'}).then(function(map) {
-                    if (vm.locations)
-                        vm.lastLocation = vm.locations[(vm.locations.length - 1)];
-                    kickstartLocations(map);
-                });
-                
-            });
-        }
 
         function doEdit() {
             
@@ -158,6 +186,8 @@
                     
 
                     data.taskList = data.taskList.sort(compareTasks);
+                    vm.tasks = [];
+                    vm.locations = [];
 
                     data.taskList.forEach(function (t) {
                         
@@ -220,6 +250,18 @@
                 return 0;
             }
 
+        }
+
+        function onHasChanges() {
+            $scope.$on(config.events.hasChangesChanged, function (event, data) {
+                $timeout(function () {
+                    //any code in here will automatically have an apply run afterwards
+                    if (vm.activityId < 0) {
+                        $location.path('/activities/');
+                    }
+                    getRequestedActivity();
+                });
+            });
         }
     }
 })();
