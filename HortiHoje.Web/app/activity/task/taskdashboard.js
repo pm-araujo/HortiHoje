@@ -427,9 +427,10 @@
                                     }
 
                                     var fieldNoteReporter = datacontext.fieldnotereporter.create({
-                                        idReporter: userId,
-                                        idFieldNote: fieldNote.id
+                                        idReporter: userId
                                     });
+
+                                    fieldNoteReporter.idFieldNote = fieldNote.id;
 
                                     fieldNote.title = tempFieldNote.title;
                                     fieldNote.description = tempFieldNote.description;
