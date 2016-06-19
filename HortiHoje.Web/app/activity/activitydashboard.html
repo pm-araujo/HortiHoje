@@ -2,14 +2,14 @@
     <section class="matter">
         <div class="container">
             <div class="row">
-                <div class="widget wblue">
+                <div class="widget worange">
                     <div data-cc-widget-header title="{{vm.activity.name}}"
                          subtitle="{{vm.activity.description}}" data-ng-dblclick="vm.editActivity()">
                     </div>
                     <div class="widget-content user">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="widget wgreen">
+                                <div class="widget wdarkorange">
                                     <div data-cc-widget-header title="Travel Journal"
                                          allow-collapse="true"></div>
                                     <div class="widget-content">
@@ -22,11 +22,11 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="widget wgreen">
+                                <div class="widget wdarkorange">
                                     <div data-cc-widget-header title="Task List"
                                          allow-collapse="true"></div>
                                     <div class="widget-content text-info">
-                                        <table class="table table-condensed table-striped">
+                                        <table class="table table-condensed table-striped table-hover">
                                             <thead>
                                             <tr>
                                                 <th>#</th>
@@ -39,8 +39,7 @@
                                             <tr data-ng-mouseover="vm.animateMarker($index)"
                                                 data-ng-repeat="t in vm.tasks"
                                                 data-ng-mouseleave="vm.animateMarkerLeave($index)"
-                                                data-ng-click="vm.goToTask(t)"
-                                                role="button">
+                                                data-ng-click="vm.goToTask(t)">
                                                 <td>{{indexChar($index) }}</td>
                                                 <td>{{t.name}}</td>
                                                 <td>{{t.shortenedDescript}}</td>

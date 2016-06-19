@@ -18,9 +18,11 @@
             this.getById = getById;
 
             // Exposed data access functions
+            this.doLogin = doLogin;
             this.getCount = getCount;
             this.getPartials = getPartials;
-            this.doLogin = doLogin;
+            this.getAllExcept = getAllExcept;
+
         }
 
         AbstractRepository.extend(Ctor);
@@ -84,6 +86,16 @@
                 self.log('Retrieved [Reporter Partials] from remote data source', reporters.length, true);
                 return reporters;
             }
+        }
+
+        // Get All Reporters Except One
+        function getAllExcept(idReporter) {
+            var self = this;
+            var pred = Predicate("id", "!=", idReporter);
+
+            return EntityQuery.from('Reporters')
+                .where(pred)
+                .using(self.manager).executeLocally();
         }
     }
 })();

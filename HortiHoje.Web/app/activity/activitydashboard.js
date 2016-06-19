@@ -61,10 +61,62 @@
                 animation: true,
                 templateUrl: './app/modals/newTask.html',
                 controller:
-                    ['$scope', '$modalInstance', 'tasks',
-                        function ($scope, $modalInstance, tasks) {
+                    ['$scope', '$modalInstance', 'tasks', 'manager',
+                        function($scope, $modalInstance, tasks, manager) {
 
+                            var userId = sessionStorage.userId;
+                            var $q = common.$q;
                             $scope.tasks = tasks;
+
+                            var data = datacontext.reporter.getById(userId);
+                            console.log("heard from getById", data);
+                            $scope.selectedAllocated = [manager];
+                            $scope.selectedAllowed = [manager];
+
+                            data = datacontext.reporter.getAllExcept(userId);
+                            console.log("heard from getAllExcept", data);
+                            $scope.allowedReps = data;
+                            $scope.allocatedReps = data;
+                            $scope.currentAllowed = data[0];
+                            $scope.currentAllocated = data[0];
+
+                            var location;
+                            var initMap = function() {
+                                var options = {
+                                    zoom: 5,
+                                    center: new google.maps.LatLng(40.178, -9.041),
+                                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                                };
+                                var rootMap = new google.maps.Map(document.getElementById('newTaskMap'), options);
+                                google.maps.event.trigger(rootMap, 'resize');
+
+                                if (location) {
+                                    placeMarker(new google.maps.LatLng(parseFloat($scope.locLat), parseFloat($scope.locLng)));
+                                }
+
+                                google.maps.event.addListener(rootMap, 'click', function (event) {
+                                    placeMarker(event.latLng);
+                                });
+
+                                function placeMarker(newLocation) {
+
+                                    if (location) {
+                                        location.setMap(null);
+                                    }
+
+                                    location = new google.maps.Marker({
+                                        position: newLocation,
+                                        map: rootMap
+                                    });
+
+                                    $scope.locLat = newLocation.lat();
+                                    $scope.locLng = newLocation.lng();
+                                }
+                            }
+
+                            $scope.preloadMap = function() {
+                                initMap();
+                            }
 
                             $scope.tempTask = {
                                 name: "",
@@ -75,27 +127,106 @@
                                 idActivity: vm.activity.id,
                                 idLocation: 0
                             }
+
+                            $scope.locLat = "0";
+                            $scope.locLng = "0";
+
+                            $scope.addNewAllowed = function () {
+                                var self = this;
+                                $timeout(function() {
+                                    var rep = self.currentAllowed;
+                                    if (!rep) {
+                                        return;
+                                    }
+
+                                    self.allowedReps = self.allowedReps.filter(function (el) {
+                                        return (el.id != rep.id);
+                                    });
+                                    self.currentAllowed = self.allowedReps[0];
+
+                                    self.selectedAllowed.push(rep);
+                                });
+                            }
+
+                            $scope.removeSelectedAllowed = function (rep) {
+                                var self = this;
+                                $timeout(function () {
+
+                                    self.selectedAllowed = self.selectedAllowed.filter(function(el) {
+                                        return (el.id != rep.id);
+                                    });
+
+                                    $scope.selectedAllowed = self.selectedAllowed;
+                                    self.allowedReps.push(rep);
+                                });
+                            }
+
+
+                            $scope.addNewAllocated = function () {
+                                var self = this;
+                                $timeout(function () {
+                                    var rep = self.currentAllocated;
+                                    if (!rep) {
+                                        return;
+                                    }
+
+                                    self.allocatedReps = self.allocatedReps.filter(function (el) {
+                                        return (el.id != rep.id);
+                                    });
+                                    self.currentAllocated = self.allocatedReps[0];
+
+                                    self.selectedAllocated.push(rep);
+                                });
+                            }
+
+                            $scope.removeSelectedAllocated = function (rep) {
+                                var self = this;
+                                $timeout(function () {
+
+                                    self.selectedAllocated = self.selectedAllocated.filter(function (el) {
+                                        return (el.id != rep.id);
+                                    });
+
+                                    $scope.selectedAllocated = self.selectedAllocated;
+                                    self.allocatedReps.push(rep);
+                                });
+                            }
+
                             $scope.newTask = function () {
                                 var tempTask = $scope.tempTask;
+                                var allowedReps = $scope.selectedAllowed;
+                                var allocatedReps = $scope.selectedAllocated;
+                                var lat = $scope.locLat;
+                                var lng = $scope.locLng
+
                                 var prevOrder = ( tempTask.previousTask.order || 0);
                                 tempTask.order = prevOrder + 1;
 
                                 var task = datacontext.task.create();
                                 var loc = datacontext.location.create();
-                                var taskAlloc = datacontext.taskallocatedreporter.create({
-                                    idTask: task.id,
-                                    idReporter: sessionStorage.userId
-                                });
-                                var taskAllow = datacontext.taskallowedreporter.create({
-                                    idTask: task.id,
-                                    idReporter: sessionStorage.userId
-                                });
 
-                                loc.lat = "0";
-                                loc.long = "0";
+                                loc.lat = lat;
+                                loc.long = lng;
 
                                 task.idActivity = tempTask.idActivity;
                                 task.idLocation = loc.id;
+
+
+                                allowedReps.forEach(function(el) {
+                                    var taskAllow = datacontext.taskallowedreporter.create({
+                                        idTask: task.id,
+                                        idReporter: el.id
+                                    });
+                                });
+
+                                allocatedReps.forEach(function(el) {
+                                    var taskAlloc = datacontext.taskallocatedreporter.create({
+                                        idTask: task.id,
+                                        idReporter: el.id
+                                    });
+                                });
+
+
 
                                 task.name = tempTask.name;
                                 task.description = tempTask.description;
@@ -111,6 +242,9 @@
                 resolve: {
                     tasks: function() {
                         return vm.tasks;
+                    },
+                    manager: function() {
+                        return vm.activity.reporter;
                     }
                 }
             });

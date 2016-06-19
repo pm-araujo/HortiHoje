@@ -1,29 +1,78 @@
 ﻿<div class="modal-dialog">
     <div class="modal-header">
-        <h3 class="modal-title">Edit: {{tempActivity.name || "New Task"}}</h3>
+        <h3 class="modal-title">Edit: {{tempTask.name || "New Task"}}</h3>
     </div>
 
     <div class="modal-body">
         <div class="padd">
             <form class="form-horizontal" ng-submit="newTask()" role="form">
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Task Name</label>
-                    <input class="col-md-8 form-control" size="50" data-ng-model="tempTask.name" placeholder="Activity Name" />
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Task Description</label><br/>
-                    <textarea class="col-md-8 form-control" data-ng-model="tempTask.description"
-                              placeholder="Activity Description" style="height: 200px; width: 400px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Previous Task</label>
-                    <select class="col-md-8 form-control" data-ng-options="t.name for t in tasks" data-ng-model="tempTask.previousTask">
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label"></label>
-                    <ngMap></ngMap>
-                </div>
+                <tabset active="activeForm">
+                    <tab index="0" heading="Details">
+                        <div style="padding-top: 1em;"></div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Task Name</label>
+                            <input class="col-md-8 form-control" size="50" data-ng-model="tempTask.name" placeholder="Activity Name" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Task Description</label><br/>
+                            <textarea class="col-md-8 form-control" data-ng-model="tempTask.description"
+                                      placeholder="Activity Description" style="height: 200px; width: 400px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Previous Task</label>
+                            <select class="col-md-8 form-control" data-ng-options="t.name for t in tasks" data-ng-model="tempTask.previousTask"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Complete</label>
+                            <input class="col-md-8 form-control" type="checkbox" data-ng-model="tempTask.completed"/>
+                        </div>
+                    </tab>
+                    <tab index="1" heading="Permissions">
+                        <div style="padding-top: 1em;"></div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Allowed Reporters</label>
+                            <select class="form-control" data-ng-options="r.name for r in allowedReps" data-ng-model="currentAllowed"></select>
+                            <button class="btn btn-info col-md-2 pull-right" type="button" data-ng-click="addNewAllowed()">Add Allowed</button>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6">
+                                <strong><a data-toggle="collapse" data-target=".isCollapsedAllowed">{{selectedAllowed.length}} Reporters</a></strong>
+                                <div class="panel-collapse collapse isCollapsedAllowed">
+                                    <div class="well well-lg">
+                                        <a role="button" data-ng-repeat="rep in selectedAllowed" data-ng-click="removeSelectedAllowed(rep)">{{rep.name}}; </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Allocated Reporters</label>
+                            <select class="col-md-8 form-control" data-ng-options="r.name for r in allocatedReps" data-ng-model="currentAllocated"></select>
+                            <button class="btn btn-info col-md-2 pull-right" type="button" data-ng-click="addNewAllocated()">Add Allocated</button>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6">
+                                <strong><a data-toggle="collapse" data-target=".isCollapseAllocated">{{selectedAllocated.length}} Reporters</a></strong>
+                                <div class="panel-collapse collapse isCollapseAllocated">
+                                    <div class="well well-lg">
+                                        <a role="button" data-ng-repeat="rep in selectedAllocated" data-ng-click="removeSelectedAllocated(rep)">{{rep.name}}; </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab index="2" heading="Location" data-ng-click="preloadMap()">
+                        <div style="padding-top: 1em;"></div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Select Location</label>
+                            <div class="col-md-8" style="height: 400px; width: 500px;">
+                                <div id="newTaskMap" style="height: 100%; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <small>Lat: {{locLat}} Long: {{locLng}}</small>
+                    </tab>
+                </tabset>
             </form>
         </div>
     </div>

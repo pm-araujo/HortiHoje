@@ -270,6 +270,7 @@ a.btn {
     border: 0 !important;
 }
 
+
 .borange {
     background: #f88529 !important;
     color: #fff !important;
@@ -924,10 +925,25 @@ form {
         border: 1px solid #52b9e9;
         color: #fff;
     }
-
     .widget.wblue .widget-head {
         background-color: #1171a3;
         border: 1px solid #1171a3;
+        color: #fff;
+    }
+    .widget.wdarkblue .widget-head {
+        background-color: #0363ba;
+        border: 1px solid #0363ba;
+        color: #fff;
+    }
+    .widget.wdarkerblue .widget-head {
+        background-color: #0245b0;
+        border: 1px solid #0245b0;
+        color: #fff;
+    }
+
+    .widget.wdarkyellow .widget-head {
+        background-color: #ffc207;
+        border: 1px solid #ffc207;
         color: #fff;
     }
 
@@ -942,6 +958,11 @@ form {
         border: 1px solid #f88529;
         color: #fff;
     }
+    .widget.wdarkorange .widget-head {
+        background-color: #f95e1d;
+        border: 1px solid #f95e1d;
+        color: #fff;
+    }
 
     .widget.wviolet .widget-head {
         background-color: #932ab6;
@@ -950,19 +971,27 @@ form {
     }
 
         .widget.wred .widget-head .widget-icons a,
-        .widget.wblue .widget-head .widget-icons a,
         .widget.wlightblue .widget-head .widget-icons a,
+        .widget.wblue .widget-head .widget-icons a,
+        .widget.wdarkblue .widget-head .widget-icons a,
+        .widget.wdarkerblue .widget-head .widget-icons a,
         .widget.worange .widget-head .widget-icons a,
+        .widget.wdarkorange .widget-head .widget-icons a,
         .widget.wgreen .widget-head .widget-icons a,
+        .widget.wdarkyellow .widget-head .widget-icons a,
         .widget.wviolet .widget-head .widget-icons a {
             color: #fff;
         }
 
-            .widget.wred .widget-head .widget-icons a:hover,
-            .widget.wblue .widget-head .widget-icons a:hover,
-            .widget.wlightblue .widget-head .widget-icons a:hover,
-            .widget.worange .widget-head .widget-icons a:hover,
-            .widget.wgreen .widget-head .widget-icons a:hover,
+        .widget.wred .widget-head .widget-icons a:hover,
+        .widget.wlightblue .widget-head .widget-icons a:hover,
+        .widget.wblue .widget-head .widget-icons a:hover,
+        .widget.wdarkblue .widget-head .widget-icons a:hover,
+        .widget.wdarkerblue .widget-head .widget-icons a:hover,
+        .widget.worange .widget-head .widget-icons a:hover,
+        .widget.wdarkorange .widget-head .widget-icons a:hover,
+        .widget.wgreen .widget-head .widget-icons a:hover,
+        .widget.wdarkyellow .widget-head .widget-icons a:hover,
             .widget.wviolet .widget-head .widget-icons a:hover {
                 color: #eee;
             }

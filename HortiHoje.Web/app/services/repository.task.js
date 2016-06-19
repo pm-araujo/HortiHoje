@@ -40,13 +40,13 @@
         // Get All Other Tasks in Activity
         function getAllOthers(idTask, idActivity) {
             var self = this;
-            var pred = Predicate("idTask", "ne", idTask)
+            console.log("hello", idTask, idActivity);
+            var pred = Predicate("id", "ne", idTask)
                 .and("idActivity", "eq", idActivity);
 
             return EntityQuery.from('Tasks')
                 .where(pred)
-                .using(self.manager).executeLocally()
-                .to$q(querySucceeded, self._queryFailed);
+                .using(self.manager).executeLocally();
 
             function querySucceeded(data) {
                 return data.results;
