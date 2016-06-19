@@ -39,8 +39,9 @@
                         <li>
                             <hr />
                             <div>
-                                <button class="btn btn-danger pull-right" data-ng-click="vm.cancelChanges()">Cancel</button>
-                                <button class="btn btn-primary pull-left" data-ng-click="vm.saveChanges()">Sync</button>
+                                <button class="btn btn-primary " data-ng-click="vm.saveChanges()">Sync</button>
+                                <button class="btn" data-ng-class="syncToggle ? 'btn-success' : 'btn-warning'" data-ng-click="doSyncToggle()">{{syncToggle ? "Auto" : "Manual"}}</button>
+                                <button class="btn btn-danger" data-ng-click="vm.cancelChanges()">Cancel</button>
                             </div>
                         </li>
                     </ul>

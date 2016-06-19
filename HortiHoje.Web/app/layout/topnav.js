@@ -38,6 +38,8 @@
 
             vm.user = sessionStorage.userFullName;
             sessionStorage.isAuthenticated = true;
+
+            $scope.syncToggle = sessionStorage.syncToggle = false;
         }
 
         $scope.haveUser = function () {
@@ -52,9 +54,16 @@
             sessionStorage.removeItem('userId');
             sessionStorage.removeItem('isManager');
             sessionStorage.removeItem('connectedList');
+            sessionStorage.removeItem('syncToggle');
 
             $location.path('/login');
             $window.location.reload();
+        }
+
+        $scope.doSyncToggle = function() {
+            
+            $scope.syncToggle = !$scope.syncToggle;
+            sessionStorage.syncToggle = $scope.syncToggle;
         }
 
         $scope.doProfile = function () {

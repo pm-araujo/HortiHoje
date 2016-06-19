@@ -94,7 +94,12 @@
                 changeEl.type = 'incoming';
 
                 $rootScope.changeList.push(changeEl);
+
                 common.$broadcast(events.notifyChange, changeEl);
+
+                if (sessionStorage.syncToggle === "true") {
+                    sync();
+                }
             }
 
             $.connection.hub.qs = {
@@ -271,6 +276,10 @@
                     }
 
                     $rootScope.changeList.push(changeEl);
+
+                    if (sessionStorage.syncToggle === "true") {
+                        sync();
+                    }
                 }
 
             });
