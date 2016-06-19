@@ -5,13 +5,13 @@
 
     angular
         .module('app')
-        .controller(controllerId, ['$location', '$modal', '$routeParams', '$scope', '$timeout', 'common', 'config', 'datacontext', taskdashboard]);
+        .controller(controllerId, ['$location', '$modal', '$routeParams', '$scope', '$timeout', 'common', 'config', 'datacontext', 'NgMap', taskdashboard]);
 
-    function taskdashboard($location, $modal, $routeParams, $scope, $timeout, common, config, datacontext) {
+    function taskdashboard($location, $modal, $routeParams, $scope, $timeout, common, config, datacontext, NgMap) {
         var vm = this;
         var logError = common.logger.getLogFn(controllerId, 'error');
         var events = config.events;
-
+        var keyCodes = config.keyCodes;
 
         var logError = common.logger.getLogFn(controllerId, 'error');
 
@@ -22,6 +22,15 @@
         vm.location = {};
         vm.fieldNotes = [];
 
+        vm.files = [];
+
+        vm.canEdit = canEdit;
+
+        vm.filteredFieldnotes = [];
+        vm.search = search;
+        vm.fieldNotesFilter = fieldNotesFilter;
+        vm.fieldNotesSearch = "";
+        var applyFilter = function () { }
 
         activate();
 
@@ -33,11 +42,32 @@
                         $location.path('/activity/' + vm.task.idActivity);
                     }
                     getOtherTasksInActivity();
+                    getTaskFiles();
+
+                    NgMap.getMap({ id: 'taskMap' }).then(function (map) {
+                        var loc = {
+                            lat: parseFloat(vm.location.lat),
+                            lng: parseFloat(vm.location.long)
+                        };
+
+                        map.setCenter(loc);
+                        map.setZoom(8);
+
+
+                        return new google.maps.Marker({
+                            position: loc,
+                            map: map,
+                            draggable: false,
+                            animation: google.maps.Animation.DROP
+                        });
+                    });
+
+                    applyFilter = common.createSearchThrottle(vm, "fieldNotes");
+                    if (vm.fieldNotesSearch) { applyFilter(true); }
                 });
         }
 
         function allowedIn() {
-            console.log(vm.task.allowedReporters);
             return vm.task.allowedReporters.some(function (el) {
                 return (el.idReporter == sessionStorage.userId);
             });
@@ -60,10 +90,30 @@
 
         }
 
+        // Gets Files from fieldnotes in this task
+        function getTaskFiles() {
+            var data = datacontext.file.getAll();
+            var tempNotes = vm.fieldNotes;
+
+            data = data.filter(function (el) {   // Only MediaFiles belonging to a field note remain
+                var predicate = (el.idFieldNote != null);
+
+                predicate &= tempNotes.some(function (note) {    // Exclude Check to see if matches any fieldnote
+                    return (el.idFieldNote != note.id);  
+                });
+
+                return predicate;
+            });
+
+
+
+            vm.files = data;
+        }
+
+
+        // Gets Other tasks in activity
         function getOtherTasksInActivity() {
             var data = datacontext.task.getAllOthers(vm.task.id, vm.task.idActivity);
-
-            console.log("Other Tasks: ", data);
 
             vm.others = data.sort(compareTasks);
             /* Err code
@@ -80,13 +130,21 @@
 
                     vm.task = data;
                     vm.location = data.location;
-                    vm.fieldNotes = data.fieldNotes;
+                    data.fieldNotes.forEach(function(el) {
+                        el.uniqueReporters = el.reporters.length;
+                    });
+                    vm.fieldNotes = vm.filteredFieldnotes = data.fieldNotes;
 
                 }, function (error) {
                     logError("Unable to get Task with id " + val);
                     $location.path('/');
                 });
         }
+
+        // Go Back
+        vm.goBack = function () {
+            $window.history.back();
+        };
 
         // Event Callback
         function onHasChanges() {
@@ -98,6 +156,7 @@
                     }
                     getRequestedTask();
                     getOtherTasksInActivity();
+                    getTaskFiles();
                 });
             });
         }
@@ -147,13 +206,18 @@
 
                             datacontext.reporter.getPartials().then(function (data) {
 
-                                console.log("heard from getPartials", data);
                                 $scope.allowedReps = data.filter(function (el) {
-                                    return !($scope.selectedAllowed.indexOf(el) == -1);
+                                    var isSelected = $scope.selectedAllowed.some(function(a) {
+                                        return (a.idReporter == el.id);
+                                    });
+                                    return !(isSelected);
                                 });
-                                console.log("after filter: ", $scope.allowedReps);
+
                                 $scope.allocatedReps = data.filter(function (el) {
-                                    return !$scope.selectedAllocated.includes(el);
+                                    var isSelected = $scope.selectedAllocated.some(function (a) {
+                                        return (a.idReporter == el.id);
+                                    });
+                                    return !(isSelected);
                                 });
                                 $scope.currentAllowed = $scope.allowedReps[0];
                                 $scope.currentAllocated = $scope.allocatedReps[0];
@@ -302,6 +366,55 @@
                     }
                 }
             });
+        }
+
+        // Search Stuff
+        function search($event) {
+            if ($event.keyCode === keyCodes.esc) {
+                vm.fieldNotesSearch = '';
+                applyFilter(true);
+            }
+            else {
+                applyFilter();
+            }
+        }
+
+        function searchInReporters(reporters, search) {
+            var textContains = common.textContains;
+
+            var predicate = reporters.some(function(el) {
+                return textContains(el.reporter.name, search);
+            });
+
+            return predicate;
+        }
+
+        function searchInFiles(files, search) {
+            var textContains = common.textContains;
+
+            var predicate = files.some(function (el) {
+                return textContains(el.name, search);
+            });
+
+            predicate |= files.some(function (el) {
+                return el.tags.some(function (tag) {
+                    return textContains(tag.tag.name, search);
+                });
+            });
+
+            return predicate;
+        }
+
+        function fieldNotesFilter(fieldNote) {
+            var textContains = common.textContains;
+            var searchText = vm.fieldNotesSearch;
+
+            var isMatch = searchText
+                ? textContains(fieldNote.title, searchText) ||
+                  searchInReporters(fieldNote.reporters, searchText) || searchInFiles(fieldNote.mediaFiles, searchText)
+                : true;
+
+            return isMatch;
         }
     }
 })();

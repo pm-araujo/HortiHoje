@@ -10,7 +10,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="widget wdarkblue">
-                                    <div data-cc-widget-header title="Travel Journal"
+                                    <div data-cc-widget-header title="Task Location"
                                          allow-collapse="true"></div>
                                     <div class="widget-content">
                                         <ng-map id="taskMap">
@@ -22,35 +22,72 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="widget wdarkerblue">
-                                    <div data-cc-widget-header title="Task List"
+                                <div class="widget wdarkblue">
+                                    <div data-cc-widget-header title="Field Notes"
+                                        subtitle="{{vm.filteredFieldnotes.length}} / {{vm.fieldNotes.length}}">
                                          allow-collapse="true"></div>
                                     <div class="widget-content text-info">
                                         <table class="table table-condensed table-striped table-hover">
                                             <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Task</th>
-                                                    <th>Descript</th>
-                                                    <th>Finished</th>
-                                                </tr>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Files</th>
+                                                <th>Reporters</th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <tr data-ng-mouseover="vm.animateMarker($index)"
-                                                    data-ng-repeat="t in vm.tasks"
-                                                    data-ng-mouseleave="vm.animateMarkerLeave($index)">
-                                                    <td>{{indexChar($index) }}</td>
-                                                    <td>{{t.name}}</td>
-                                                    <td>{{t.shortenedDescript}}</td>
-                                                    <td><i class="fa fa-{{t.finished}}-circle"></i></td>
-                                                </tr>
+                                            <tr data-ng-repeat="fn in vm.filteredFieldnotes">
+                                                <td>{{fn.title}}</td>
+                                                <td>{{fn.mediaFiles.length}}</td>
+                                                <td>{{fn.uniqueReporters}}</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="widget-foot">
                                         <div class="clearfix"></div>
+                                        <div class="form-search pull-left">
+                                            <input class="input-sm search-query"
+                                                   data-ng-model="vm.fieldNotesSearch"
+                                                   data-ng-keyup="vm.search($event)"
+                                                   placeholder="Title, Description, Manager" />
+                                        </div>
+                                        <button class="btn btn-primary pull-right" data-ng-disabled="!vm.canEdit()" data-ng-click="vm.newFieldNote()">New</button>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                        <div class="pull-left">
+                            <button class="btn btn-info" data-ng-click="vm.goBack()">
+                                <i class="fa fa-arrow-left"></i>Back
+                            </button>
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-info" data-ng-disabled="!vm.canEdit()" data-ng-click="vm.editTask()">
+                                <i class="fa fa-pencil"></i>Edit
+                            </button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="widget wdarkerblue">
+                    <div data-cc-widget-header title="Task Files"
+                         subtitle="{{vm.files.length}}"></div>
+                    <div class="widget-content user">
+                        <div class="padd list-flow fader-animation" data-ng-repeat="f in vm.files">
+                            <div class="user file">
+                                <a target="_self" data-cc-file-download-path="{{f.name}}" download="{{f.name}}">
+                                    <i data-cc-file-image="{{f.name}}"></i>
+                                    <div class="name-stack">
+                                        <h6>{{f.name}}</h6>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

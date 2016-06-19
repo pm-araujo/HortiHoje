@@ -18,6 +18,7 @@
             // Exposed data access functions
             this.create = create;
             this.getCount = getCount;
+            this.getFromTask = getFromTask;
             this.getPartials = getPartials;
             this.getById = getById;
         }
@@ -41,6 +42,18 @@
         // get Location by id
         function getById(id, forceRemote) {
             return this._getById(entityName, id, forceRemote);
+        }
+
+        // Get From a given task
+        function getFromTask(idTask) {
+            var self = this;
+
+            var pred = Predicate("idTask", "eq", idTask);
+
+            return EntityQuery.from(entityName)
+                .where(pred)
+                .select("fieldNotes.mediaFiles")
+                .using(self.manager).executeLocally();
         }
 
         // datacontext.location.getPartials

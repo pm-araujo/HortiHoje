@@ -47,10 +47,6 @@
             return EntityQuery.from('Tasks')
                 .where(pred)
                 .using(self.manager).executeLocally();
-
-            function querySucceeded(data) {
-                return data.results;
-            }
         }
 
         // getTasksCount

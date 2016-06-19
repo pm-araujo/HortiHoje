@@ -19,8 +19,10 @@
             // Exposed data access functions
             this.attach = attach;
             this.create = create;
+            this.getAll = getAll;
             this.getCount = getCount;
             this.getPartials = getPartials;
+            this.getFromTask = getFromTask;
         }
 
         AbstractRepository.extend(Ctor);
@@ -36,6 +38,7 @@
         function create() {
             return this.manager.createEntity(entityName);
         }
+
         // getMediaFileCount
         function getCount() {
             var self = this;
@@ -43,11 +46,31 @@
             return self.$q.when(self._getLocalCount(entityName, predicate));
         }
 
+        // Get All Files within a given task
+        function getFromTask(idTask) {
+            var self = this;
+
+            var pred = Predicate("fieldNotes", "any", "idTask", "eq", idTask);
+
+            return EntityQuery.from('Task')
+                .where(pred)
+                .expand('Task', 'FieldNote')
+                .select("fieldNotes.mediaFiles")
+                .using(self.manager).executeLocally();
+        }
+
+        // Get All static like
+        function getAll() {
+            var self = this;
+
+            return EntityQuery.from(entityName)
+                .using(self.manager).executeLocally();
+        }
 
         // getMediaFilePartials
-        function getPartials(forceRefresh) {
+        function getPartials(forceRefresh, fieldNotes) {
             var self = this;
-            var predicate = Predicate('idFieldNote', '==', null);
+            var predicate = fieldNotes ? null : Predicate('idFieldNote', '==', null);
             var files;
 
             if (!forceRefresh) {
