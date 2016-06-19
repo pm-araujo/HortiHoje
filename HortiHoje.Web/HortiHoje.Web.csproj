@@ -216,6 +216,7 @@
     <Content Include="app\login\login.html" />
     <Content Include="app\login\login.js" />
     <Content Include="app\modals\newFile.html" />
+    <Content Include="app\modals\newFieldNote.html" />
     <Content Include="app\modals\newTask.html" />
     <Content Include="app\modals\editActivity.html" />
     <Content Include="app\services\datacontext.js" />

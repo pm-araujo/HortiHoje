@@ -325,6 +325,7 @@
                                 });
                             }
 
+                            // editTask
                             $scope.newTask = function () {
                                 var tempTask = $scope.tempTask;
                                 var allowedReps = $scope.selectedAllowed;
@@ -361,6 +362,108 @@
                     tasks: function () {
                         return vm.others;
                     },
+                    task: function() {
+                        return vm.task;
+                    }
+                }
+            });
+        }
+
+        vm.newFieldNote = function() {
+
+            if (!canEdit()) {
+                return;
+            }
+
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: './app/modals/newFieldNote.html',
+                controller:
+                    ['$scope', '$modalInstance', 'Upload', 'datacontext', 'task',
+                        function ($scope, $modalInstance, Upload, datacontext, task) {
+
+                            var userId = sessionStorage.userId;
+                            var $q = common.$q;
+
+                            $scope.tempFieldNote = {};
+
+                            $scope.tempFieldNote.title = "";
+                            $scope.tempFieldNote.description = "";
+
+                            $scope.files = [];
+                            $scope.tags = [];
+
+
+                            // editTask
+                            $scope.newFieldNote = function () {
+                                    var tempFieldNote = $scope.tempFieldNote;
+                                    var files = $scope.files;
+                                    var tags = $scope.tags;
+
+                                    var fieldNote = datacontext.fieldnote.create();
+                                    
+                                    // If there's files
+                                    for (var i = 0; i < files.length; i++) {
+                                        var newFile = datacontext.file.create();
+
+                                        newFile.name = files[i].name;
+                                        //datacontext.generateChange(newFile);
+                                        if (tags && (tags.length != 0)) {
+                                            var arrTags = tags.split(',');
+                                            arrTags.forEach(function(tagStr) {
+                                                var tag = datacontext.tag.create();
+                                                tag.name = tagStr;
+                                                var mft = datacontext.mediafiletag.create({
+                                                    idTag: tag.id,
+                                                    idMediaFile: newFile.id
+                                                });
+                                                //datacontext.generateChange(tag);
+                                                //datacontext.generateChange(mft);
+                                            });
+                                        }
+
+                                        newFile.idFieldNote = fieldNote.id;
+                                        doSave(files[i]);
+                                    }
+
+                                    var fieldNoteReporter = datacontext.fieldnotereporter.create({
+                                        idReporter: userId,
+                                        idFieldNote: fieldNote.id
+                                    });
+
+                                    fieldNote.title = tempFieldNote.title;
+                                    fieldNote.description = tempFieldNote.description;
+                                    fieldNote.idTask = task.id;
+
+                                    common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+                                
+                                    $modalInstance.close('add');
+                                };
+
+                            function doSave($file) {
+                                Upload.upload({
+                                    url: "./api/files/upload", // webapi url
+                                    method: "POST",
+                                    fileName: $file.name,
+                                    file: $file
+                                }).progress(function (evt) {
+                                    // get upload percentage
+                                    console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                                }).success(function (data, status, headers, config) {
+                                    // file is uploaded successfully
+                                    console.log("Success");
+                                    console.log(data);
+                                }).error(function (data, status, headers, config) {
+                                    // file failed to upload
+                                    console.log("Error");
+                                    console.log(data);
+                                });
+                            }
+
+                            $scope.cancelNewFieldNote = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ],
+                resolve: {
                     task: function() {
                         return vm.task;
                     }

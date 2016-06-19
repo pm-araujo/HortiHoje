@@ -40,7 +40,7 @@
         // Get All Other Tasks in Activity
         function getAllOthers(idTask, idActivity) {
             var self = this;
-            console.log("hello", idTask, idActivity);
+
             var pred = Predicate("id", "ne", idTask)
                 .and("idActivity", "eq", idActivity);
 
