@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
+using System.Web.Script.Serialization;
+using HortiHoje.Model;
 using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
+using Task = System.Threading.Tasks.Task;
 
 namespace HortiHoje
 {
@@ -13,6 +16,17 @@ namespace HortiHoje
             new ConnectionMapping<string>();
         private static readonly ChangesQueue changes = new ChangesQueue();
 
+
+        public string Transcript(string formData)
+        {
+            string result = "";
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            TranscriptModel transcript;
+
+            transcript = serializer.Deserialize<TranscriptModel>(formData);
+
+            return result;
+        }
 
         public void Send(string test)
         {
