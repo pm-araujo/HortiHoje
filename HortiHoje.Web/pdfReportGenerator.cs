@@ -15,7 +15,13 @@ namespace HortiHoje
         public pdfReportGenerator(string name)
         {
             document = new Document();
-            PdfWriter.GetInstance(document, new FileStream("./" + name, FileMode.Create));
+            document.Open();
+            PdfWriter.GetInstance(document, new FileStream(name, FileMode.Create));
+        }
+
+        public void closeDocument()
+        {
+            document.Close();
         }
 
         public void generateFromActivity(Activity activity)

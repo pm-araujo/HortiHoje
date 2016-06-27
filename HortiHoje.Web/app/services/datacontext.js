@@ -51,7 +51,9 @@
             // SignalR
             hubHello: hubHello,
             importSnapshot: importSnapshot,
-            getSnapshot: getSnapshot
+            getSnapshot: getSnapshot,
+
+            doReport: doReport
 
             // Repositories to be added on demand:
             //      reporter
@@ -262,6 +264,7 @@
 
         function hubHello() {
             console.log("hasChanges:", manager.hasChanges());
+
         }
 
         function onHasChanges() {
@@ -479,6 +482,14 @@
             ];
 
             return $q.when(people);
+        }
+
+        function doReport(activity) {
+            console.log("here I go Again");
+            EntityQuery.from("DoReport")
+                .withParameters({id: activity.id})
+                .using(manager)
+                .execute();
         }
 
 

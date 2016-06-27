@@ -333,6 +333,7 @@
     <None Include="scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\breeze.ajaxpost.js" />
     <Content Include="scripts\breeze.angular.js" />
     <Content Include="scripts\breeze.debug.js" />
     <Content Include="scripts\breeze.directives.js" />
