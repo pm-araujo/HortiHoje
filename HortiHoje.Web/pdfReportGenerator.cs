@@ -15,13 +15,14 @@ namespace HortiHoje
         public pdfReportGenerator(string name)
         {
             document = new Document();
-            document.Open();
             PdfWriter.GetInstance(document, new FileStream(name, FileMode.Create));
+            document.Open();
+
         }
 
         public void closeDocument()
         {
-            document.Close();
+            document.CloseDocument();
         }
 
         public void generateFromActivity(Activity activity)
@@ -37,7 +38,7 @@ namespace HortiHoje
 
         }
 
-        private void printTask(Task task)
+        public void printTask(Task task)
         {
             Paragraph paragraph;
             paragraph = new Paragraph();
@@ -52,7 +53,7 @@ namespace HortiHoje
             document.Add(paragraph);
         }
 
-        private void printTaskList(IQueryable<Task> tasks)
+        public void printTaskList(ICollection<Task> tasks)
         {
             Paragraph paragraph;
             List list;
@@ -62,10 +63,15 @@ namespace HortiHoje
             }
         }
 
-        private void printFieldNoteList(IQueryable<FieldNote> fieldNotes)
+        public void printFieldNoteList(ICollection<FieldNote> fieldNotes)
         {
             List list;
+            Paragraph paragraph;
+
             list = new List();
+            paragraph = new Paragraph();
+            paragraph.Add("Field Notes:");
+            document.Add(paragraph);
             foreach (FieldNote fieldNote in fieldNotes)
             {
                 list.Add(fieldNote.Title);
@@ -73,17 +79,23 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printAllocatedTARList(IQueryable<TaskAllocatedReporter> reporters)
+        public void printAllocatedTARList(ICollection<TaskAllocatedReporter> reporters)
         {
             List list;
+            Paragraph paragraph;
+
             list = new List();
+            paragraph = new Paragraph();
+
+            paragraph.Add("Allocated Reporters:");
+            document.Add(paragraph);
             foreach (TaskAllocatedReporter reporter in reporters)
             {
                 list.Add(reporter.Reporter.Name);
             }
             document.Add(list);
         }
-        private void printReporterList(IQueryable<Reporter> reporters)
+        private void printReporterList(ICollection<Reporter> reporters)
         {
             List list;
             list = new List();
@@ -93,10 +105,16 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printAllowedTARList(IQueryable<TaskAllowedReporter> reporters)
+        public void printAllowedTARList(ICollection<TaskAllowedReporter> reporters)
         {
             List list;
+            Paragraph paragraph;
+
             list = new List();
+            paragraph = new Paragraph();
+
+            paragraph.Add("Allowed Reporters:");
+            document.Add(paragraph);
             foreach (TaskAllowedReporter reporter in reporters)
             {
                 list.Add(reporter.Reporter.Name);

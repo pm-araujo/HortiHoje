@@ -6,6 +6,7 @@ using HortiHoje.DataAccess;
 using Newtonsoft.Json.Linq;
 using Breeze.ContextProvider;
 using Breeze.WebApi2;
+using WebGrease.Css.Extensions;
 
 namespace HortiHoje.Web.Controllers
 {
@@ -33,12 +34,50 @@ namespace HortiHoje.Web.Controllers
         {
             Activity activity = (_repository.Activities
                 .Where(a => a.Id == id)).First();
-            IQueryable<Task> taskList = (_repository.Tasks
-                .Where(t => t.IdActivity == id));
-
+            ICollection<Task> taskList = (_repository.Tasks
+                .Where(t => t.IdActivity == id)).ToSafeReadOnlyCollection();
             pdfReportGenerator pdf = new pdfReportGenerator("C:\\Users\\Sight\\Desktop\\report.pdf");
 
             pdf.generateFromActivity(activity);
+
+            foreach (var task in taskList)
+            {
+                // getting location
+                task.Location = (_repository.Locations
+                .Where(l => l.Id == task.IdLocation)).First();
+
+                // getting reporters
+                task.AllowedReporters = (_repository.TaskAllowedReporters
+                .Where(r => r.IdTask == task.Id)).ToSafeReadOnlyCollection();
+                foreach (var rep in task.AllowedReporters)
+                {
+                    rep.Reporter = (_repository.Reporters
+                        .Where(r => r.Id == rep.IdReporter)).First();
+                }
+
+                task.AllocatedReporters = (_repository.TaskAllocatedReporters
+                    .Where(r => r.IdTask == task.Id)).ToSafeReadOnlyCollection();
+                foreach (var rep in task.AllocatedReporters)
+                {
+                    rep.Reporter = (_repository.Reporters
+                        .Where(r => r.Id == rep.IdReporter)).First();
+                }
+
+                // getting fieldnotes
+                task.FieldNotes = (_repository.FieldNotes
+                    .Where(f => f.IdTask == task.Id)).ToSafeReadOnlyCollection();
+
+                
+                pdf.printTask(task);
+                pdf.printAllowedTARList(task.AllowedReporters);
+                pdf.printAllocatedTARList(task.AllocatedReporters);
+
+                pdf.printFieldNoteList(task.FieldNotes);
+                
+            }
+
+            //pdf.printTaskList(taskList);
+            pdf.closeDocument();
 
             return true;
         }
