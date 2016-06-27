@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using HortiHoje.Model;
 using HortiHoje.DataAccess;
@@ -26,6 +27,21 @@ namespace HortiHoje.Web.Controllers
             return _repository.SaveChanges(saveBundle);
         }
 
+
+        [HttpGet]
+        public bool DoReport(int id)
+        {
+            Activity activity = (_repository.Activities
+                .Where(a => a.Id == id)).First();
+            IQueryable<Task> taskList = (_repository.Tasks
+                .Where(t => t.IdActivity == id));
+
+            pdfReportGenerator pdf = new pdfReportGenerator("C:\\Users\\Sight\\Desktop\\report.pdf");
+
+            pdf.generateFromActivity(activity);
+
+            return true;
+        }
 
 
 

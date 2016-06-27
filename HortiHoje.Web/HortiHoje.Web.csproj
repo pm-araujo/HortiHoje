@@ -333,6 +333,7 @@
     <None Include="scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\breeze.ajaxpost.js" />
     <Content Include="scripts\breeze.angular.js" />
     <Content Include="scripts\breeze.debug.js" />
     <Content Include="scripts\breeze.directives.js" />
@@ -383,6 +384,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="pdfReportGenerator.cs" />
     <Compile Include="TranscriptModel.cs" />
     <Content Include="app\services\repository.taskallowedreporter.js" />
     <Compile Include="App_Start\BreezeWebApiConfig.cs" />
@@ -411,6 +413,10 @@
     <ProjectReference Include="..\HortiHoje.Model\HortiHoje.Model.csproj">
       <Project>{d91ea111-bab8-41e3-86cb-e87fdcaecb60}</Project>
       <Name>HortiHoje.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITextSharp\itextsharp.csproj">
+      <Project>{84c4fdd9-3ed7-453b-b9da-b3ed52cb071c}</Project>
+      <Name>itextsharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
