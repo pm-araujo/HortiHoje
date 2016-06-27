@@ -9,24 +9,48 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.Model", "HortiHoj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HortiHoje.DataAccess", "HortiHoje.DataAccess\HortiHoje.DataAccess.csproj", "{57E72B09-3299-4AF9-8A81-5D82C37613D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "itextsharp", "ITextSharp\itextsharp.csproj", "{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_woDrawing|Any CPU = Debug_woDrawing|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		Release_woDrawing|Any CPU = Release_woDrawing|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Debug_woDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Debug_woDrawing|Any CPU.Build.0 = Debug|Any CPU
 		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Release_woDrawing|Any CPU.ActiveCfg = Release|Any CPU
+		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Release_woDrawing|Any CPU.Build.0 = Release|Any CPU
 		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6340F15-1FFA-4061-B122-079AAE3726CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Debug_woDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Debug_woDrawing|Any CPU.Build.0 = Debug|Any CPU
 		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Release_woDrawing|Any CPU.ActiveCfg = Release|Any CPU
+		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Release_woDrawing|Any CPU.Build.0 = Release|Any CPU
 		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D91EA111-BAB8-41E3-86CB-E87FDCAECB60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug_woDrawing|Any CPU.ActiveCfg = Debug|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug_woDrawing|Any CPU.Build.0 = Debug|Any CPU
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release_woDrawing|Any CPU.ActiveCfg = Release|Any CPU
+		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release_woDrawing|Any CPU.Build.0 = Release|Any CPU
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57E72B09-3299-4AF9-8A81-5D82C37613D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Debug_woDrawing|Any CPU.ActiveCfg = Debug_woDrawing|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Debug_woDrawing|Any CPU.Build.0 = Debug_woDrawing|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Release_woDrawing|Any CPU.ActiveCfg = Release_woDrawing|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Release_woDrawing|Any CPU.Build.0 = Release_woDrawing|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C4FDD9-3ED7-453B-B9DA-B3ED52CB071C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
