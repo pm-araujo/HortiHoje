@@ -29,9 +29,6 @@ namespace HortiHoje
 
             document.Add(paragraph);
 
-            printTaskList(activity.TaskList);
-
-
         }
 
         private void printTask(Task task)
@@ -86,7 +83,7 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printAllocatedReporterList(ICollection<TaskAllocatedReporter> reporters)
+        private void printAllocatedTARList(ICollection<TaskAllocatedReporter> reporters)
         {
             List list;
             list = new List();
@@ -96,7 +93,17 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printAllowedReporterList(ICollection<TaskAllowedReporter> reporters)
+        private void printReporterList(ICollection<Reporter> reporters)
+        {
+            List list;
+            list = new List();
+            foreach (Reporter reporter in reporters)
+            {
+                list.Add(reporter.Name);
+            }
+            document.Add(list);
+        }
+        private void printAllowedTARList(ICollection<TaskAllowedReporter> reporters)
         {
             List list;
             list = new List();
