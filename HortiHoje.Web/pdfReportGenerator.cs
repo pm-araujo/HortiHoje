@@ -43,26 +43,10 @@ namespace HortiHoje
             paragraph.Add("\t" + task.Location.Lat);
             paragraph.Add("Longitude:");
             paragraph.Add("\t" + task.Description);
-
-
-            paragraph.Add("Allocated Reporters:");
             document.Add(paragraph);
-            paragraph = new Paragraph();
-            printAllocatedReporterList(task.AllocatedReporters);
-
-
-            paragraph.Add("Allowed Reporters:");
-            document.Add(paragraph);
-            paragraph = new Paragraph();
-            printAllowedReporterList(task.AllowedReporters);
-
-            paragraph.Add("Field Notes:");
-            document.Add(paragraph);
-            paragraph = new Paragraph();
-            printFieldNoteList(task.FieldNotes);
         }
 
-        private void printTaskList(ICollection<Task> tasks)
+        private void printTaskList(IQueryable<Task> tasks)
         {
             Paragraph paragraph;
             List list;
@@ -72,7 +56,7 @@ namespace HortiHoje
             }
         }
 
-        private void printFieldNoteList(ICollection<FieldNote> fieldNotes)
+        private void printFieldNoteList(IQueryable<FieldNote> fieldNotes)
         {
             List list;
             list = new List();
@@ -83,7 +67,7 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printAllocatedTARList(ICollection<TaskAllocatedReporter> reporters)
+        private void printAllocatedTARList(IQueryable<TaskAllocatedReporter> reporters)
         {
             List list;
             list = new List();
@@ -93,7 +77,7 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printReporterList(ICollection<Reporter> reporters)
+        private void printReporterList(IQueryable<Reporter> reporters)
         {
             List list;
             list = new List();
@@ -103,7 +87,7 @@ namespace HortiHoje
             }
             document.Add(list);
         }
-        private void printAllowedTARList(ICollection<TaskAllowedReporter> reporters)
+        private void printAllowedTARList(IQueryable<TaskAllowedReporter> reporters)
         {
             List list;
             list = new List();
