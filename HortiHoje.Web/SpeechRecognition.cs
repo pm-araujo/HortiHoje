@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Speech.AudioFormat;
 using System.Speech.Recognition;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace HortiHoje
@@ -30,8 +31,20 @@ namespace HortiHoje
         public SpeechRecognition()
         {
             speechRecognitionEngine = new SpeechRecognitionEngine();
-            dictionGrammar = new DictationGrammar();
-            speechRecognitionEngine.LoadGrammar(dictionGrammar);
+        }
+
+        public string doRecognize()
+        {
+            RecognitionResult res;
+
+            Task.Run(() =>
+            {
+                speechRecognitionEngine.LoadGrammar(new DictationGrammar());
+            }).Wait();
+
+            res = speechRecognitionEngine.Recognize();
+
+            return (res != null) ? res.Text : "";
         }
 
         public void bindRecognizeComplete(EventHandler<RecognizeCompletedEventArgs> handleSpeechCompleted)
@@ -51,7 +64,10 @@ namespace HortiHoje
 
         public void setInputToWave(string path)
         {
-            speechRecognitionEngine.SetInputToWaveFile(path);
+            Task.Run(() =>
+            {
+                speechRecognitionEngine.SetInputToWaveFile(path);
+            }).Wait();
         }
 
         public void setInputToWaveStream(Stream source)
@@ -86,6 +102,5 @@ namespace HortiHoje
         }
 
         private SpeechRecognitionEngine speechRecognitionEngine;
-        private Grammar dictionGrammar;
     }
 }

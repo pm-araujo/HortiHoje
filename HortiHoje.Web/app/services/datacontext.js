@@ -52,7 +52,7 @@
             hubHello: hubHello,
             importSnapshot: importSnapshot,
             getSnapshot: getSnapshot,
-            transcript: transcript
+            transcript: transcript,
 
             doReport: doReport
 
@@ -490,13 +490,19 @@
         }
 
         function transcript(form) {
+            var defer = Promise.defer();
+
             hub.server.transcript(form)
                 .done(function(res) {
                     console.log(res);
+                    defer.resolve(res);
                 })
                 .fail(function(err) {
                     logError("Speech Recognizer Failed, " + err);
+                    defer.reject();
                 });
+
+            return defer.promise;
         }
 
         function doReport(activity) {

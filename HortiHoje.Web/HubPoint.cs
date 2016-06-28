@@ -8,6 +8,7 @@ using System.Web.Script.Serialization;
 using HortiHoje.Model;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.Owin.Security.Provider;
 using Newtonsoft.Json;
 using Task = System.Threading.Tasks.Task;
 
@@ -20,11 +21,17 @@ namespace HortiHoje
         private static readonly ChangesQueue changes = new ChangesQueue();
         private static SpeechRecognition engine = new SpeechRecognition();
 
-        public void Transcript(string wavFile)
+        public string Transcript(string wavFile)
         {
-            engine.bindRecognizeComplete(handleSpeechCompleted);
-            engine.setInputToWave(wavFile);
+            string res = "";
 
+            Task.Run(() =>
+            {
+                engine.setInputToWave(wavFile);
+                res = engine.doRecognize();
+            }).Wait();
+
+            return res;
         }
 
         private void handleSpeechCompleted(object sender, RecognizeCompletedEventArgs args)

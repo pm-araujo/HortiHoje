@@ -587,18 +587,14 @@
 
                                 var result = doSaveDefault(blob).then(function(result) {
 
-                                    datacontext.transcript(result.data.returnData);
+                                    datacontext.transcript(result.data.returnData)
+                                        .then(function (res) {
+                                            $timeout(function() {
+                                                $scope.tempFieldNote.description += res;
+                                            });
+                                        });
                                 });
-                                // let's save it locally
-                                /*
-                                var url = (window.URL || window.webkitURL).createObjectURL(blob);
-                                var link = window.document.createElement('a');
-                                link.href = url;
-                                link.download = 'output.wav';
-                                var click = document.createEvent("Event");
-                                click.initEvent("click", true, true);
-                                link.dispatchEvent(click);
-                                */
+
                             }
 
                             function doSaveDefault($file) {
