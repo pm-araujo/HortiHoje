@@ -5,9 +5,9 @@
 
     angular
         .module('app')
-        .controller(controllerId, ['$location', '$modal', '$routeParams', '$scope', '$timeout', 'common', 'config', 'datacontext', 'NgMap', taskdashboard]);
+        .controller(controllerId, ['$location', '$modal', '$routeParams', '$scope', '$timeout', '$window', 'common', 'config', 'datacontext', 'NgMap', taskdashboard]);
 
-    function taskdashboard($location, $modal, $routeParams, $scope, $timeout, common, config, datacontext, NgMap) {
+    function taskdashboard($location, $modal, $routeParams, $scope, $timeout, $window, common, config, datacontext, NgMap) {
         var vm = this;
         var logError = common.logger.getLogFn(controllerId, 'error');
         var events = config.events;
