@@ -92,20 +92,12 @@
 
         // Gets Files from fieldnotes in this task
         function getTaskFiles() {
-            var data = datacontext.file.getAll();
             var tempNotes = vm.fieldNotes;
+            var data = [];
 
-            data = data.filter(function (el) {   // Only MediaFiles belonging to a field note remain
-                var predicate = (el.idFieldNote != null);
-
-                predicate &= tempNotes.some(function (note) {    // Exclude Check to see if matches any fieldnote
-                    return (el.idFieldNote != note.id);  
-                });
-
-                return predicate;
+            tempNotes.forEach(function(el) {
+                data = data.concat(el.mediaFiles);
             });
-
-
 
             vm.files = data;
         }
@@ -450,10 +442,10 @@
                                     fieldNote.description = tempFieldNote.description;
                                     fieldNote.idTask = task.id;
 
-                                var fieldNoteReporter = datacontext.fieldnotereporter.create({
-                                    idReporter: userId,
-                                    idFieldNote: fieldNote.id
-                                });
+                                    var fieldNoteReporter = datacontext.fieldnotereporter.create({
+                                        idReporter: userId,
+                                        idFieldNote: fieldNote.id
+                                    });
 
                                     common.$broadcast(events.hasChangesChanged, { hasChanges: false });
                                 
