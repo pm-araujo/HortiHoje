@@ -54,6 +54,8 @@
             getSnapshot: getSnapshot,
             transcript: transcript
 
+            doReport: doReport
+
             // Repositories to be added on demand:
             //      reporter
             //      lookups
@@ -267,6 +269,7 @@
 
         function hubHello() {
             console.log("hasChanges:", manager.hasChanges());
+
         }
 
         function onHasChanges() {
@@ -495,5 +498,15 @@
                     logError("Speech Recognizer Failed, " + err);
                 });
         }
+
+        function doReport(activity) {
+            console.log("here I go Again");
+            EntityQuery.from("DoReport")
+                .withParameters({id: activity.id})
+                .using(manager)
+                .execute();
+        }
+
+
     }
 })();

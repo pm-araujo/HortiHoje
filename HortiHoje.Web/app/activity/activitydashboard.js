@@ -40,6 +40,8 @@
                     kickstartLocations(map);
                 });
 
+                datacontext.doReport(vm.activity);
+
             });
         }
 

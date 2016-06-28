@@ -77,7 +77,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HortiHoje.Model\HortiHoje.Model.csproj">
       <Project>{d91ea111-bab8-41e3-86cb-e87fdcaecb60}</Project>
-      <Name>CC.Model</Name>
+      <Name>HortiHoje.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
