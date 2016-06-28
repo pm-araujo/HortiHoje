@@ -1,0 +1,20 @@
+07/06
+Reporter table 
+	-id attribute must be lowercase
+Activity table
+	-location id attribute name invalid, must be idLocation
+	
+
+Might need extra tables to establish faster/easier relationships between entities
+	Task <-> Reporter
+
+
+-------------------------------------------------------------------
+30/05
+Task table
+	-locationId property name incorrect('location')
+Reporter table
+	-incorrect Id FK connection with manager(it's backwards: Reporter->Manager instead of Reporter<-Manager)
+
+Check remaining FK connections
+Standardize names, either managerId or IdManager, not both.
