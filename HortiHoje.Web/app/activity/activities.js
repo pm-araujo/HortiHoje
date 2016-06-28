@@ -106,7 +106,7 @@
                                 newActivity.description = $scope.tempActivity.description;
                                 newActivity.idManager = sessionStorage.userId;
 
-                                common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+                                common.$broadcast(config.events.hasChangesChanged, { hasChanges: false });
 
                                 $modalInstance.close('edit');
                             };
