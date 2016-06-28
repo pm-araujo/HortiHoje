@@ -34,14 +34,16 @@ namespace HortiHoje
             return res;
         }
 
-        private void handleSpeechCompleted(object sender, RecognizeCompletedEventArgs args)
-        {
-            Clients.Caller.transcriptResult(args.Result.Text);
-        }
-
         public void Send(string test)
         {
             Clients.All.helloToAll(test + DateTime.Now);
+        }
+
+        public void sendReport(string email)
+        {
+            string defaultFile = "C:\\Users\\Sight\\Desktop\\report.pdf";
+
+            new MailSender(defaultFile, email);
         }
 
         // User called committing change to server and everyone else currently connected

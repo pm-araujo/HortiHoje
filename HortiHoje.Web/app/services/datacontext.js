@@ -54,7 +54,8 @@
             getSnapshot: getSnapshot,
             transcript: transcript,
 
-            doReport: doReport
+            doReport: doReport,
+            sendReport: sendReport
 
             // Repositories to be added on demand:
             //      reporter
@@ -511,6 +512,10 @@
                 .withParameters({id: activity.id})
                 .using(manager)
                 .execute();
+        }
+
+        function sendReport(email) {
+            hub.server.sendReport(email);
         }
 
 

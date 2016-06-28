@@ -17,8 +17,6 @@
         vm.activityId = $routeParams.id;
         vm.activity = undefined;
 
-        vm.doEdit = doEdit;
-
         var entityNames = model.entityNames;
 
         vm.locations = [];
@@ -291,6 +289,34 @@
             }
         }
 
+        vm.sendReport = function() {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: './app/modals/sendReport.html',
+                controller:
+                    ['$scope', '$modalInstance', 'datacontext', 'activity',
+                        function ($scope, $modalInstance, datacontext, activity) {
+
+                            $scope.info = {
+                                email: ""
+                            };
+
+                            $scope.doSendReport = function() {
+                                var email = $scope.info.email;
+                                datacontext.sendReport(email);
+
+                                $modalInstance.close('add');
+                            };
+
+                            $scope.cancelSendReport = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ],
+                resolve: {
+                    activity: function () { return vm.activity; }
+                }
+            });
+        }
+
         $scope.indexChar = function (index) {
             return String.fromCharCode(65 + index);
         };
@@ -305,10 +331,6 @@
                 vm.map.setZoom(5);
             }
         };
-
-        function doEdit() {
-            
-        }
 
         function getTitle() {
             return activity.name;

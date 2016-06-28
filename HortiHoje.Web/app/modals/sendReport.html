@@ -1,0 +1,23 @@
+﻿<div class="modal-dialog">
+    <div class="modal-header">
+        <h3 class="modal-title">Generate and Send Report</h3>
+    </div>
+
+    <div class="modal-body">
+        <div class="padd">
+            <form class="form-horizontal" ng-submit="doSendReport()" role="form">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">E-Mail</label>
+                    <input class="col-md-8 form-control" size="50" data-ng-model="info.email" type="email" placeholder="e.g. john@mail.com" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="clearfix"></div>
+        <button class="btn btn-warning" type="button" ng-click="cancelSendReport()">Cancel</button>
+        <button class="btn btn-primary" type="button" ng-submit="doSendReport()" ng-click="doSendReport()">Send</button>
+        <div class="clearfix"></div>
+    </div>
+
+</div>

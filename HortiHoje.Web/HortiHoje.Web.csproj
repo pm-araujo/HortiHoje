@@ -215,6 +215,7 @@
     <Content Include="app\layout\widgetheader.html" />
     <Content Include="app\login\login.html" />
     <Content Include="app\login\login.js" />
+    <Content Include="app\modals\sendReport.html" />
     <Content Include="app\modals\newFile.html" />
     <Content Include="app\modals\newFieldNote.html" />
     <Content Include="app\modals\newTask.html" />
