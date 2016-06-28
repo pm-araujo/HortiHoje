@@ -417,7 +417,8 @@
                                     var tags = $scope.tags;
 
                                     var fieldNote = datacontext.fieldnote.create();
-                                    
+
+
                                     // If there's files
                                     for (var i = 0; i < files.length; i++) {
                                         var newFile = datacontext.file.create();
@@ -441,12 +442,6 @@
                                         newFile.idFieldNote = fieldNote.id;
                                         doSave(files[i]);
                                     }
-
-                                    var fieldNoteReporter = datacontext.fieldnotereporter.create({
-                                        idReporter: userId
-                                    });
-
-                                    fieldNoteReporter.idFieldNote = fieldNote.id;
 
                                     fieldNote.title = tempFieldNote.title;
                                     fieldNote.description = tempFieldNote.description;

@@ -38,8 +38,6 @@
                     kickstartLocations(map);
                 });
 
-                datacontext.doReport(vm.activity);
-
             });
         }
 
@@ -303,7 +301,12 @@
 
                             $scope.doSendReport = function() {
                                 var email = $scope.info.email;
-                                datacontext.sendReport(email);
+                                datacontext.doReport(activity)
+                                    .then(function() {
+                                        datacontext.sendReport(email);
+                                    });
+                                
+
 
                                 $modalInstance.close('add');
                             };

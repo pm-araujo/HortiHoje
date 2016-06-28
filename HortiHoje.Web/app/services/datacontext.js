@@ -507,11 +507,23 @@
         }
 
         function doReport(activity) {
-            console.log("here I go Again");
+            var defer = Promise.defer();
+
             EntityQuery.from("DoReport")
                 .withParameters({id: activity.id})
                 .using(manager)
-                .execute();
+                .execute()
+                .to$q(success, fail);
+
+            function success() {
+                defer.resolve();
+            }
+
+            function fail() {
+                defer.reject();
+            }
+
+            return defer.promise;
         }
 
         function sendReport(email) {
