@@ -409,6 +409,9 @@
                             $scope.files = [];
                             $scope.tags = [];
 
+                            $scope.update = function ($files) {
+                                $scope.files = $files;
+                            }
 
                             // editTask
                             $scope.newFieldNote = function () {
@@ -424,9 +427,10 @@
                                         var newFile = datacontext.file.create();
 
                                         newFile.name = files[i].name;
+                                        newFile.idFieldNote = fieldNote.id;
                                         //datacontext.generateChange(newFile);
-                                        if (tags && (tags.length != 0)) {
-                                            var arrTags = tags.split(',');
+                                        if (tags[i] && (tags[i].length != 0)) {
+                                            var arrTags = tags[i].split(',');
                                             arrTags.forEach(function(tagStr) {
                                                 var tag = datacontext.tag.create();
                                                 tag.name = tagStr;
@@ -439,13 +443,17 @@
                                             });
                                         }
 
-                                        newFile.idFieldNote = fieldNote.id;
                                         doSave(files[i]);
                                     }
 
                                     fieldNote.title = tempFieldNote.title;
                                     fieldNote.description = tempFieldNote.description;
                                     fieldNote.idTask = task.id;
+
+                                var fieldNoteReporter = datacontext.fieldnotereporter.create({
+                                    idReporter: userId,
+                                    idFieldNote: fieldNote.id
+                                });
 
                                     common.$broadcast(events.hasChangesChanged, { hasChanges: false });
                                 

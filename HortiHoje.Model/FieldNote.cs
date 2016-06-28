@@ -5,7 +5,7 @@ namespace HortiHoje.Model
 {
     public class FieldNote
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         [Required, MaxLength(50)]
         public string Title { get; set; }
 
