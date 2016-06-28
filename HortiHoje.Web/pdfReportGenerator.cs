@@ -31,6 +31,9 @@ namespace HortiHoje
             paragraph = new Paragraph();
             paragraph.Add("Activity Name: ");
             paragraph.Add(activity.Name);
+
+            document.Add(paragraph);
+            paragraph= new Paragraph();
             paragraph.Add("Activity Description: " );
             paragraph.Add(activity.Description);
 
@@ -44,12 +47,26 @@ namespace HortiHoje
             paragraph = new Paragraph();
             paragraph.Add("Task Name:");
             paragraph.Add("\t" + task.Name);
+
+            document.Add(paragraph);
+            paragraph = new Paragraph();
+
+
             paragraph.Add("Task Description:");
             paragraph.Add("\t" + task.Description);
+
+            document.Add(paragraph);
+            paragraph = new Paragraph();
+
+
             paragraph.Add("Latitude:");
             paragraph.Add("\t" + task.Location.Lat);
+
+            document.Add(paragraph);
+            paragraph = new Paragraph();
+
             paragraph.Add("Longitude:");
-            paragraph.Add("\t" + task.Description);
+            paragraph.Add("\t" + task.Location.Long);
             document.Add(paragraph);
         }
 
