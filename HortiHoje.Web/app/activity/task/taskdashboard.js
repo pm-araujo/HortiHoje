@@ -669,6 +669,15 @@
             });
         }
 
+        vm.deleteTask = function () {
+            vm.goBack();
+            vm.task.entityAspect.setDeleted();
+            vm.task.entityAspect.acceptChanges();
+
+            common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+        }
+
+
         // Search Stuff
         function search($event) {
             if ($event.keyCode === keyCodes.esc) {

@@ -65,6 +65,9 @@
                             <button class="btn btn-info" data-ng-click="vm.goBack()">
                                 <i class="fa fa-arrow-left"></i>Back
                             </button>
+                            <button class="btn btn-danger" data-ng-disabled="!vm.canEdit()" data-ng-click="vm.deleteTask()">
+                                <i class="fa fa-trash"></i>Delete
+                            </button>
                         </div>
                         <div class="pull-right">
                             <button class="btn btn-info" data-ng-disabled="!vm.canEdit()" data-ng-click="vm.editTask()">
