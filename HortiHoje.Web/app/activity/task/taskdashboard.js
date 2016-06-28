@@ -669,6 +669,323 @@
             });
         }
 
+        vm.goToFieldNote = function (fn) {
+            vm.fn = fn;
+            if (!canEdit()) {
+                return;
+            }
+
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: './app/modals/newFieldNote.html',
+                controller:
+                    ['$scope', '$modalInstance', 'Upload', 'datacontext', 'task', 'fieldNote',
+                        function ($scope, $modalInstance, Upload, datacontext, task, fieldNote) {
+
+                            var userId = sessionStorage.userId;
+                            var $q = common.$q;
+
+                            // Recording Stuff
+
+                            // Variables Record
+                            var leftchannel = [];
+                            var rightchannel = [];
+                            var recorder = null;
+                            var recording = false;
+                            var recordingLength = 0;
+                            var volume = null;
+                            var audioInput = null;
+                            var sampleRate = null;
+                            var audioContext = null;
+                            var context = null;
+
+                            $scope.isRecording = false;
+
+                            $scope.tempFieldNote = fieldNote;
+
+                            $scope.files = fieldNote.mediaFiles;
+                            $scope.tags = [];
+
+                            /*
+                            for (var i = 0; i < fieldNote.mediaFiles.length; i++) {
+                                var file = fieldNote.mediaFiles[i];
+                                file.tags.forEach(function(el) {
+                                    $scope.tags[i].push(el.name);
+                                });
+                            }
+                            */
+                            $scope.update = function ($files) {
+                                $scope.files += $files;
+                            }
+
+                            // editTask
+                            $scope.newFieldNote = function () {
+                                var tempFieldNote = $scope.tempFieldNote;
+                                var files = $scope.files;
+                                var tags = $scope.tags;
+
+                                var fieldNote = datacontext.fieldnote.create();
+
+
+                                // If there's files
+                                /*
+                                for (var i = 0; i < files.length; i++) {
+                                    var newFile = datacontext.file.create();
+
+                                    newFile.name = files[i].name;
+                                    newFile.idFieldNote = fieldNote.id;
+                                    //datacontext.generateChange(newFile);
+                                    if (tags[i] && (tags[i].length != 0)) {
+                                        var arrTags = tags[i].split(',');
+                                        arrTags.forEach(function (tagStr) {
+                                            var tag = datacontext.tag.create();
+                                            tag.name = tagStr;
+                                            var mft = datacontext.mediafiletag.create({
+                                                idTag: tag.id,
+                                                idMediaFile: newFile.id
+                                            });
+                                            //datacontext.generateChange(tag);
+                                            //datacontext.generateChange(mft);
+                                        });
+                                    }
+                                    
+                                    doSave(files[i]);
+                                }
+                                */
+                                fieldNote.title = tempFieldNote.title;
+                                fieldNote.description = tempFieldNote.description;
+                                fieldNote.idTask = task.id;
+
+                                var fieldNoteReporter = datacontext.fieldnotereporter.create({
+                                    idReporter: userId,
+                                    idFieldNote: fieldNote.id
+                                });
+
+                                common.$broadcast(events.hasChangesChanged, { hasChanges: false });
+
+                                $modalInstance.close('add');
+                            };
+
+                            function doSave($file) {
+                                Upload.upload({
+                                    url: "./api/files/upload", // webapi url
+                                    method: "POST",
+                                    fileName: $file.name,
+                                    file: $file
+                                }).progress(function (evt) {
+                                    // get upload percentage
+                                    console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                                }).success(function (data, status, headers, config) {
+                                    // file is uploaded successfully
+                                    console.log("Success");
+                                    console.log(data);
+                                }).error(function (data, status, headers, config) {
+                                    // file failed to upload
+                                    console.log("Error");
+                                    console.log(data);
+                                });
+                            }
+
+                            $scope.toggleRecord = toggleRecord;
+
+
+                            // Function Record
+
+                            function toggleRecord() {
+
+                                console.log("hey, " + $scope.isRecording);
+
+                                if ($scope.isRecording) { // stop recording
+                                    $scope.isRecording = false;
+                                    recorder.disconnect();
+                                    saveRecording();
+                                } else { // start recording
+
+                                    setupRecorder();
+                                    $scope.isRecording = true;
+                                    // reset the buffers for the new recording
+                                    leftchannel.length = rightchannel.length = 0;
+                                    recordingLength = 0;
+
+                                }
+
+                            }
+
+                            function startRecording(e) {
+                                // creates the audio context
+                                audioContext = window.AudioContext || window.webkitAudioContext;
+                                context = new audioContext();
+
+                                // retrieve the current sample rate to be used for WAV packaging
+                                sampleRate = context.sampleRate;
+
+                                // creates a gain node
+                                volume = context.createGain();
+
+                                // creates an audio node from the microphone incoming stream
+                                audioInput = context.createMediaStreamSource(e);
+
+                                // connect the stream to the gain node
+                                audioInput.connect(volume);
+
+                                /* From the spec: This value controls how frequently the audioprocess event is 
+                                dispatched and how many sample-frames need to be processed each call. 
+                                Lower values for buffer size will result in a lower (better) latency. 
+                                Higher values will be necessary to avoid audio breakup and glitches */
+                                var bufferSize = 2048;
+                                recorder = context.createScriptProcessor(bufferSize, 2, 2);
+
+                                recorder.onaudioprocess = function (e) {
+                                    console.log('recording');
+                                    var left = e.inputBuffer.getChannelData(0);
+                                    var right = e.inputBuffer.getChannelData(1);
+                                    // we clone the samples
+                                    leftchannel.push(new Float32Array(left));
+                                    rightchannel.push(new Float32Array(right));
+                                    recordingLength += bufferSize;
+                                }
+
+                                // we connect the recorder
+                                volume.connect(recorder);
+                                recorder.connect(context.destination);
+                            }
+
+                            function saveRecording() {
+
+                                // we flat the left and right channels down
+                                var leftBuffer = mergeBuffers(leftchannel, recordingLength);
+                                var rightBuffer = mergeBuffers(rightchannel, recordingLength);
+                                // we interleave both channels together
+                                var interleaved = interleave(leftBuffer, rightBuffer);
+
+                                // we create our wav file
+                                var buffer = new ArrayBuffer(44 + interleaved.length * 2);
+                                var view = new DataView(buffer);
+
+                                // RIFF chunk descriptor
+                                writeUTFBytes(view, 0, 'RIFF');
+                                view.setUint32(4, 44 + interleaved.length * 2, true);
+                                writeUTFBytes(view, 8, 'WAVE');
+                                // FMT sub-chunk
+                                writeUTFBytes(view, 12, 'fmt ');
+                                view.setUint32(16, 16, true);
+                                view.setUint16(20, 1, true);
+                                // stereo (2 channels)
+                                view.setUint16(22, 2, true);
+                                view.setUint32(24, sampleRate, true);
+                                view.setUint32(28, sampleRate * 4, true);
+                                view.setUint16(32, 4, true);
+                                view.setUint16(34, 16, true);
+                                // data sub-chunk
+                                writeUTFBytes(view, 36, 'data');
+                                view.setUint32(40, interleaved.length * 2, true);
+
+                                // write the PCM samples
+                                var lng = interleaved.length;
+                                var index = 44;
+                                var volume = 1;
+                                for (var i = 0; i < lng; i++) {
+                                    view.setInt16(index, interleaved[i] * (0x7FFF * volume), true);
+                                    index += 2;
+                                }
+
+                                // our final binary blob
+                                var blob = new Blob([view], { type: 'audio/wav' });
+                                blob.lastModifiedDate = new Date();
+                                blob.name = "output.wav";
+
+                                var result = doSaveDefault(blob).then(function (result) {
+
+                                    datacontext.transcript(result.data.returnData)
+                                        .then(function (res) {
+                                            $timeout(function () {
+                                                $scope.tempFieldNote.description += res;
+                                            });
+                                        });
+                                });
+
+                            }
+
+                            function doSaveDefault($file) {
+                                return Upload.upload({
+                                    url: "./api/files/uploadStock", // webapi url
+                                    method: "POST",
+                                    fileName: $file.name,
+                                    file: $file
+                                }).progress(function (evt) {
+                                    // get upload percentage
+                                    console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+                                }).success(function (data, status, headers, config) {
+                                    // file is uploaded successfully
+                                    console.log("Success");
+                                    console.log(data);
+                                    return data;
+                                }).error(function (data, status, headers, config) {
+                                    // file failed to upload
+                                    console.log("Error");
+                                    console.log(data);
+                                });
+                            }
+
+                            function setupRecorder() {
+                                if (!navigator.getUserMedia)
+                                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                                                  navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                                if (navigator.getUserMedia) {
+                                    navigator.getUserMedia({ audio: true }, startRecording, function (e) {
+                                        logError('Error capturing audio: ' + e.message);
+                                        return;
+                                    });
+                                } else { logError('Microphone not supported in this browser'); }
+                            }
+
+                            function interleave(leftChannel, rightChannel) {
+                                var length = leftChannel.length + rightChannel.length;
+                                var result = new Float32Array(length);
+
+                                var inputIndex = 0;
+
+                                for (var index = 0; index < length;) {
+                                    result[index++] = leftChannel[inputIndex];
+                                    result[index++] = rightChannel[inputIndex];
+                                    inputIndex++;
+                                }
+                                return result;
+                            }
+
+                            function mergeBuffers(channelBuffer, recordingLength) {
+                                var result = new Float32Array(recordingLength);
+                                var offset = 0;
+                                var lng = channelBuffer.length;
+                                for (var i = 0; i < lng; i++) {
+                                    var buffer = channelBuffer[i];
+                                    result.set(buffer, offset);
+                                    offset += buffer.length;
+                                }
+                                return result;
+                            }
+
+                            function writeUTFBytes(view, offset, string) {
+                                var lng = string.length;
+                                for (var i = 0; i < lng; i++) {
+                                    view.setUint8(offset + i, string.charCodeAt(i));
+                                }
+                            }
+                            $scope.cancelNewFieldNote = function () { $modalInstance.dismiss('cancel'); };
+                        }
+                    ],
+                resolve: {
+                    task: function () {
+                        return vm.task;
+                    },
+                    fieldNote: function() {
+                        return vm.fn;
+                    }
+                }
+            });
+        }
+
         vm.deleteTask = function () {
             vm.goBack();
             vm.task.entityAspect.setDeleted();

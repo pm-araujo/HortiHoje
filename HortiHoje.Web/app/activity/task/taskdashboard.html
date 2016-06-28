@@ -36,7 +36,8 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr data-ng-repeat="fn in vm.filteredFieldnotes">
+                                            <tr data-ng-repeat="fn in vm.filteredFieldnotes"
+                                                data-ng-click="vm.goToFieldNote(fn)">
                                                 <td>{{fn.title}}</td>
                                                 <td>{{fn.mediaFiles.length}}</td>
                                                 <td>{{fn.uniqueReporters}}</td>
