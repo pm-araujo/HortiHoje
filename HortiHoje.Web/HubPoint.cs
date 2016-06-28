@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Speech.Recognition;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Serialization;
 using HortiHoje.Model;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
 using Task = System.Threading.Tasks.Task;
 
@@ -15,17 +18,18 @@ namespace HortiHoje
         private static readonly ConnectionMapping<string> _connections =
             new ConnectionMapping<string>();
         private static readonly ChangesQueue changes = new ChangesQueue();
+        private static SpeechRecognition engine = new SpeechRecognition();
 
-
-        public string Transcript(string formData)
+        public void Transcript(string wavFile)
         {
-            string result = "";
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            TranscriptModel transcript;
+            engine.bindRecognizeComplete(handleSpeechCompleted);
+            engine.setInputToWave(wavFile);
 
-            transcript = serializer.Deserialize<TranscriptModel>(formData);
+        }
 
-            return result;
+        private void handleSpeechCompleted(object sender, RecognizeCompletedEventArgs args)
+        {
+            Clients.Caller.transcriptResult(args.Result.Text);
         }
 
         public void Send(string test)
