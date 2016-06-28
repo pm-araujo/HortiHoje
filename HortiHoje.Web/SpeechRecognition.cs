@@ -27,7 +27,7 @@ namespace HortiHoje
             MessageBox.Show("Speech recognized: " + args.Result.Text);
         }*/
 
-        SpeechRecognition()
+        public SpeechRecognition()
         {
             speechRecognitionEngine = new SpeechRecognitionEngine();
             dictionGrammar = new DictationGrammar();

@@ -52,6 +52,7 @@
             hubHello: hubHello,
             importSnapshot: importSnapshot,
             getSnapshot: getSnapshot,
+            transcript: transcript
 
             doReport: doReport
 
@@ -76,6 +77,10 @@
 
         function initHub() {
             hub = $.connection.hubPoint;
+
+            hub.client.transcriptResult = function(result) {
+                console.log("got transcript result: ", transcript);
+            }
 
             hub.client.helloToAll = function(data) {
                 console.log('server replied');
@@ -482,6 +487,16 @@
             ];
 
             return $q.when(people);
+        }
+
+        function transcript(form) {
+            hub.server.transcript(form)
+                .done(function(res) {
+                    console.log(res);
+                })
+                .fail(function(err) {
+                    logError("Speech Recognizer Failed, " + err);
+                });
         }
 
         function doReport(activity) {
